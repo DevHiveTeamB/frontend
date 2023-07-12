@@ -31,7 +31,7 @@
     <div class="photo"></div>
     <div class="infoContainer">
       <div class="title">파이썬으로 만드는 인공지능</div>
-      <div class="like">❤️</div>
+      <button class="like" @click="liked">❤️</button>
       <div class="category">카테고리</div>
       <div class="content">
         ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ
@@ -45,10 +45,20 @@
 export default {
   data() {
     return {
-      openModal: false
+      openModal: false,
+      isShow: false
     }
   },
-  methods: {}
+  methods: {
+    liked() {
+      if (this.isShow == false) {
+        this.isShow = true
+      } else {
+        this.isShow = false
+      }
+      console.log(this.isShow)
+    }
+  }
 }
 </script>
 
