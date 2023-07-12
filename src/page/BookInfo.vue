@@ -38,14 +38,15 @@
         <div class="price">가격</div>
       </div>
     </div>
+    <reportModal />
   </div>
 </template>
 
 <script>
+import reportModal from '../components/reportModal.vue'
 export default {
   data() {
     return {
-      openModal: false,
       isShow: false
     }
   },
@@ -58,6 +59,9 @@ export default {
       }
       console.log(this.isShow)
     }
+  },
+  components: {
+    reportModal
   }
 }
 </script>

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SearchList from './views/SearchList.vue'
-import BookSearch from './views/BookSearch.vue'
-import BookInfo from './views/BookInfo.vue'
+import SearchList from './page/SearchList.vue'
+import BookSearch from './page/BookSearch.vue'
+import BookInfo from './page/BookInfo.vue'
 
 const routes = [
   {
