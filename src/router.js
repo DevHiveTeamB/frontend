@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import SearchList from './page/SearchList.vue'
 import BookSearch from './page/BookSearch.vue'
 import BookInfo from './page/BookInfo.vue'
-
+import MainPage from './page/MainPage.vue'
 const routes = [
   {
     path: '/SearchList',
@@ -15,6 +15,10 @@ const routes = [
   {
     path: '/BookInfo',
     component: BookInfo
+  },
+  {
+    path: '/',
+    component: MainPage
   }
 ]
 
