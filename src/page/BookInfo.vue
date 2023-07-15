@@ -206,7 +206,6 @@ select:focus {
   height: 25px;
   right: 0px;
   border: none;
-  background: url('../image/찜 버튼.png');
 }
 .infoContainer .category {
   position: absolute;
