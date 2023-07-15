@@ -1,9 +1,9 @@
 <template>
   <div id="container">
     <div id="searchContainer">
-      <button id="btn">버튼</button>
+      <button id="btn"></button>
       <input type="search" id="search" />
-      <img id="icon" src="../icon.png" @click="this.$router.push('/BookSearch')" />
+      <img id="icon" src="../image/돋보기.png" @click="this.$router.push('/BookSearch')" />
     </div>
     <div class="select">
       <input type="radio" id="select1" name="category" /><label for="select1">교수</label>
@@ -42,26 +42,28 @@ export default {
   padding: 0;
   height: 800px;
   width: 370px;
+  position: relative;
 }
 #searchContainer {
   position: relative;
 }
 #btn {
-  width: 50px;
-  height: 50px;
-  background-color: #ffffff;
-  border: 0;
-  margin: 0;
-  position: relative;
+  width: 40px;
+  height: 40px;
+  top: 5px;
+  left: 10px;
+  position: absolute;
+  background: url('../image/뒤로가기2.png') no-repeat;
+  background-size: contain;
+  border: none;
 }
 #search {
-  width: 320px;
+  width: 310px;
   height: 50px;
   border: 2px solid #316464;
   box-shadow: none;
-  margin: 0;
   position: absolute;
-  padding-right: 50px;
+  right: 0px;
 }
 #search:focus {
   outline: none;
@@ -76,7 +78,9 @@ export default {
 }
 
 .select {
-  padding: 10px 0px;
+  position: absolute;
+  top: 50px;
+  width: 100%;
   border-bottom: 2px solid #316464;
 }
 .select input[type='radio'] {
@@ -92,7 +96,7 @@ export default {
   border-radius: 9999px;
   text-align: center;
   font-weight: 800;
-  margin: 10px 10px;
+  margin: 10px;
   font-size: 14px;
 }
 .select input[type='radio'] + label {
@@ -104,9 +108,12 @@ export default {
   color: #fff;
 }
 
-// .filterContainer {
-//   border-bottom: 1px solid #000000;
-// }
+.filterContainer {
+  border-bottom: 1px solid #000000;
+  position: absolute;
+  width: 100%;
+  top: 90px;
+}
 .filterContainer input[type='radio'] {
   display: none;
 }
@@ -136,6 +143,7 @@ export default {
   width: 370px;
   height: 108px;
   border: 2px solid #316464;
+  top: 130px;
 }
 
 .bookContainer .photo {

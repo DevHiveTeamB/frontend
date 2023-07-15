@@ -3,12 +3,15 @@
 </template>
 
 <script>
+import Navbar from './components/NavBar.vue'
 export default {
   name: 'App',
   data() {
     return {}
   },
-  components: {}
+  components: {
+    Navbar
+  }
 }
 </script>
 

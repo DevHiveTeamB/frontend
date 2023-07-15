@@ -1,9 +1,9 @@
 <template>
   <div id="container">
     <div id="searchContainer">
-      <button id="btn" @click="this.$router.push('/')">버튼</button>
+      <button id="btn" @click="this.$router.push('/')"></button>
       <input type="search" id="search" />
-      <img id="icon" src="../icon.png" @click="this.$router.push('/BookSearch')" />
+      <img id="icon" src="../image/돋보기.png" @click="this.$router.push('/BookSearch')" />
     </div>
     <div class="select">
       <input type="radio" id="select1" name="category" /><label for="select1">교수</label>
@@ -39,21 +39,22 @@ export default {
   position: relative;
 }
 #btn {
-  width: 50px;
-  height: 50px;
-  background-color: #ffffff;
-  border: 0;
-  margin: 0;
-  position: relative;
+  width: 40px;
+  height: 40px;
+  top: 5px;
+  left: 10px;
+  position: absolute;
+  background: url('../image/뒤로가기2.png') no-repeat;
+  background-size: contain;
+  border: none;
 }
 #search {
-  width: 320px;
+  width: 310px;
   height: 50px;
   border: 2px solid #316464;
   box-shadow: none;
-  margin: 0;
   position: absolute;
-  padding-right: 50px;
+  right: 0px;
 }
 #search:focus {
   outline: none;
@@ -68,8 +69,11 @@ export default {
 }
 
 .select {
-  padding: 10px 0px;
-  border-bottom: 1px solid #000000;
+  position: absolute;
+  top: 50px;
+  padding-top: px;
+  border-bottom: 2px solid #316464;
+  width: 370px;
 }
 .select input[type='radio'] {
   display: none;
@@ -107,6 +111,9 @@ export default {
 }
 
 #recentSearchContainer {
+  position: absolute;
+  top: 90px;
   margin: 10px 0px;
+  width: 370px;
 }
 </style>

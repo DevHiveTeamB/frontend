@@ -1,37 +1,33 @@
 <template>
   <div id="container">
     <div id="upperBar">
-      <button id="backBtn">뒤</button>
-      <div id="pageName">페이지 이름</div>
-      <div class="dropdown">
-        <a
-          class="btn btn-secondary dropdown-toggle"
-          href="#"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-        </a>
-
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">수정하기</a></li>
-          <li><a class="dropdown-item" href="#">삭제하기</a></li>
-          <li><a class="dropdown-item" href="#">신고하기</a></li>
-        </ul>
-      </div>
+      <button id="backBtn"></button>
+      <div id="pageName">DevHive</div>
+      <select class="dropdown" name="menu">
+        <option hidden="" disabled="disable" selected="selected" value=""></option>
+        <option value="write">수정하기</option>
+        <option value="delete">삭제하기</option>
+        <option value="report">신고하기</option>
+      </select>
     </div>
     <div class="profileContainer">
-      <div class="profile">사진</div>
+      <img class="profile" src="../image/프로필사진.png" />
       <div class="name">이름</div>
       <div class="grade">평점</div>
       <div class="date">날짜</div>
-      <div class="views">조회수</div>
-      <div class="likes">좋아요</div>
+      <div class="views">
+        <img src="../image/조회수_아이콘.png" />
+        99
+      </div>
+      <div class="likes">
+        <img src="../image/찜 버튼.png" />
+        99
+      </div>
     </div>
-    <div class="photo"></div>
+    <img src="..\image\책사진.jpeg" class="photo" />
     <div class="infoContainer">
       <div class="title">파이썬으로 만드는 인공지능</div>
-      <button class="like" @click="liked">❤️</button>
+      <button class="like" @click="liked"></button>
       <div class="category">카테고리</div>
       <div class="content">
         ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ
@@ -85,26 +81,43 @@ export default {
 }
 #backBtn {
   position: absolute;
-  top: 5px;
+  top: 8px;
   left: 10px;
   width: 40px;
   height: 40px;
+  border: none;
+  background: url('../image/뒤로가기.png') no-repeat;
 }
 #pageName {
   position: absolute;
-  width: 250px;
-  height: 40px;
-  top: 5px;
-  left: 60px;
+  width: 270px;
+  height: 50px;
+  left: 40px;
   text-align: center;
-  line-height: 40px;
+  line-height: 50px;
+  font-size: 20px;
+  color: #fff;
+  font-weight: 700;
 }
+
 .dropdown {
   position: absolute;
   width: 40px;
   height: 40px;
   right: 10px;
-  top: 5px;
+  top: 8px;
+  background: url('../image/menuBtn.png') no-repeat;
+  border: none;
+}
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+select:focus {
+  border: none;
+  box-shadow: none;
+  outline: none;
 }
 
 .profileContainer {
@@ -120,7 +133,6 @@ export default {
   position: absolute;
   left: 10px;
   top: 5px;
-  border: 1px solid #000;
 }
 .profileContainer .name {
   position: absolute;
@@ -144,13 +156,16 @@ export default {
   font-size: 5px;
   text-align: right;
 }
+
 .profileContainer .views {
   position: absolute;
-  width: 30px;
-  height: 15px;
   right: 40px;
   font-size: 3px;
   bottom: 5px;
+}
+.profileContainer img {
+  width: 15px;
+  height: 15px;
 }
 
 .profileContainer .likes {
@@ -165,7 +180,7 @@ export default {
 .photo {
   width: 340px;
   height: 270px;
-  border: 1px solid #000;
+  // border: 1px solid #000;
   position: absolute;
   top: 120px;
   left: 10px;
@@ -190,6 +205,8 @@ export default {
   width: 25px;
   height: 25px;
   right: 0px;
+  border: none;
+  background: url('../image/찜 버튼.png');
 }
 .infoContainer .category {
   position: absolute;
