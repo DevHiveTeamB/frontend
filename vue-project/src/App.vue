@@ -1,30 +1,44 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div id="app">
+    <div id="content">
+      <router-view>
+        <!-- 컴포넌트 보이는 곳 -->
+        <MainPage />
+      </router-view>
+      <!-- NavBar는 모든 페이지에 고정 -->
+      <NavBar />
+    </div>
+  </div>
 </template>
 
+<script>
+import NavBar from './components/NavBar.vue'
+import MainPage from './views/MainPage.vue'
+export default {
+  name: 'App',
+  components: {
+    NavBar,
+    MainPage
+  }
+}
+</script>
+
 <style>
+body,
+html {
+  width: 360px;
+  height: 800px;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 </style>
