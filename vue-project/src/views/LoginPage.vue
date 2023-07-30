@@ -1,18 +1,13 @@
 <template>
   <div>
-    <div>MainPage</div>
-    <NavBar @openMypage="openMypage" />
+    <div>로그인페이지</div>
+    <NavBar />
   </div>
 </template>
 
 <script>
 import NavBar from '../components/NavBar.vue'
 export default {
-  methods: {
-    openMypage() {
-      this.$router.push('/login')
-    }
-  },
   components: {
     NavBar
   }

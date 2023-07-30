@@ -1,25 +1,15 @@
 <template>
   <div id="app">
     <div id="content">
-      <router-view>
-        <!-- 컴포넌트 보이는 곳 -->
-        <MainPage />
-      </router-view>
-      <!-- NavBar는 모든 페이지에 고정 -->
-      <NavBar />
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import NavBar from './components/NavBar.vue'
-import MainPage from './views/MainPage.vue'
 export default {
   name: 'App',
-  components: {
-    NavBar,
-    MainPage
-  }
+  components: {}
 }
 </script>
 
