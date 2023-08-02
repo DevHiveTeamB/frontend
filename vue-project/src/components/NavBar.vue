@@ -1,10 +1,18 @@
 <template>
   <!-- NAVBAR -->
   <div class="container">
-    <button id="home">홈</button>
-    <button id="community">커뮤</button>
-    <button id="chat">채팅</button>
-    <button id="mypage" @click="this.$router.push('login')">마이</button>
+    <div id="home">
+      <img src="../assets/icon_home_disable.svg"/>
+    </div>
+    <div id="community">
+      <img src="../assets/icon_commu_disable.svg"/>
+    </div>
+    <div id="chat">
+      <img src="../assets/icon_chat_disable.svg"/>
+    </div>
+    <div id="mypage" @click="this.$router.push('login')">
+      <img src="../assets/icon_mypage_disable.svg"/>
+    </div>
   </div>
 </template>
 
@@ -13,12 +21,13 @@ export default {
   props: {},
   data() {
     return {
-      isHomeClicked: false,
-      isCommunityClicked: false,
-      isChatClicked: false,
-      isMypageClicked: false
+      // isHomeClicked: false,
+      // isCommunityClicked: false,
+      // isChatClicked: false,
+      // isMypageClicked: false
     }
-  }
+  },
+  methods: {}
 }
 </script>
 
@@ -29,5 +38,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  background: #FFF;
+  border: 2px solid #316464
 }
 </style>
