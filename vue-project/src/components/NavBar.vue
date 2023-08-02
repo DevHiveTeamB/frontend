@@ -13,12 +13,13 @@ export default {
   props: {},
   data() {
     return {
-      isHomeClicked: false,
-      isCommunityClicked: false,
-      isChatClicked: false,
-      isMypageClicked: false
+      // isHomeClicked: false,
+      // isCommunityClicked: false,
+      // isChatClicked: false,
+      // isMypageClicked: false
     }
-  }
+  },
+  methods: {}
 }
 </script>
 
