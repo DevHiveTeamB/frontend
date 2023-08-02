@@ -2,18 +2,26 @@
   <div id="app">
     <div id="content">
       <router-view></router-view>
+      <NavBar id="navbar" />
     </div>
   </div>
 </template>
 
 <script>
+import NavBar from './components/NavBar.vue'
 export default {
   name: 'App',
-  components: {}
+  components: {
+    NavBar
+  }
 }
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body,
 html {
   width: 360px;
@@ -21,6 +29,7 @@ html {
   margin: 0 auto;
   padding: 0;
   overflow: hidden;
+  position: relative;
 }
 
 #app {
@@ -30,5 +39,11 @@ html {
   align-items: center;
   width: 100%;
   height: 100%;
+}
+
+#navbar {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
 }
 </style>
