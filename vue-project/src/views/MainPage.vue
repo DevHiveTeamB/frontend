@@ -1,19 +1,14 @@
 <template>
   <div>
     <div>MainPage</div>
-    <NavBar />
   </div>
 </template>
 
 <script>
-import NavBar from '../components/NavBar.vue'
 export default {
   methods: {},
-  components: {
-    NavBar
-  }
+  components: {}
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

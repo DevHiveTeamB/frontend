@@ -15,16 +15,13 @@
         <button @click="kakaoLogin">카카오로그인</button>
       </div>
     </div>
-    <NavBar />
   </div>
 </template>
 
 <script>
-import NavBar from '../components/NavBar.vue'
 import UpperBar from '../components/UpperBar.vue'
 export default {
   components: {
-    NavBar,
     UpperBar
   },
   methods: {

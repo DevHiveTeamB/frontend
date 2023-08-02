@@ -1,17 +1,19 @@
 <template>
   <!-- NAVBAR -->
-  <div class="container">
-    <div id="home">
-      <img src="../assets/icon_home_disable.svg"/>
-    </div>
-    <div id="community">
-      <img src="../assets/icon_commu_disable.svg"/>
-    </div>
-    <div id="chat">
-      <img src="../assets/icon_chat_disable.svg"/>
-    </div>
-    <div id="mypage" @click="this.$router.push('login')">
-      <img src="../assets/icon_mypage_disable.svg"/>
+  <div id="navbar">
+    <div class="container">
+      <div id="home">
+        <img src="../assets/icon_home_disable.svg" />
+      </div>
+      <div id="community">
+        <img src="../assets/icon_commu_disable.svg" />
+      </div>
+      <div id="chat">
+        <img src="../assets/icon_chat_disable.svg" />
+      </div>
+      <div id="mypage" @click="this.$router.push('login')">
+        <img src="../assets/icon_mypage_disable.svg" />
+      </div>
     </div>
   </div>
 </template>
@@ -38,7 +40,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #FFF;
-  border: 2px solid #316464
+  background: #fff;
+  border: 2px solid #316464;
 }
 </style>
