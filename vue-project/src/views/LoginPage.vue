@@ -21,7 +21,6 @@
 
 <script>
 import NavBar from '../components/NavBar.vue'
-import UpperBar from '../components/UpperBar.vue'
 export default {
   components: {
     NavBar,
