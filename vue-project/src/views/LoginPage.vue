@@ -7,6 +7,7 @@
 
 <script>
 import NavBar from '../components/NavBar.vue'
+
 export default {
   components: {
     NavBar
@@ -14,4 +15,5 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>
