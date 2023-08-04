@@ -30,6 +30,7 @@ html {
   padding: 0;
   overflow: hidden;
   position: relative;
+  border: 1px solid #000;
 }
 
 #app {

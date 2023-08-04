@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from '../views/MainPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import JoinPage from '../views/JoinPage.vue'
-
+import PostPage from '../views/PostPage.vue'
 const routes = [
   {
     path: '/',
@@ -15,6 +15,10 @@ const routes = [
   {
     path: '/join',
     component: JoinPage
+  },
+  {
+    path: '/write',
+    component: PostPage
   }
 ]
 
