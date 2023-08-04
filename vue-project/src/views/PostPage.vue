@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button id="complete" checkForm>완료</button>
+    <button id="complete" @click="checkForm">완료</button>
     <div class="content">
       <!-- 사진 선택하고 화면에 나옴
       슬라이드로 넘기는거 구현해주세요
@@ -27,7 +27,7 @@
       <input v-model="title" type="text" placeholder="제목을 입력해주세요" /><br />
       <input v-model="content" type="text" placeholder="책 소개를 입력해주세요" /><br />
       <div @click="modalOpen = true">카테고리입력</div>
-      <CategoryModal v-if="modalOpen" />
+      <CategoryModal v-if="modalOpen" @close="modalOpen = false" />
       <input v-model="price" type="number" placeholder="가격을 입력해주세요" /><br />
     </div>
   </div>
@@ -48,11 +48,14 @@ export default {
         this.title == '' ||
         this.selectedImage == '' ||
         this.content == '' ||
-        this.category == '' ||
+        // this.category == '' ||
         this.price == ''
       ) {
         alert('빈칸없이 작성해주세요')
       }
+    },
+    closeModal() {
+      this.$emit('close')
     }
   },
   data() {
