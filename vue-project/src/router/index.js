@@ -24,6 +24,10 @@ const routes = [
   {
     path: '/mypage',
     component: () => import('../views/MyPage.vue')
+  },
+  {
+    path: '/popup',
+    component: () => import('../views/SearchPopup.vue')
   }
 ]
 

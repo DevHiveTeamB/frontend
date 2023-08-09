@@ -6,16 +6,18 @@
     <div>MainPage</div>
     <button @click="this.$router.push('/write')">게시글작성</button>
     <button @click="this.$router.push('/booklist')">게시글목록</button>
-    <div>
-      <input id="searchBar" />
-    </div>
+
+    <div @click="this.$router.push('popup')">검색창</div>
   </div>
 </template>
 
 <script>
 export default {
   methods: {},
-  components: {}
+  components: {},
+  data() {
+    return {}
+  }
 }
 </script>
 
