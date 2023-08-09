@@ -34,7 +34,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import CategoryModal from '../components/CategoryModal.vue'
+
 export default {
   methods: {
     handleFileChange(event) {
@@ -48,7 +50,7 @@ export default {
         this.title == '' ||
         this.selectedImage == '' ||
         this.content == '' ||
-        // this.category == '' ||
+        this.category == '' ||
         this.price == ''
       ) {
         alert('빈칸없이 작성해주세요')
@@ -56,6 +58,37 @@ export default {
     },
     closeModal() {
       this.$emit('close')
+    },
+    sendPostRequest() {
+      const postData = new postData()
+
+      for (let i = 0; i < this.selectedImages.length; i++) {
+        postData.append('images[]', this.selectedImages[i])
+      }
+
+      postData.append('title', this.title)
+      postData.append('content', this.content)
+      postData.append('category', this.category)
+      postData.append('price', this.price)
+
+      axios
+        .post('/posts/post', postData)
+        .then((response) => {
+          //요청 성공시
+          console.log(response.data)
+
+          //요청 성공하면 데이터 초기화
+          this.selectedImage = null
+          this.selectedImages = []
+          this.title = ''
+          this.content = ''
+          this.category = ''
+          this.price = ''
+        })
+        .catch((error) => {
+          //요청 실패시
+          console.error(error)
+        })
     }
   },
   data() {
