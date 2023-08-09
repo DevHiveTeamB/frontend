@@ -1,3 +1,4 @@
+// 홈화면
 <template>
   <div>
     <div>MainPage</div>
