@@ -1,4 +1,5 @@
 <template>
+  <!-- 글 작성 페이지의 카테고리 선택 모달창 -->
   <div class="modal">
     <div class="modal-content">
       <button @click="closeModal">닫기</button>
