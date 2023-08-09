@@ -1,4 +1,5 @@
 <template>
+  <!-- 회원가입 -->
   <div>
     <div>상단바자리</div>
     <div id="joinform">
