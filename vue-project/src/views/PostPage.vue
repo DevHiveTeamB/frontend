@@ -1,4 +1,5 @@
 <template>
+  <!-- 글 작성페이지 -->
   <div>
     <button id="complete" @click="checkForm">완료</button>
     <div class="content">
@@ -50,7 +51,7 @@ export default {
         this.title == '' ||
         this.selectedImage == '' ||
         this.content == '' ||
-        this.category == '' ||
+        //this.category == '' ||
         this.price == ''
       ) {
         alert('빈칸없이 작성해주세요')
@@ -77,13 +78,8 @@ export default {
           //요청 성공시
           console.log(response.data)
 
-          //요청 성공하면 데이터 초기화
-          this.selectedImage = null
-          this.selectedImages = []
-          this.title = ''
-          this.content = ''
-          this.category = ''
-          this.price = ''
+          //요청 성공 글 내용 페이지로 이동
+          //this.$router.push('')
         })
         .catch((error) => {
           //요청 실패시

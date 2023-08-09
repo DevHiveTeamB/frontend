@@ -1,4 +1,5 @@
 <template>
+  <!-- 책 검색 창 -->
   <div>
     <div class="category">
       <input type="radio" name="category" value="1" @change="radioChange($event)" /> 1

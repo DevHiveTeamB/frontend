@@ -1,4 +1,5 @@
 <template>
+  <!-- 상단바 -->
   <div class="container">
     <button id="backBtn" @click="goBack">뒤</button>
     <div id="title">페이지이름</div>

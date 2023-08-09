@@ -1,4 +1,5 @@
 <template>
+  <!-- 홈화면 -->
   <div>
     <div>MainPage</div>
     <button @click="this.$router.push('/write')">게시글작성</button>
