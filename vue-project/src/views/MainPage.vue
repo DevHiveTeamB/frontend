@@ -1,5 +1,6 @@
 <template>
   <!-- 홈화면 -->
+  <!-- HappyBeen -->
   <!-- hello~! -->
   <div>
     <div>MainPage</div>
