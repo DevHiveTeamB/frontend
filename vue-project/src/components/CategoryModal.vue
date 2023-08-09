@@ -22,7 +22,8 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      searchContent: ''
+      searchContent: '',
+      categorySelected: ''
     }
   },
   methods: {
@@ -34,10 +35,21 @@ export default {
       console.log('categorySelected: ', categorySelected)
     },
     searchBook() {
+      //카테고리 선택X
+      if (!this.categorySelected) {
+        alert('카테고리를 선택해주세요.')
+        return
+      }
+      const categorySelected = this.categorySelected
       const bookInfo = this.searchBook
-      // 카테고리 선택에 따라 API 요청
-      //일단은 강의명만 되면 다 구현할 예정
       let apiUrl = ''
+
+      // 카테고리 선택에 따라 API 요청
+      //일단은 강의명 되면 다 구현할 예정
+      if (categorySelected === '1') {
+        apiUrl = '/lectures/title/get/'
+      }
+
       axios
         .get(apiUrl + bookInfo)
         .then((response) => {
