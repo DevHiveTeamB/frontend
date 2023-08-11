@@ -10,7 +10,15 @@
       <input type="radio" name="filter" value="like" @change="filterChange($event)" />찜
       <input type="radio" name="filter" value="views" @change="filterChange($event)" />조회수
     </div>
-    {{ categorySelected }}
+    <!-- 카테고리 값 제대로 넘어오는지 확인하려고 -->
+    {{ categorySelected }}{{ searchText }}
+    <div class="serachResult">
+      <div v-for="post in posts" :key="post.postID">
+        <h2>{{ post.postTitle }}</h2>
+        <!-- 글 내용 추가되면 넣기 -->
+        <p>{{ post.postDate }}</p>
+      </div>
+    </div>
     <div></div>
   </div>
 </template>

@@ -63,10 +63,14 @@ export default {
         .then((response) => {
           console.log(response)
 
-          //성공하면 페이지 라우팅 (response 정보와 선택된 카테고리 정보도 전달)
+          //성공하면 페이지 라우팅 (response 정보와 선택된 카테고리 정보와 검색값도 전달)
           this.$router.push({
             name: 'BookList',
-            props: { posts: response.data.post, categorySelected: this.categorySelected }
+            props: {
+              posts: response.data.post,
+              categorySelected: this.categorySelected,
+              searchText: this.searchText
+            }
           })
         })
         .catch((error) => {

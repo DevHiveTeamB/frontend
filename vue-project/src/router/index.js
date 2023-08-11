@@ -9,10 +9,10 @@ const routes = [
     path: '/login',
     component: () => import('../views/LoginPage.vue')
   },
-  {
-    path: '/join',
-    component: () => import('../views/JoinPage.vue')
-  },
+  // {
+  //   path: '/join',
+  //   component: () => import('../views/JoinPage.vue')
+  // },
   {
     path: '/write',
     component: () => import('../views/PostPage.vue')
@@ -32,6 +32,10 @@ const routes = [
   {
     path: '/announce',
     component: () => import('../views/AnnouncePage.vue')
+  },
+  {
+    path: '/mybooklist',
+    component: () => import('../views/MyBookListPage.vue')
   }
 ]
 
