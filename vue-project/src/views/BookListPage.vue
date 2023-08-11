@@ -10,12 +10,19 @@
       <input type="radio" name="filter" value="like" @change="filterChange($event)" />찜
       <input type="radio" name="filter" value="views" @change="filterChange($event)" />조회수
     </div>
+    {{ categorySelected }}
     <div></div>
   </div>
 </template>
 
 <script>
 export default {
+  props: ['posts', 'categorySelected'],
+  created() {
+    if (!this.posts || this.posts.length == 0) {
+      //post 데이터가 없을 경우
+    }
+  },
   methods: {
     radioChange(event) {
       var categorySelected = event.target.value

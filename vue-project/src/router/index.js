@@ -28,6 +28,10 @@ const routes = [
   {
     path: '/popup',
     component: () => import('../views/SearchPopup.vue')
+  },
+  {
+    path: '/announce',
+    component: () => import('../views/AnnouncePage.vue')
   }
 ]
 

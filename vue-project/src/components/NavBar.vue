@@ -2,7 +2,7 @@
   <!-- NAVBAR -->
   <div id="navbar">
     <div class="container">
-      <div id="home">
+      <div id="home" @click="this.$router.push('/')">
         <img src="../assets/icon_home_disable.svg" />
       </div>
       <div id="community">
@@ -11,7 +11,7 @@
       <div id="chat">
         <img src="../assets/icon_chat_disable.svg" />
       </div>
-      <div id="mypage" @click="this.$router.push('login')">
+      <div id="mypage" @click="this.$router.push('/login')">
         <img src="../assets/icon_mypage_disable.svg" />
       </div>
     </div>
