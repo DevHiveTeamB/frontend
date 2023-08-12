@@ -5,7 +5,7 @@
   <div>
     <div class="serachBar">
       <input v-model="searchText" />
-      <button @click="sendGetRequest">검색</button>
+      <button @click="sendPostRequest">검색</button>
     </div>
     <div class="category">
       <input type="radio" name="category" value="professor" @change="radioChange($event)" /> 교수
@@ -21,45 +21,17 @@ import axios from 'axios'
 export default {
   methods: {
     radioChange(event) {
-      var categorySelected = event.target.value
-      console.log('categorySelected: ', categorySelected)
+      this.categorySelected = event.target.value
+      console.log('categorySelected: ', this.categorySelected)
     },
-    // 검색버튼 누르면 get 요청
-    sendGetRequest() {
-      let url = '/lectures/'
-      let data = ''
-      if (this.categorySelected == '') {
-        url = url + 'title/get/' + this.searchText
-        console.log(url)
 
-        data = {
-          title: this.searchText
-        }
-      } else if (this.categorySelected == 'professor') {
-        url = url + 'professor/get/' + this.searchText
-        console.log(url)
-
-        data = {
-          professor: this.searchText
-        }
-      } else if (this.categorySelected == 'course') {
-        url = url + 'course/get/' + this.searchText
-        console.log(url)
-
-        data = {
-          course: this.searchText
-        }
-      } else if (this.categorySelected == 'major') {
-        url = url + 'major/get/' + this.searchText
-        console.log(url)
-
-        data = {
-          major: this.searchText
-        }
-      }
+    sendPostRequest() {
+      const url = '/v1/post/all'
+      const data = { [this.categorySelected]: this.searchText }
+      console.log(url, data)
 
       axios
-        .get(url, data)
+        .post(url, null, { params: data })
         .then((response) => {
           console.log(response)
 

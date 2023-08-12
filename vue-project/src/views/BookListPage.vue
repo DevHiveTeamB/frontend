@@ -14,9 +14,13 @@
     {{ categorySelected }}{{ searchText }}
     <div class="serachResult">
       <div v-for="post in posts" :key="post.postID">
+        <!-- 사진, 제목, 글 내용, 가격, 조회수, 찜 표시-->
+        <p>{{ post.picture }}</p>
         <h2>{{ post.postTitle }}</h2>
-        <!-- 글 내용 추가되면 넣기 -->
-        <p>{{ post.postDate }}</p>
+        <p>{{ post.postcontent }}</p>
+        <p>{{ post.price }}</p>
+        <p>{{ post.hits }}</p>
+        <p>{{ post.isFavorite }}</p>
       </div>
     </div>
     <div></div>
