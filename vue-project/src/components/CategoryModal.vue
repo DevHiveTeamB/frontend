@@ -5,14 +5,20 @@
       <div class="category">
         <input type="radio" name="category" value="1" @change="radioChange($event)" /> 강의명
         <input type="radio" name="category" value="2" @change="radioChange($event)" /> 전공
-        <input type="radio" name="category" value="3" @change="radioChange($event)" /> 교수명
-        <input type="radio" name="category" value="4" @change="radioChange($event)" /> 과목코드
+        <input type="radio" name="category" value="3" @change="radioChange($event)" /> 교수
+        <!-- <input type="radio" name="category" value="4" @change="radioChange($event)" /> 과목코드 -->
       </div>
       <div class="search">
         <input v-model="searchContent" type="text" />
         <button @click="searchBook">검색</button>
       </div>
-      <button @click="closeModal">닫기</button>
+      <div class="searchResult">
+        <div v-for="result in searchResults" :key="result.postID">
+          <!-- 일단은 제목만  -->
+          {{ result.postTitle }}
+        </div>
+      </div>
+      <button @click="closeModal">완료</button>
     </div>
   </div>
 </template>
@@ -23,7 +29,8 @@ export default {
   data() {
     return {
       searchContent: '',
-      categorySelected: ''
+      categorySelected: '',
+      searchResults: [] //결과 데이터 저장 용도
     }
   },
   methods: {
@@ -35,28 +42,30 @@ export default {
       console.log('categorySelected: ', categorySelected)
     },
     searchBook() {
-      //카테고리 선택X
-      if (!this.categorySelected) {
-        alert('카테고리를 선택해주세요.')
-        return
-      }
-      const categorySelected = this.categorySelected
+      let categorySelected = this.categorySelected
       const bookInfo = this.searchBook
-      let apiUrl = ''
+      let apiUrl = '/lectures/'
 
       // 카테고리 선택에 따라 API 요청
-      //일단은 강의명 되면 다 구현할 예정
-      if (categorySelected === '1') {
-        apiUrl = '/lectures/title/get/'
+
+      //카테고리가 선택되지 않았을 때
+      if (categorySelected == '') {
+        categorySelected = 'title'
       }
+      apiUrl = apiUrl + `${categorySelected}/get/${bookInfo}`
+
+      const data = { [this.categorySelected]: this.searchText }
+
+      console.log(apiUrl, data)
 
       axios
-        .get(apiUrl + bookInfo)
+        .get(apiUrl, data)
         .then((response) => {
-          console.log('API Response: ', response.data)
+          console.log(response.data)
+          this.searchResults = response.data
         })
         .catch((error) => {
-          console.log('API Error: ', error)
+          console.log(error)
         })
     }
   }

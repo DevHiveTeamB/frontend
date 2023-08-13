@@ -11,7 +11,7 @@
       <div id="chat">
         <img src="../assets/icon_chat_disable.svg" />
       </div>
-      <div id="mypage" @click="this.$router.push('/login')">
+      <div id="mypage" @click="this.$router.push('login')">
         <img src="../assets/icon_mypage_disable.svg" />
       </div>
     </div>
@@ -19,17 +19,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  props: {},
-  data() {
-    return {
-      // isHomeClicked: false,
-      // isCommunityClicked: false,
-      // isChatClicked: false,
-      // isMypageClicked: false
-    }
+  computed: {
+    ...mapGetters(['isLoggedIn'])
   },
-  methods: {}
+  methods: {
+    navigateToMypageOrLogin() {
+      if (this.isLoggedIn) {
+        this.$router.push('/mypage')
+      } else {
+        this.$router.push('/login')
+      }
+    }
+  }
 }
 </script>
 

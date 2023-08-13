@@ -13,7 +13,7 @@
     <!-- 카테고리 값 제대로 넘어오는지 확인하려고 -->
     {{ categorySelected }}{{ searchText }}
     <div class="serachResult">
-      <div v-for="post in posts" :key="post.postID">
+      <div v-for="post in sortedPosts" :key="post.postID">
         <!-- 사진, 제목, 글 내용, 가격, 조회수, 찜 표시-->
         <p>{{ post.picture }}</p>
         <h2>{{ post.postTitle }}</h2>
@@ -33,6 +33,7 @@ export default {
   created() {
     if (!this.posts || this.posts.length == 0) {
       //post 데이터가 없을 경우
+      alert('검색에 맞는 결과가 없음')
     }
   },
   methods: {
@@ -43,6 +44,25 @@ export default {
     filterChange(event) {
       var filterSelected = event.target.value
       console.log('filterSelected: ', filterSelected)
+    }
+  },
+  data() {
+    return {
+      filterSelected: null
+    }
+  },
+  computed: {
+    sortedPosts() {
+      //찜 순서대로 정렬
+      if (this.filterSelected === 'like') {
+        return this.posts.slice().sort((a, b) => b.isFavorite - a.isFavorite)
+        //조회수 순서대로 정렬
+      } else if (this.filterSelected === 'views') {
+        // hits 기준으로 정렬
+        return this.posts.slice().sort((a, b) => b.hits - a.hits)
+      } else {
+        return this.posts
+      }
     }
   }
 }

@@ -8,9 +8,9 @@
       <button @click="sendPostRequest">검색</button>
     </div>
     <div class="category">
-      <input type="radio" name="category" value="professor" @change="radioChange($event)" /> 교수
       <input type="radio" name="category" value="course" @change="radioChange($event)" /> 강의명
       <input type="radio" name="category" value="major" @change="radioChange($event)" /> 전공
+      <input type="radio" name="category" value="professor" @change="radioChange($event)" /> 교수
     </div>
     <div class="recent"></div>
   </div>
@@ -26,7 +26,7 @@ export default {
     },
 
     sendPostRequest() {
-      const url = '/v1/post/all'
+      const url = '/v1/post'
       const data = { [this.categorySelected]: this.searchText }
       console.log(url, data)
 
