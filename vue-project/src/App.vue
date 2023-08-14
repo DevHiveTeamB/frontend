@@ -22,6 +22,13 @@ export default {
   box-sizing: border-box;
 }
 
+#content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 body,
 html {
   width: 360px;
