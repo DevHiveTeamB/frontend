@@ -1,4 +1,5 @@
 <template>
+  <!-- hi -->
   <!-- view display none으로 조건부 렌더링 -->
   <div style="display: flex; flex-direction: column; width: 100%; height: 100%">
     <div id="TopBar" :style="!isPopup ? 'display : none' : ''">
