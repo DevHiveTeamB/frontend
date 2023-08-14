@@ -20,11 +20,12 @@
 import axios from 'axios'
 export default {
   methods: {
+    //카테고리 선택
     radioChange(event) {
       this.categorySelected = event.target.value
       console.log('categorySelected: ', this.categorySelected)
     },
-
+    //책 검색 했을때
     sendPostRequest() {
       const url = '/v1/post'
       const data = { [this.categorySelected]: this.searchText }
