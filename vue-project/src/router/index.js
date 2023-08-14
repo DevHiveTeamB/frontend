@@ -1,30 +1,33 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainPage from '../views/MainPage.vue'
-import LoginPage from '../views/LoginPage.vue'
-import JoinPage from '../views/JoinPage.vue'
-import PostPage from '../views/PostPage.vue'
-import BookListPage from '../views/BookListPage.vue'
 
 const routes = [
   {
     path: '/',
-    component: MainPage
+    component: () => import('../views/MainPage.vue')
   },
   {
     path: '/login',
-    component: LoginPage
+    component: () => import('../views/LoginPage.vue')
   },
   {
     path: '/join',
-    component: JoinPage
+    component: () => import('../views/JoinPage.vue')
   },
   {
     path: '/write',
-    component: PostPage
+    component: () => import('../views/PostPage.vue')
   },
   {
     path: '/booklist',
-    component: BookListPage
+    component: () => import('../views/BookListPage.vue')
+  },
+  {
+    path: '/mypage',
+    component: () => import('../views/MyPage.vue')
+  },
+  {
+    path: '/popup',
+    component: () => import('../views/SearchPopup.vue')
   }
 ]
 

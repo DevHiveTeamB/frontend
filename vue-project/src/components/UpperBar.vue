@@ -23,7 +23,4 @@ export default {
   display: flex;
   align-items: center;
 }
-#title {
-  // 페이지이름 가운데 와야대는데..
-}
 </style>
