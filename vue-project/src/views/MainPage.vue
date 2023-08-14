@@ -1,11 +1,21 @@
 <template>
   <!-- 홈화면 -->
   <div>
-    <div>로고</div>
-    <div @click="this.$router.push('popup')">검색창</div>
+<<<<<<< HEAD
+    <div id="logo">
+      <img src="../assets/DevHive_logo.svg"/>
+    </div>
+    <div id="subbutton" @click="this.$router.push('/write')">
+      <img src="../assets/icon_main_posting.svg" @click="this.$router.push('/write')"/>
+      <img src="../assets/icon_main_postlist.svg" @click="this.$router.push('/booklist')"/>
+    </div>
+=======
+    <div>MainPage</div>
     <button @click="this.$router.push('/write')">게시글작성</button>
-    <button @click="this.$router.push('/mybooklist')">게시글목록</button>
-    <button @click="this.$router.push('/announce')">공지사항</button>
+    <button @click="this.$router.push('/booklist')">게시글목록</button>
+
+    <div @click="this.$router.push('popup')">검색창</div>
+>>>>>>> develop
   </div>
 </template>
 
@@ -57,4 +67,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.logo {
+  position: relative;
+  width: 50%;
+}
+</style>
