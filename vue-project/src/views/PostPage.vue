@@ -82,7 +82,7 @@ export default {
       const formData = new FormData()
 
       //이미지 파일들 추가
-      for (let i = 0; i < selectedImages.length; i++) {
+      for (let i = 0; i < this.selectedImages.length; i++) {
         formData.append('picture', this.selectedImages[i])
       }
 
