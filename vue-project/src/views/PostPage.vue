@@ -1,7 +1,7 @@
 <template>
   <!-- 글 작성페이지 -->
   <div>
-    <button id="complete" @click=";[checkForm, sendPostRequest]">완료</button>
+    <button id="complete" @click="checkForm">완료</button>
     <div class="content">
       <!-- 사진 선택하고 화면에 나옴
       슬라이드로 넘기는거 구현해주세요
@@ -37,9 +37,24 @@
 <script>
 import axios from 'axios'
 import CategoryModal from '../components/CategoryModal.vue'
-
+import { mapState } from 'vuex'
 export default {
+  created() {
+    this.redirectToLogin()
+  },
+  computed: {
+    ...mapState(['isLoggedIn'])
+  },
   methods: {
+    async redirectToLogin() {
+      //로그인한 사용자만 이용가능하도록
+      if (!this.isLoggedIn) {
+        alert('로그인 후 이용 가능합니다.')
+        this.$router.push('/login')
+      } else {
+        // 로그인된 상태면 userId를 가져옴
+      }
+    },
     handleFileChange(event) {
       const file = event.target.files[0]
       if (file && this.selectedImages.length < 5) {
@@ -51,70 +66,53 @@ export default {
         this.title == '' ||
         this.selectedImage == '' ||
         this.content == '' ||
-        //this.category == '' ||
+        this.category == '' ||
         this.price == ''
       ) {
         alert('빈칸없이 작성해주세요')
+      } else {
+        //모든 정보가 입력되었을때만 요청 보냄
+        this.sendPostRequest()
       }
     },
     closeModal() {
       this.$emit('close')
     },
     sendPostRequest() {
-      // body에{
-      // 		"picture" : image.jpg
-      // 		"data" : {
-      // 				"userID" : "Long",
-      // 			  "lectureID": "Long",
-      // 			  "writer": "Long",
-      // 			  "postTitle": "String", OK
-      // 			  "postContent": "String",  OL
-      // 			  "price": "Integer",
-      // 			  "hits": "Integer"
-      // 		}
-      // } 들어가야 함
-      const postData = new postData()
+      const formData = new FormData()
 
-      //이미지들 저장
-      for (let i = 0; i < this.selectedImages.length; i++) {
-        postData.append('images[]', this.selectedImages[i])
+      //이미지 파일들 추가
+      for (let i = 0; i < selectedImages.length; i++) {
+        formData.append('picture', this.selectedImages[i])
       }
 
-      postData.append('postTitle', this.title)
-      postData.append('postContent', this.content)
-      postData.append('category', this.category)
-      postData.append('price', this.price)
-      console.log(postData)
+      //'data' 객체 추가
+      const data = {
+        userId: 'Long',
+        lecutreId: 'Long',
+        postTitle: this.title,
+        postContnet: this.content,
+        price: this.price
+      }
+
+      formData.append('data', JSON.stringify(data))
 
       axios
-        .post('v1/post')
+        .post('v1/post', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
         .then((response) => {
-          //요청 성공시
           console.log(response.data)
-
-          //요청 성공 글 내용 페이지로 이동
-          //this.$router.push('')
+          //완료되면 내가 작성한 글 내용보는걸로 넘어갈까..?
         })
         .catch((error) => {
-          //요청 실패시
           console.error(error)
         })
-    },
-    //로그인 상태 확인
-    checkLoggedIn() {
-      //세션 스토리지에서 userid 가져와서 로그인 상태 확인
-      const userid = sessionStorage.getItem('userid')
-      //로그인 완료되면 메인페이지로 이동
-      if (userid) {
-        console.log('User is logged in with userid: ', userid)
-        //로그인된 사용자만 이용가능하므로
-        // } else {
-        //   console.log('User is not logged in.')
-        //   alert('로그인 후 이용가능합니다.')
-        //   this.$router.go(-1)
-      }
     }
   },
+
   data() {
     return {
       selectedImage: null,
@@ -123,15 +121,12 @@ export default {
       content: '',
       category: '',
       price: '',
-      modalOpen: false
+      modalOpen: false,
+      userId: null
     }
   },
   components: {
     CategoryModal
-  },
-  created() {
-    //페이지 로드 시 로그인 상태 확인
-    this.checkLoggedIn()
   }
 }
 </script>
