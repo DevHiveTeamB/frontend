@@ -2,9 +2,13 @@
   <!-- 홈화면 -->
   <!-- HappyBeen -->
   <div>
-    <div>MainPage</div>
-    <button @click="this.$router.push('/write')">게시글작성</button>
-    <button @click="this.$router.push('/booklist')">게시글목록</button>
+    <div id="logo">
+      <img src="../assets/DevHive_logo.svg"/>
+    </div>
+    <div id="subbutton" @click="this.$router.push('/write')">
+      <img src="../assets/icon_main_posting.svg" @click="this.$router.push('/write')"/>
+      <img src="../assets/icon_main_postlist.svg" @click="this.$router.push('/booklist')"/>
+    </div>
   </div>
 </template>
 
@@ -15,4 +19,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.logo {
+  position: relative;
+  width: 50%;
+}
+</style>
