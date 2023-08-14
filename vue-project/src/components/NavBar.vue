@@ -3,16 +3,16 @@
   <div id="navbar">
     <div class="container">
       <div id="home" @click="this.$router.push('/')">
-        <img src="../assets/icon_home_disable.svg" />
+        <img src="../assets/home/icon_home_disable.svg" />
       </div>
       <div id="community">
-        <img src="../assets/icon_commu_disable.svg" />
+        <img src="../assets/community/icon_commu_disable.svg" />
       </div>
       <div id="chat">
-        <img src="../assets/icon_chat_disable.svg" />
+        <img src="../assets/chat/icon_chat_disable.svg" />
       </div>
       <div id="mypage" @click="this.$router.push('login')">
-        <img src="../assets/icon_mypage_disable.svg" />
+        <img src="../assets/mypage/icon_mypage_disable.svg" />
       </div>
     </div>
   </div>
