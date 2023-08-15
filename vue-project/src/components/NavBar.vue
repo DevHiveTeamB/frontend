@@ -11,7 +11,7 @@
       <div id="chat" class="item">
         <img src="../assets/chat/icon_chat_disable.svg" />
       </div>
-      <div id="mypage" class="item" @click="this.$router.push('login')">
+      <div id="mypage" class="item" @click="navigateToMypageOrLogin">
         <img src="../assets/mypage/icon_mypage_disable.svg" />
       </div>
     </div>
@@ -32,6 +32,9 @@ export default {
         this.$router.push('/login')
       }
     }
+  },
+  created() {
+    console.log(this.isLoggedIn)
   }
 }
 </script>

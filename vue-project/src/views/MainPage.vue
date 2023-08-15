@@ -106,13 +106,15 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { mapState, mapMutations } from 'vuex'
+import axios from '../main.js'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   computed: {
-    ...mapState(['isLoggedIn'])
+    ...mapGetters(['userInfo', 'isLoggedIn'])
   },
   created() {
+    console.log('create')
+    console.log(this.userInfo)
     const urlParams = new URLSearchParams(window.location.search)
     const userId = urlParams.get('userId')
     //userId 값이 존재하면
@@ -120,14 +122,14 @@ export default {
     if (userId) {
       console.log(userId)
       axios
-        .get(`v1/user/${userId}`, {
-          params: {
-            userId: userId
-          }
-        })
+        .get(`/v1/user/${userId}`)
         .then((response) => {
           //요청 성공시
           console.log(response.data)
+          alert(response.data.username + '님 환영합니다')
+          this.setUserInfo(response.data)
+          console.log(this.userInfo)
+
           //로그인 상태로 저장
           this.handleLogin()
         })
@@ -138,7 +140,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['login', 'logout']),
+    ...mapMutations(['login', 'logout', 'setUserInfo']),
     handleLogin() {
       this.login() // 뮤테이션을 호출하여 로그인 상태 변경
     },
