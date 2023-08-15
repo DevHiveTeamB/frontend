@@ -27,8 +27,14 @@
       </div>
       <input v-model="title" type="text" placeholder="제목을 입력해주세요" /><br />
       <input v-model="content" type="text" placeholder="책 소개를 입력해주세요" /><br />
-      <div @click="modalOpen = true">카테고리입력</div>
-      <CategoryModal v-if="modalOpen" @close="modalOpen = false" />
+      <div @click="modalOpen = true">카테고리</div>
+      <CategoryModal
+        v-if="modalOpen"
+        @close="modalOpen = false"
+        @result-selected="handleResultSelected"
+      />
+      <!-- 선택된 카테고리 표시해줌 -->
+      <div v-if="selectedResult">{{ selectedResult.postTitle }}</div>
       <input v-model="price" type="number" placeholder="가격을 입력해주세요" /><br />
     </div>
   </div>
@@ -39,22 +45,26 @@ import axios from 'axios'
 import CategoryModal from '../components/CategoryModal.vue'
 import { mapState } from 'vuex'
 export default {
-  created() {
-    this.redirectToLogin()
-  },
+  //백엔드랑 연결하면 넣어야함
+  // created() {
+  //   this.redirectToLogin()
+  // },
+
   computed: {
     ...mapState(['isLoggedIn'])
   },
   methods: {
-    async redirectToLogin() {
-      //로그인한 사용자만 이용가능하도록
-      if (!this.isLoggedIn) {
-        alert('로그인 후 이용 가능합니다.')
-        this.$router.push('/login')
-      } else {
-        // 로그인된 상태면 userId를 가져옴
-      }
-    },
+    // 백엔드랑 연결하면 넣어야함
+
+    // async redirectToLogin() {
+    //   //로그인한 사용자만 이용가능하도록
+    //   if (!this.isLoggedIn) {
+    //     alert('로그인 후 이용 가능합니다.')
+    //     this.$router.push('/login')
+    //   } else {
+    //     // 로그인된 상태면 userId를 가져옴
+    //   }
+    // },
     handleFileChange(event) {
       const file = event.target.files[0]
       if (file && this.selectedImages.length < 5) {
@@ -75,9 +85,7 @@ export default {
         this.sendPostRequest()
       }
     },
-    closeModal() {
-      this.$emit('close')
-    },
+
     sendPostRequest() {
       const formData = new FormData()
 
@@ -110,6 +118,9 @@ export default {
         .catch((error) => {
           console.error(error)
         })
+    },
+    handleResultSelected(result) {
+      this.selectedResult = result
     }
   },
 
@@ -122,7 +133,8 @@ export default {
       category: '',
       price: '',
       modalOpen: false,
-      userId: null
+      userId: null,
+      selectedResult: null
     }
   },
   components: {
