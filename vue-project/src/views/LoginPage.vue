@@ -1,12 +1,10 @@
 <template>
   <!-- 로그인 안됐을 때 나오는 페이지 -->
-  <div>
-    <UpperBar />
-    <div class="content">
-      <div>로고</div>
-      <div>간편로그인</div>
-      <button @click="kakaoLogin">kakao</button>
-    </div>
+  <UpperBar title="로그인" />
+  <div class="content">
+    <div>로고</div>
+    <div>간편로그인</div>
+    <button @click="kakaoLogin">kakao</button>
   </div>
 </template>
 

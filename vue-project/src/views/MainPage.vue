@@ -4,7 +4,7 @@
   <div style="display: flex; flex-direction: column; width: 100%; height: 100%">
     <div id="TopBar" :style="!isPopup ? 'display : none' : ''">
       <img
-        style="padding: 20px; margin-left: auto"
+        style="padding: 5%; margin-left: auto"
         src="../assets/main/icon_main_popup.svg"
         @click="this.$router.push('/announce')"
       />
@@ -42,28 +42,27 @@
       </div>
     </div>
     <div id="PopBar" :style="isPopup ? 'display : none' : ''">
-      <img style="padding: 20px" src="../assets/main/icon_main_back.svg" @click="handleSearch" />
+      <div class="imageContainer">
+        <img src="../assets/main/icon_main_back.svg" @click="handleSearch" />
+      </div>
       <div
         style="
           width: 100%;
           display: flex;
           border-bottom: 3px solid #316464;
           border-left: 3px solid #316464;
+
+          padding-left: 5%;
         "
       >
         <input
           v-model="searchData"
           placeholder="검색어를 입력하세요"
-          style="
-            width: 100%;
-            border: none;
-            outline: none;
-            font-size: 20px;
-            padding-left: 5%;
-            color: #316464;
-          "
+          style="width: auto; border: none; outline: none; color: #316464; font-size: 20px"
         />
-        <img style="padding: 20px" src="../assets/main/icon_main_search.svg" @click="searching" />
+        <div class="imageContainer">
+          <img style="" src="../assets/main/icon_main_search.svg" @click="searching" />
+        </div>
       </div>
     </div>
     <div id="Popup" :style="isPopup ? 'display : none' : ''">
@@ -84,12 +83,7 @@
         <div class="searchList" :key="index" v-for="(value, index) in searchList">
           <div
             style="background-color: white; border: none; padding: 0 5px"
-            @click="
-              () => {
-                // value delete in searchList
-                searchList.splice(index, 1)
-              }
-            "
+            @click="searchList.splice(index, 1)"
           >
             x
           </div>
@@ -238,6 +232,15 @@ export default {
 
 #PopBar {
   display: flex;
+  height: 10%;
+}
+.imageContainer {
+  height: 100%;
+  padding: 5% 5%;
+  //height 와 같은 값
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 #Popup {
