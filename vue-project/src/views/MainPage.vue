@@ -3,11 +3,13 @@
   <!-- view display none으로 조건부 렌더링 -->
   <div style="display: flex; flex-direction: column; width: 100%; height: 100%">
     <div id="TopBar" :style="!isPopup ? 'display : none' : ''">
-      <img
-        style="padding: 5%; margin-left: auto"
-        src="../assets/main/icon_main_popup.svg"
-        @click="this.$router.push('/announce')"
-      />
+      <div style="margin-left: auto" class="imageContainer">
+        <img
+          class="imageItem"
+          src="../assets/main/icon_main_popup.svg"
+          @click="this.$router.push('/announce')"
+        />
+      </div>
     </div>
     <div id="view" :style="!isPopup ? 'display : none' : ''">
       <div id="logo">
@@ -43,26 +45,31 @@
     </div>
     <div id="PopBar" :style="isPopup ? 'display : none' : ''">
       <div class="imageContainer">
-        <img src="../assets/main/icon_main_back.svg" @click="handleSearch" />
+        <img class="imageItem" src="../assets/main/icon_main_back.svg" @click="handleSearch" />
       </div>
-      <div
-        style="
-          width: 100%;
-          display: flex;
-          border-bottom: 3px solid #316464;
-          border-left: 3px solid #316464;
 
-          padding-left: 5%;
+      <input
+        v-model="searchData"
+        placeholder="검색어를 입력하세요"
+        style="
+          flex-grow: 1;
+          padding: 0px;
+          padding-left: 2%;
+          border: none;
+          outline: none;
+          color: #316464;
+          font-size: 20px;
+          border-left: #316464 solid 3px;
+          border-bottom: #316464 solid 3px;
         "
-      >
-        <input
-          v-model="searchData"
-          placeholder="검색어를 입력하세요"
-          style="width: auto; border: none; outline: none; color: #316464; font-size: 20px"
+      />
+      <div class="imageContainer" style="border-bottom: #316464 solid 3px">
+        <img
+          class="imageItem"
+          style=""
+          src="../assets/main/icon_main_search.svg"
+          @click="searching"
         />
-        <div class="imageContainer">
-          <img style="" src="../assets/main/icon_main_search.svg" @click="searching" />
-        </div>
       </div>
     </div>
     <div id="Popup" :style="isPopup ? 'display : none' : ''">
@@ -191,17 +198,17 @@ export default {
   align-content: center;
 
   //flex center 에서 혼자 맨 위에
-  margin-bottom: auto;
+  // margin-bottom: auto;
 }
 
 #view {
   width: 100%;
   height: 60%;
   padding: 0 10%;
-  margin-bottom: 50%;
+  margin-top: 30%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-content: center;
 }
 
@@ -233,14 +240,18 @@ export default {
 #PopBar {
   display: flex;
   height: 10%;
+  width: 100%;
 }
 .imageContainer {
   height: 100%;
+  width: 20%;
   padding: 5% 5%;
   //height 와 같은 값
-  display: flex;
-  justify-content: center;
-  align-content: center;
+}
+
+.imageItem {
+  height: 95%;
+  width: 95%;
 }
 
 #Popup {
