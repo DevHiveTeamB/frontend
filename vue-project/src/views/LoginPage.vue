@@ -1,12 +1,17 @@
 <template>
   <!-- 로그인 안됐을 때 나오는 페이지 -->
-  <div>
-    <UpperBar />
-    <div class="content">
-      <div>로고</div>
-      <div>간편로그인</div>
-      <button @click="kakaoLogin">kakao</button>
-    </div>
+  <UpperBar title="로그인" rightSource="" />
+  <div class="content">
+    <img style="width: 80%; margin-top: 30%" src="../assets/main/DevHive_logo.svg" />
+    <!-- <div style="border: solid 1px #316464; width: 80%; margin: 10px 0"></div> -->
+    <img style="margin: 10px 0; width: 20%" src="../assets/mypage/icon_mypage_login.svg" />
+    <button class="LoginButton" @click="kakaoLogin">
+      <img
+        src="../assets/mypage/icon_login_kakao.svg"
+        style="position: absolute; left: 12%; height: 3%"
+      />
+      카카오 로그인
+    </button>
   </div>
 </template>
 
@@ -25,4 +30,24 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.LoginButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  height: 5%;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #f6c65d;
+  border: none;
+}
+</style>
