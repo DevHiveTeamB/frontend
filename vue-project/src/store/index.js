@@ -10,12 +10,14 @@ const vuexPersist = new VuexPersist({
 
 const store = createStore({
   state() {
+    //데이터
     return {
       isLoggedIn: false
       // 다른 상태 변수들도 여기에 추가 가능
     }
   },
   mutations: {
+    //데이터 변경은 mutations를 통해서만 가능함
     login(state) {
       state.isLoggedIn = true
     },

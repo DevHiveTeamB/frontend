@@ -3,17 +3,28 @@
   <div class="modal">
     <div class="modal-content">
       <div class="category">
-        <input type="radio" name="category" value="1" @change="radioChange($event)" /> 강의명
-        <input type="radio" name="category" value="2" @change="radioChange($event)" /> 전공
-        <input type="radio" name="category" value="3" @change="radioChange($event)" /> 교수
-        <!-- <input type="radio" name="category" value="4" @change="radioChange($event)" /> 과목코드 -->
+        <div v-for="option in categoryOptions" :key="option.value">
+          <input
+            type="radio"
+            :id="option.value"
+            name="category"
+            :value="option.value"
+            v-model="categorySelected"
+          />
+          <label :for="option.value">{{ option.label }}</label>
+        </div>
       </div>
       <div class="search">
-        <input v-model="searchContent" type="text" />
+        <input v-model="searchText" type="text" />
         <button @click="searchBook">검색</button>
       </div>
       <div class="searchResult">
-        <div v-for="result in searchResults" :key="result.postID">
+        <div
+          v-for="result in searchResults"
+          :key="result.postID"
+          @click="selectResult(result)"
+          class="result-item"
+        >
           <!-- 일단은 제목만  -->
           {{ result.postTitle }}
         </div>
@@ -28,45 +39,73 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      searchContent: '',
-      categorySelected: '',
-      searchResults: [] //결과 데이터 저장 용도
+      searchText: '', //검색창 입력 내용
+      categorySelected: '', //카테고리 선택
+      searchResults: [], //결과 데이터 저장 용도,
+      selectedResult: null, //결과 중 하나 선택
+      categoryOptions: [
+        { value: '1', label: '강의명' },
+        { value: '2', label: '전공' },
+        { value: '3', label: '교수' },
+        { value: '4', label: '과목코드' }
+      ]
     }
   },
+
   methods: {
     closeModal() {
+      //백엔드 연결 후 넣을것
+
+      // //검색결과 중 하나를 선택하지 않았을때
+      // if (this.selectedResult == null) {
+      //   alert('검색결과 중 하나를 선택해주세요')
+      //   return
+      // }
+
       this.$emit('close')
+      //PostPage에 표시해야 되므로 값을 부모로 전달해줌
+      this.$emit('result-selected', this.selectedResult)
     },
-    radioChange(event) {
-      var categorySelected = event.target.value
-      console.log('categorySelected: ', categorySelected)
-    },
+
+    //검색 버튼 눌렀을때
     searchBook() {
-      let categorySelected = this.categorySelected
-      const bookInfo = this.searchBook
       let apiUrl = '/lectures/'
 
-      // 카테고리 선택에 따라 API 요청
-
       //카테고리가 선택되지 않았을 때
-      if (categorySelected == '') {
-        categorySelected = 'title'
+      if (this.categorySelected == '') {
+        alert('카테고리를 선택해주세요')
+        return
       }
-      apiUrl = apiUrl + `${categorySelected}/get/${bookInfo}`
+
+      //검색어를 입력하지 않았을 때
+      if (this.searchText == '') {
+        alert('검색어를 입력해주세요')
+        return
+      }
+
+      // 카테고리 선택에 따라 API 요청
+      if (this.searchText) apiUrl = apiUrl + `${this.categorySelected}/get/${this.bookInfo}`
 
       const data = { [this.categorySelected]: this.searchText }
 
       console.log(apiUrl, data)
 
+      //get 요청으로 보냄
       axios
         .get(apiUrl, data)
         .then((response) => {
           console.log(response.data)
+          //searchResults 배열에 response 받은 값들 저장
           this.searchResults = response.data
         })
         .catch((error) => {
           console.log(error)
         })
+    },
+    //검색 결과 중에 하나 선택
+    selectResult(result) {
+      this.selectedResult = result
+      console.log(this.selectedResult)
     }
   }
 }
