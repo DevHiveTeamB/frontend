@@ -13,6 +13,7 @@ const store = createStore({
     //데이터
     return {
       isLoggedIn: false,
+      isPopup: false,
       userInfo: {
         userId: 0,
         username: 'string',
@@ -34,6 +35,9 @@ const store = createStore({
     },
     userInfo(state) {
       return state.userInfo
+    },
+    isPopup(state) {
+      return state.isPopup
     }
   },
   mutations: {
@@ -46,6 +50,10 @@ const store = createStore({
     },
     setUserInfo(state, userInfo) {
       state.userInfo = userInfo
+    },
+    setIsPopup(state, isPopup) {
+      state.isPopup = isPopup
+      console.log('setIsPopup', isPopup)
     }
   },
   plugins: [vuexPersist.plugin]
