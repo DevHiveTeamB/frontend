@@ -13,7 +13,7 @@ const store = createStore({
     //데이터
     return {
       isLoggedIn: false,
-      isPopup: false,
+      isPopup: true,
       userInfo: {
         userId: 0,
         username: 'string',
