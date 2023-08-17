@@ -45,9 +45,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#navbar {
+  width: 100%;
+  height: 10%;
+}
 .container {
-  width: 357px;
-  height: 60px;
+  width: 99.7%;
+  height: 100%;
   display: flex;
   align-items: center;
   background: #fff;

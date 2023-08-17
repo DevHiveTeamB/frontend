@@ -1,7 +1,7 @@
 <template>
   <!-- 책 검색 창 -->
   <UpperBar title="책 검색 창" />
-  <div style="flex-grow: 1">
+  <div style="height: 80%">
     <div class="categoryContainer">
       <button
         :style="this.selectedCategory == value.value ? ' background-color: #316464' : ''"
@@ -14,7 +14,7 @@
       </button>
     </div>
     <div style="border: 1px solid #316464; width: 100%"></div>
-    <div style="display: flex; border-bottom: #316464 solid 2px">
+    <div style="display: flex; border-bottom: #316464 solid 2px; height: 10%">
       <input
         v-model="searchText"
         ref="searchInput"
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div
-      style="width: 100%; display: flex; flex-direction: column; padding: 0 5%"
+      style="width: 100%; height: 3%; display: flex; flex-direction: column; padding: 0 5%"
       :style="`${!isPopup ? 'display:none' : ''}`"
     >
       <!-- 배열 갯수만큼 출력 -->
@@ -53,12 +53,17 @@
       </div>
       <div @click="isPopup = false" class="searchList openClose">닫기</div>
     </div>
-    <div class="openClose" :style="`${isPopup ? 'display:none' : ''}`" @click="isPopup = true">
+    <div
+      style="height: 3%"
+      class="openClose"
+      :style="`${isPopup ? 'display:none' : ''}`"
+      @click="isPopup = true"
+    >
       최근 검색기록 보기
     </div>
     <div style="border: 1px solid #316464; width: 100%"></div>
     <!-- searchResult 만큼 출력 -->
-    <div style="overflow-y: auto; height: 80%">
+    <div style="overflow-y: auto; height: 83%">
       <div class="postItem" :key="index" v-for="(value, index) in searchResult">{{ value }}</div>
     </div>
   </div>
@@ -108,7 +113,7 @@ export default {
       selectedCategory: 'postTitle',
       searchText: '',
       searchList: [1, 2, 3, 4, 5],
-      searchResult: ['a', 'b', 'c'], //검색 결과를 저장
+      searchResult: ['a', 'b', 'c', 'd', 'e'], //검색 결과를 저장
       categoryOptions: [
         { value: 'postTitle', label: '제목', group: 'category' },
         { value: 'lectureName', label: '강의', group: 'category' },
@@ -141,10 +146,11 @@ export default {
 <style lang="scss" scoped>
 .categoryContainer {
   width: 100%;
+  height: 5%;
   padding: 0 5%;
   display: flex;
   justify-content: space-between;
-  margin: 4% 0;
+  // margin: 4% 0;
 }
 
 .openClose {
@@ -154,6 +160,7 @@ export default {
 }
 
 .categoryItem {
+  margin: 1% 0;
   width: 20%;
   padding: 1% 0;
   border-radius: 20px;
@@ -173,8 +180,8 @@ export default {
 }
 
 .postItem {
-  height: 150px;
-  margin-bottom: 10px;
+  height: 120px;
+  margin: 10px 0;
   border-bottom: solid 2px #316464;
   border-top: solid 2px #316464;
 }
