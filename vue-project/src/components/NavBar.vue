@@ -2,7 +2,7 @@
   <!-- NAVBAR -->
   <div id="navbar">
     <div class="container">
-      <div id="home" class="item" @click="this.$router.push('/')">
+      <div id="home" class="item" @click="goHome">
         <img src="../assets/home/icon_home_disable.svg" />
       </div>
       <div id="community" class="item">
@@ -11,7 +11,7 @@
       <div id="chat" class="item">
         <img src="../assets/chat/icon_chat_disable.svg" />
       </div>
-      <div id="mypage" class="item" @click="this.$router.push('login')">
+      <div id="mypage" class="item" @click="navigateToMypageOrLogin">
         <img src="../assets/mypage/icon_mypage_disable.svg" />
       </div>
     </div>
@@ -19,12 +19,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(['isLoggedIn', 'isPopup'])
   },
   methods: {
+    ...mapMutations(['setIsPopup']),
+    goHome() {
+      this.$router.push('/')
+      this.setIsPopup(true)
+    },
     navigateToMypageOrLogin() {
       if (this.isLoggedIn) {
         this.$router.push('/mypage')
@@ -32,6 +37,9 @@ export default {
         this.$router.push('/login')
       }
     }
+  },
+  created() {
+    console.log(this.isLoggedIn)
   }
 }
 </script>

@@ -12,8 +12,32 @@ const store = createStore({
   state() {
     //데이터
     return {
-      isLoggedIn: false
-      // 다른 상태 변수들도 여기에 추가 가능
+      isLoggedIn: false,
+      isPopup: true,
+      userInfo: {
+        userId: 0,
+        username: 'string',
+        kakaoId: 0,
+        email: 'string',
+        phoneNumber: 'string',
+        profilePhoto: 'string',
+        introduction: 'string',
+        membership: 0,
+        certification: 0,
+        ratingState: 0
+      }
+    }
+  },
+  getters: {
+    //computed와 비슷함
+    isLoggedIn(state) {
+      return state.isLoggedIn
+    },
+    userInfo(state) {
+      return state.userInfo
+    },
+    isPopup(state) {
+      return state.isPopup
     }
   },
   mutations: {
@@ -23,6 +47,13 @@ const store = createStore({
     },
     logout(state) {
       state.isLoggedIn = false
+    },
+    setUserInfo(state, userInfo) {
+      state.userInfo = userInfo
+    },
+    setIsPopup(state, isPopup) {
+      state.isPopup = isPopup
+      console.log('setIsPopup', isPopup)
     }
   },
   plugins: [vuexPersist.plugin]

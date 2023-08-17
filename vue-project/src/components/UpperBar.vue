@@ -2,7 +2,7 @@
   <!-- 상단바 -->
   <div class="container">
     <div class="imageContainer">
-      <img class="imageItem" src="../assets/UpperBar/icon_mypage_back.svg" @click="handleSearch" />
+      <img class="imageItem" src="../assets/UpperBar/icon_mypage_back.svg" @click="goBack" />
     </div>
     <div style="width: 100%; height: 100%; display: flex">
       <div class="title">{{ title }}</div>

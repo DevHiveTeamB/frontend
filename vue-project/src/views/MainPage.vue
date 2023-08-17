@@ -1,7 +1,7 @@
 <template>
   <!-- view display none으로 조건부 렌더링 -->
   <div style="display: flex; flex-direction: column; width: 100%; height: 100%">
-    <div id="TopBar" :style="!isPopup ? 'display : none' : ''">
+    <div id="TopBar" :style="!this.isPopup ? 'display : none' : ''">
       <div style="margin-left: auto" class="imageContainer">
         <img
           class="imageItem"
@@ -10,7 +10,7 @@
         />
       </div>
     </div>
-    <div id="view" :style="!isPopup ? 'display : none' : ''">
+    <div id="view" :style="!this.isPopup ? 'display : none' : ''">
       <div id="logo">
         <img style="width: 100%; height: 100%" src="../assets/main/DevHive_logo.svg" />
       </div>
@@ -71,7 +71,7 @@
         />
       </div>
     </div>
-    <div id="Popup" :style="isPopup ? 'display : none' : ''">
+    <div id="Popup" :style="this.isPopup ? 'display : none' : ''">
       <div class="categoryContainer">
         <button
           :style="selectCategory == value ? ' background-color: #316464' : ''"
@@ -106,13 +106,15 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { mapState, mapMutations } from 'vuex'
+import axios from '../main.js'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   computed: {
-    ...mapState(['isLoggedIn'])
+    ...mapGetters(['userInfo', 'isLoggedIn', 'isPopup'])
   },
   created() {
+    console.log('create')
+    console.log(this.userInfo)
     const urlParams = new URLSearchParams(window.location.search)
     const userId = urlParams.get('userId')
     //userId 값이 존재하면
@@ -120,14 +122,14 @@ export default {
     if (userId) {
       console.log(userId)
       axios
-        .get(`v1/user/${userId}`, {
-          params: {
-            userId: userId
-          }
-        })
+        .get(`/v1/user/${userId}`)
         .then((response) => {
           //요청 성공시
           console.log(response.data)
+          alert(response.data.username + '님 환영합니다')
+          this.setUserInfo(response.data)
+          console.log(this.userInfo)
+
           //로그인 상태로 저장
           this.handleLogin()
         })
@@ -138,7 +140,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['login', 'logout']),
+    ...mapMutations(['login', 'logout', 'setUserInfo', 'setIsPopup']),
     handleLogin() {
       this.login() // 뮤테이션을 호출하여 로그인 상태 변경
     },
@@ -147,7 +149,7 @@ export default {
     },
     //검색바 터치시 검색 팝업 띄우기
     handleSearch() {
-      this.isPopup = !this.isPopup
+      this.setIsPopup(!this.isPopup)
     },
     select(value) {
       this.selectCategory = value
@@ -169,7 +171,6 @@ export default {
   },
   data() {
     return {
-      isPopup: true,
       searchData: '',
       selectCategory: '교수',
       selectList: ['교수', '강의명', '전공'],
