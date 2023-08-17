@@ -45,6 +45,7 @@
             border-radius: 5px;
             font-weight: bold;
           "
+          @click="this.$router.push('/profile')"
         >
           프로필보기
         </button>
