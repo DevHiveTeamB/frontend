@@ -4,7 +4,11 @@
   <div style="height: 80%">
     <div class="categoryContainer">
       <button
-        :style="this.selectedCategory == value.value ? ' background-color: #316464' : ''"
+        :style="
+          this.selectedCategory == value.value
+            ? ' background-color: #316464; color=#000000; color: white;'
+            : ''
+        "
         class="categoryItem"
         :key="index"
         v-for="(value, index) in categoryOptions"
@@ -64,7 +68,14 @@
     <div style="border: 1px solid #316464; width: 100%"></div>
     <!-- searchResult 만큼 출력 -->
     <div style="overflow-y: auto; height: 83%">
-      <div class="postItem" :key="index" v-for="(value, index) in searchResult">{{ value }}</div>
+      <div class="postItem" :key="index" v-for="(value, index) in searchResult">
+        <img class="thumbnail" :src="value.picture" />
+        <div>
+          <div>postId : {{ value.postID }}</div>
+          <div>postTitle : {{ value.postTitle }}</div>
+          <div>postContent : {{ value.postContent }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -84,19 +95,24 @@ export default {
     // UpperBar
     UpperBar
   },
+  created() {
+    console.log('create')
+    this.sendPostRequest()
+  },
   methods: {
     //책 검색 했을때
     searchTest() {
-      alert(this.selectedCategory + '\n' + this.searchText)
+      this.sendPostRequest()
     },
     sendPostRequest() {
       const url = '/v1/post'
-      const data = { [this.categorySelected]: this.searchText }
+      const data = { [this.selectedCategory]: this.searchText }
       console.log(url, data)
-
+      this.searchResult = []
       axios
-        .post(url, null, { params: data })
+        .get(url, { params: data })
         .then((response) => {
+          console.log(response)
           console.log(response.data)
           //게시물 목록 검색결과로 바꿈
           this.searchResult = response.data
@@ -113,7 +129,7 @@ export default {
       selectedCategory: 'postTitle',
       searchText: '',
       searchList: [1, 2, 3, 4, 5],
-      searchResult: ['a', 'b', 'c', 'd', 'e'], //검색 결과를 저장
+      searchResult: [], //검색 결과를 저장
       categoryOptions: [
         { value: 'postTitle', label: '제목', group: 'category' },
         { value: 'lectureName', label: '강의', group: 'category' },
@@ -147,7 +163,6 @@ export default {
 .categoryContainer {
   width: 100%;
   height: 5%;
-  padding: 0 5%;
   display: flex;
   justify-content: space-between;
   // margin: 4% 0;
@@ -160,11 +175,11 @@ export default {
 }
 
 .categoryItem {
-  margin: 1% 0;
-  width: 20%;
-  padding: 1% 0;
-  border-radius: 20px;
+  flex-grow: 1;
   font-style: bold;
+  border: none;
+  border-right: 1px solid #316464;
+  border-left: 1px solid #316464;
   background-color: white;
 }
 
@@ -180,9 +195,22 @@ export default {
 }
 
 .postItem {
+  display: flex;
+  align-items: center;
   height: 120px;
   margin: 10px 0;
   border-bottom: solid 2px #316464;
   border-top: solid 2px #316464;
+}
+
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  /* 비율이 안깨지게 */
+  object-fit: contain;
+  border-radius: 20px;
+  padding: 5px;
+  border: 1px solid #316464;
+  margin-left: 2%;
 }
 </style>
