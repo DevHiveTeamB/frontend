@@ -1,9 +1,7 @@
 <template>
-  <div id="app">
-    <div id="content">
-      <router-view></router-view>
-      <NavBar id="navbar" />
-    </div>
+  <div id="content">
+    <router-view></router-view>
+    <NavBar id="navbar" />
   </div>
 </template>
 
@@ -29,14 +27,13 @@ export default {
   flex-direction: column;
 }
 
-body,
-html {
+body {
   width: 360px;
   height: 800px;
   margin: 0 auto;
-  padding: 0;
   overflow: hidden;
   position: relative;
+  /* 테두리를 바깥 쪽으로 */
   border: 1px solid #000;
 }
 

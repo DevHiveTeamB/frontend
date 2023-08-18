@@ -45,17 +45,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#navbar {
+  width: 100%;
+  height: 10%;
+}
 .container {
-  width: 360px;
-  height: 60px;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   background: #fff;
-  border: 2px solid #316464;
+  // border up down
+  border-top: 1px solid #316464;
 }
 
 .item {
-  width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;

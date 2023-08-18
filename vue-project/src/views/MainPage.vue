@@ -1,7 +1,7 @@
 <template>
   <!-- view display none으로 조건부 렌더링 -->
   <div style="display: flex; flex-direction: column; width: 100%; height: 100%">
-    <div id="TopBar" :style="!this.isPopup ? 'display : none' : ''">
+    <div id="TopBar">
       <div style="margin-left: auto" class="imageContainer">
         <img
           class="imageItem"
@@ -10,11 +10,11 @@
         />
       </div>
     </div>
-    <div id="view" :style="!this.isPopup ? 'display : none' : ''">
+    <div id="view">
       <div id="logo">
         <img style="width: 100%; height: 100%" src="../assets/main/DevHive_logo.svg" />
       </div>
-      <div id="searchBar" @click="handleSearch">
+      <div id="searchBar" @click="this.$router.push('/booklist')">
         <!-- 줄바꿈 -->
         <div class="tItem" style="width: 20%; flex-direction: column">
           <div class="tItem">Dev</div>
@@ -40,66 +40,6 @@
           src="../assets/main/icon_main_anounce.svg"
           @click="this.$router.push('/announce')"
         />
-      </div>
-    </div>
-    <div id="PopBar" :style="isPopup ? 'display : none' : ''">
-      <div class="imageContainer">
-        <img class="imageItem" src="../assets/main/icon_main_back.svg" @click="handleSearch" />
-      </div>
-
-      <input
-        v-model="searchData"
-        placeholder="검색어를 입력하세요"
-        style="
-          flex-grow: 1;
-          padding: 0px;
-          padding-left: 2%;
-          border: none;
-          outline: none;
-          color: #316464;
-          font-size: 20px;
-          border-left: #316464 solid 3px;
-          border-bottom: #316464 solid 3px;
-        "
-      />
-      <div class="imageContainer" style="border-bottom: #316464 solid 3px">
-        <img
-          class="imageItem"
-          style=""
-          src="../assets/main/icon_main_search.svg"
-          @click="searching"
-        />
-      </div>
-    </div>
-    <div id="Popup" :style="this.isPopup ? 'display : none' : ''">
-      <div class="categoryContainer">
-        <button
-          :style="selectCategory == value ? ' background-color: #316464' : ''"
-          class="categoryItem"
-          :key="index"
-          v-for="(value, index) in selectList"
-          @click="select(value)"
-        >
-          {{ value }}
-        </button>
-      </div>
-      <div style="border: 1px solid #316464; width: 100%"></div>
-      <div style="width: 100%; display: flex; flex-direction: column; padding: 0 5%">
-        <!-- 배열 갯수만큼 출력 -->
-        <div class="searchList" :key="index" v-for="(value, index) in searchList">
-          <div
-            style="background-color: white; border: none; padding: 0 5px"
-            @click="searchList.splice(index, 1)"
-          >
-            x
-          </div>
-          <div
-            style="display: flex; flex-grow: 1; justify-content: center"
-            @click="selectSearchList(value)"
-          >
-            {{ value }}
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -148,9 +88,6 @@ export default {
       this.logout() // 뮤테이션을 호출하여 로그아웃 상태 변경
     },
     //검색바 터치시 검색 팝업 띄우기
-    handleSearch() {
-      this.setIsPopup(!this.isPopup)
-    },
     select(value) {
       this.selectCategory = value
     },
@@ -205,7 +142,9 @@ export default {
   width: 100%;
   height: 60%;
   padding: 0 10%;
-  margin-top: 30%;
+  margin-top: 10%;
+  // margin: auto 0;
+  margin-bottom: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -237,11 +176,6 @@ export default {
   border: 5px solid #316464;
 }
 
-#PopBar {
-  display: flex;
-  height: 10%;
-  width: 100%;
-}
 .imageContainer {
   height: 100%;
   width: 20%;
@@ -252,39 +186,5 @@ export default {
 .imageItem {
   height: 95%;
   width: 95%;
-}
-
-#Popup {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-}
-//bottom, left, right border
-
-.categoryContainer {
-  width: 100%;
-  padding: 0 5%;
-  display: flex;
-  justify-content: space-between;
-  margin: 4% 0;
-}
-.categoryItem {
-  width: 28%;
-  border-radius: 20px;
-  font-style: bold;
-  background-color: white;
-}
-
-.searchList {
-  display: flex;
-  width: 100%;
-  padding: 0 5%;
-  border: solid 2px #316464;
-  border-radius: 20px;
-  margin: 4% 0;
-  font-style: bold;
-  background-color: white;
 }
 </style>
