@@ -4,10 +4,14 @@
     <div class="imageContainer">
       <img class="imageItem" src="../assets/UpperBar/icon_mypage_back.svg" @click="goBack" />
     </div>
-    <div style="width: 100%; height: 100%; display: flex">
-      <div class="title">{{ title }}</div>
-      <div class="imageContainer">
-        <img class="imageItem" src="@/assets/main/icon_main_search.svg" />
+    <div class="title">{{ title }}</div>
+    <div class="imageContainer">
+      <div
+        @click="clickFunction"
+        class="complete"
+        :style="`${rightSource === '완료' ? '' : 'display:none'}`"
+      >
+        완료
       </div>
     </div>
   </div>
@@ -24,6 +28,10 @@ export default {
     rightSource: {
       type: String,
       default: 'No'
+    },
+    clickFunction: {
+      type: Function,
+      default: null
     }
   },
   methods: {
@@ -37,17 +45,16 @@ export default {
 <style lang="scss" scoped>
 .imageContainer {
   height: 100%;
-  width: 20%;
+  width: 25%;
   padding: 5%;
   //height 와 같은 값
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
 }
 
 .imageItem {
-  height: 95%;
-  width: 95%;
+  height: 100%;
 }
 .container {
   width: 100%;
@@ -74,5 +81,14 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+.complete {
+  color: white;
+  font-weight: bold;
+  background-color: #316464;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
