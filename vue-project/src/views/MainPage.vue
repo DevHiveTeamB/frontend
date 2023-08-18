@@ -142,7 +142,9 @@ export default {
   width: 100%;
   height: 60%;
   padding: 0 10%;
-  margin-top: 30%;
+  margin-top: 10%;
+  // margin: auto 0;
+  margin-bottom: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -174,11 +176,6 @@ export default {
   border: 5px solid #316464;
 }
 
-#PopBar {
-  display: flex;
-  height: 10%;
-  width: 100%;
-}
 .imageContainer {
   height: 100%;
   width: 20%;
@@ -189,39 +186,5 @@ export default {
 .imageItem {
   height: 95%;
   width: 95%;
-}
-
-#Popup {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-}
-//bottom, left, right border
-
-.categoryContainer {
-  width: 100%;
-  padding: 0 5%;
-  display: flex;
-  justify-content: space-between;
-  margin: 4% 0;
-}
-.categoryItem {
-  width: 28%;
-  border-radius: 20px;
-  font-style: bold;
-  background-color: white;
-}
-
-.searchList {
-  display: flex;
-  width: 100%;
-  padding: 0 5%;
-  border: solid 2px #316464;
-  border-radius: 20px;
-  margin: 4% 0;
-  font-style: bold;
-  background-color: white;
 }
 </style>

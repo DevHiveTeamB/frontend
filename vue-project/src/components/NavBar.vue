@@ -50,15 +50,13 @@ export default {
   height: 10%;
 }
 .container {
-  width: 99.7%;
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   background: #fff;
   // border up down
   border-top: 1px solid #316464;
-  border-bottom: 1px solid #316464;
-  // border-left: 2px solid #316464;
 }
 
 .item {
