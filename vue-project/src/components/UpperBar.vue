@@ -13,6 +13,14 @@
       >
         완료
       </div>
+      <div>
+        <img
+          src="../assets/UpperBar/icon_UpperBar_Hamburger.svg"
+          @click="clickFunction"
+          class="complete hamburgerBtn"
+          :style="`${rightSource === 'hamburgerBtn' ? '' : 'display:none'}`"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -54,7 +62,7 @@ export default {
 }
 
 .imageItem {
-  height: 100%;
+  height: 80%;
 }
 .container {
   width: 100%;

@@ -41,39 +41,60 @@
       :style="`${!isPopup ? 'display:none' : ''}`"
     >
       <!-- 배열 갯수만큼 출력 -->
-      <div class="searchList" :key="index" v-for="(value, index) in searchList">
-        <div
-          style="background-color: white; border: none; padding: 0 5px"
-          @click="searchList.splice(index, 1)"
-        >
-          x
-        </div>
-        <div
-          style="display: flex; flex-grow: 1; justify-content: center; align-content: center"
-          @click="searchText = value"
-        >
-          {{ value }}
+      <div class="modal">
+        <div class="modal-content">
+          <div class="searchList" :key="index" v-for="(value, index) in searchList">
+            <div
+              style="background-color: white; border: none; padding: 0 5px"
+              @click="searchList.splice(index, 1)"
+            >
+              x
+            </div>
+
+            <div
+              style="display: flex; flex-grow: 1; justify-content: center; align-content: center"
+              @click="searchText = value"
+            >
+              {{ value }}
+            </div>
+          </div>
+          <div @click="isPopup = false" class="closeSearchList">닫기</div>
         </div>
       </div>
-      <div @click="isPopup = false" class="searchList openClose">닫기</div>
     </div>
-    <div
-      style="height: 3%"
-      class="openClose"
-      :style="`${isPopup ? 'display:none' : ''}`"
-      @click="isPopup = true"
-    >
-      최근 검색기록 보기
+    <div class="openSearchList" :style="`${isPopup ? 'display:none' : ''}`" @click="isPopup = true">
+      최근 검색 기록 보기
     </div>
+
     <div style="border: 1px solid #316464; width: 100%"></div>
     <!-- searchResult 만큼 출력 -->
-    <div style="overflow-y: auto; height: 83%">
-      <div class="postItem" :key="index" v-for="(value, index) in searchResult">
+    <div style="overflow-y: auto; height: 83%; width: 100%">
+      <div
+        class="postItem"
+        :key="index"
+        v-for="(value, index) in searchResult"
+        @click="
+          () => {
+            console.log(`${value.postID}번 게시물 클릭`)
+          }
+        "
+      >
         <img class="thumbnail" :src="value.picture" />
-        <div>
-          <div>postId : {{ value.postID }}</div>
-          <div>postTitle : {{ value.postTitle }}</div>
-          <div>postContent : {{ value.postContent }}</div>
+        <div class="postContent">
+          <h2
+            class="contentItem"
+            style="font-size: 18px; white-space: nowrap; /* 2. 줄바꿈 방지 */"
+          >
+            {{ value.postTitle }}
+          </h2>
+          <div
+            class="contentItem"
+            style="height: 30%; margin: 2% 0; font-size: 14px; color: #c9caca"
+          >
+            {{ value.postContent }}
+          </div>
+          <div class="contentItem contentPrice">20000원</div>
+          <!-- <div class="contentItem">price : {{ value.price }}</div> -->
         </div>
       </div>
     </div>
@@ -84,15 +105,7 @@
 import axios from '../main.js'
 import UpperBar from '../components/UpperBar.vue'
 export default {
-  //백엔드 연결후에 넣어야함
-  // created() {
-  //   if (!this.posts || this.posts.length == 0) {
-  //     //post 데이터가 없을 경우
-  //     alert('검색에 맞는 결과가 없음')
-  //   }
-  // },
   components: {
-    // UpperBar
     UpperBar
   },
   created() {
@@ -103,6 +116,7 @@ export default {
     //책 검색 했을때
     searchTest() {
       this.sendPostRequest()
+      this.addSearchList()
     },
     sendPostRequest() {
       const url = '/v1/post'
@@ -120,6 +134,17 @@ export default {
         .catch((error) => {
           console.error(error)
         })
+    },
+    addSearchList() {
+      //최근검색어는 5개까지만 유지
+      if (this.searchList.length >= 5) {
+        this.searchList.shift()
+      }
+      //같은 값이면 삭제 후 갱신
+      if (this.searchList.includes(this.searchText)) {
+        this.searchList.splice(this.searchList.indexOf(this.searchText), 1)
+      }
+      this.searchList.push(this.searchText)
     }
   },
   data() {
@@ -128,7 +153,7 @@ export default {
       selectedFilter: null,
       selectedCategory: 'postTitle',
       searchText: '',
-      searchList: [1, 2, 3, 4, 5],
+      searchList: [], //최근 검색어
       searchResult: [], //검색 결과를 저장
       categoryOptions: [
         { value: 'postTitle', label: '제목', group: 'category' },
@@ -168,12 +193,6 @@ export default {
   // margin: 4% 0;
 }
 
-.openClose {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}
-
 .categoryItem {
   flex-grow: 1;
   font-style: bold;
@@ -198,9 +217,9 @@ export default {
   display: flex;
   align-items: center;
   height: 120px;
+  width: 100%;
   margin: 10px 0;
   border-bottom: solid 2px #316464;
-  border-top: solid 2px #316464;
 }
 
 .thumbnail {
@@ -208,9 +227,63 @@ export default {
   height: 100px;
   /* 비율이 안깨지게 */
   object-fit: contain;
-  border-radius: 20px;
-  padding: 5px;
-  border: 1px solid #316464;
-  margin-left: 2%;
+  margin: 0 2%;
+}
+
+.postContent {
+  width: 68%;
+  padding: 0 2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.contentItem {
+  margin: 0;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contentPrice {
+  font-weight: bold;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  width: 50%;
+  height: fit-content;
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.openSearchList {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.closeSearchList {
+  border-radius: 999px;
+  background-color: #2e6464;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  border: none;
+  padding: 2px 0;
 }
 </style>
