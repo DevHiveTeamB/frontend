@@ -187,6 +187,7 @@ export default {
   position: absolute;
   bottom: 0;
   width: 100%;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: end;

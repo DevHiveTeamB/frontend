@@ -67,13 +67,33 @@
     </div>
     <div style="border: 1px solid #316464; width: 100%"></div>
     <!-- searchResult 만큼 출력 -->
-    <div style="overflow-y: auto; height: 83%">
-      <div class="postItem" :key="index" v-for="(value, index) in searchResult">
+    <div style="overflow-y: auto; height: 83%; width: 100%">
+      <div
+        class="postItem"
+        :key="index"
+        v-for="(value, index) in searchResult"
+        @click="
+          () => {
+            console.log(`${value.postID}번 게시물 클릭`)
+          }
+        "
+      >
         <img class="thumbnail" :src="value.picture" />
-        <div>
-          <div>postId : {{ value.postID }}</div>
-          <div>postTitle : {{ value.postTitle }}</div>
-          <div>postContent : {{ value.postContent }}</div>
+        <div class="postContent">
+          <h2
+            class="contentItem"
+            style="font-size: 18px; white-space: nowrap; /* 2. 줄바꿈 방지 */"
+          >
+            {{ value.postTitle }}
+          </h2>
+          <div
+            class="contentItem"
+            style="height: 30%; margin: 2% 0; font-size: 14px; color: #c9caca"
+          >
+            {{ value.postContent }}
+          </div>
+          <div class="contentItem contentPrice">20000원</div>
+          <!-- <div class="contentItem">price : {{ value.price }}</div> -->
         </div>
       </div>
     </div>
@@ -198,6 +218,7 @@ export default {
   display: flex;
   align-items: center;
   height: 120px;
+  width: 100%;
   margin: 10px 0;
   border-bottom: solid 2px #316464;
   border-top: solid 2px #316464;
@@ -208,9 +229,26 @@ export default {
   height: 100px;
   /* 비율이 안깨지게 */
   object-fit: contain;
-  border-radius: 20px;
-  padding: 5px;
-  border: 1px solid #316464;
-  margin-left: 2%;
+  margin: 0 2%;
+}
+
+.postContent {
+  width: 68%;
+  padding: 0 2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.contentItem {
+  margin: 0;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contentPrice {
+  font-weight: bold;
 }
 </style>
