@@ -9,10 +9,6 @@ const routes = [
     path: '/login',
     component: () => import('../views/LoginPage.vue')
   },
-  // {
-  //   path: '/join',
-  //   component: () => import('../views/JoinPage.vue')
-  // },
   {
     path: '/write',
     component: () => import('../views/PostPage.vue')
@@ -30,16 +26,17 @@ const routes = [
     component: () => import('../views/ProfilePage.vue')
   },
   {
-    path: '/popup',
-    component: () => import('../views/SearchPopup.vue')
-  },
-  {
     path: '/announce',
     component: () => import('../views/AnnouncePage.vue')
   },
   {
     path: '/mybooklist',
     component: () => import('../views/MyBookListPage.vue')
+  },
+  {
+    path: '/bookdeatil',
+    //path: '/:post_id', //동적으로 매핑
+    component: () => import('../views/BookDeatilPage.vue')
   }
 ]
 
