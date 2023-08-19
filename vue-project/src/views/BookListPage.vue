@@ -75,7 +75,8 @@
         v-for="(value, index) in searchResult"
         @click="
           () => {
-            console.log(`${value.postID}번 게시물 클릭`)
+            console.log(`${value.postId}번 게시물 클릭`)
+            this.$router.push(`/bookdetail/${value.postId}`)
           }
         "
       >
@@ -93,8 +94,9 @@
           >
             {{ value.postContent }}
           </div>
-          <div class="contentItem contentPrice">20000원</div>
-          <!-- <div class="contentItem">price : {{ value.price }}</div> -->
+          <!-- <div class="contentItem contentPrice">20000원</div> -->
+          <!-- 이거되는데? -->
+          <div class="contentItem">{{ value.price }}원</div>
         </div>
       </div>
     </div>
@@ -110,15 +112,15 @@ export default {
   },
   created() {
     console.log('create')
-    this.sendPostRequest()
+    this.sendGetRequest()
   },
   methods: {
     //책 검색 했을때
     searchTest() {
-      this.sendPostRequest()
+      this.sendGetRequest()
       this.addSearchList()
     },
-    sendPostRequest() {
+    sendGetRequest() {
       const url = '/v1/post'
       const data = { [this.selectedCategory]: this.searchText }
       console.log(url, data)
@@ -126,7 +128,6 @@ export default {
       axios
         .get(url, { params: data })
         .then((response) => {
-          console.log(response)
           console.log(response.data)
           //게시물 목록 검색결과로 바꿈
           this.searchResult = response.data
@@ -263,7 +264,7 @@ export default {
 }
 
 .modal-content {
-  width: 50%;
+  width: 360px;
   height: fit-content;
   background-color: white;
   padding: 20px;

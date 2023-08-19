@@ -34,8 +34,7 @@ const routes = [
     component: () => import('../views/MyBookListPage.vue')
   },
   {
-    path: '/bookdeatil',
-    //path: '/:post_id', //동적으로 매핑
+    path: '/bookdetail/:post_id',
     component: () => import('../views/BookDeatilPage.vue')
   }
 ]
