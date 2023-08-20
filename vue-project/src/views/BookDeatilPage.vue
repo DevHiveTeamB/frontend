@@ -7,7 +7,16 @@
         <div class="leftItem name">
           {{ postData.writer.username }}
         </div>
-        <div class="leftItem rating">평점</div>
+        <div class="rating leftItem" style="display: flex">
+          <div
+            :key="index"
+            v-for="(value, index) in [1, 2, 3, 4, 5]"
+            :class="(`${postData.writer.ratingState >= value ? 'star' : 'nostar'}`, leftItem)"
+          >
+            <img src="../assets/mypage/icon_mypage_star.svg" />
+          </div>
+          ({{ postData.writer.ratingState }})
+        </div>
         <div class="rightItem date">
           {{ getFormattedDate(postData.postDate) }}
         </div>
@@ -29,18 +38,34 @@
     <div class="contentContainer">
       <div class="titleContainer">
         <div id="title">{{ postData.postTitle }}</div>
-        <div id="isLike">{{ postData.isLike }}</div>
+        <img
+          @click="changeIsFavorite"
+          style="width: 7%"
+          v-bind:src="
+            isFavorite
+              ? require('../assets/bookdetail/icon_bookdetail_isLike.svg')
+              : require('../assets/bookdetail/icon_bookdetail_likes.svg')
+          "
+          alt="LikeImage"
+        />
       </div>
       <div id="content">{{ postData.postContent }}</div>
       <div id="price">{{ postData.price }}원</div>
     </div>
+    <button class="tradeBtn">거래하기</button>
   </div>
-  <button>거래하기</button>
 
   <!-- 토글창 -->
   <!-- 글 소유자이면 수정/삭제 아니라면 신고하기 -->
   <div v-if="isDropdownOpen" class="dropdown-menu">
-    <div v-for="(value, index) in item1" :key="index" class="dropdown-item">{{ value }}</div>
+    <div
+      v-for="(value, index) in userId === postData.writer.userId ? item1 : item2"
+      :key="index"
+      class="dropdown-item"
+      @click="navigateToPage(value)"
+    >
+      {{ value }}
+    </div>
   </div>
 </template>
 
@@ -83,6 +108,7 @@ export default {
           console.log(err)
         })
     },
+    //날짜를 년,월,일만 가져오도록 변환
     getFormattedDate(dateString) {
       const date = new Date(dateString)
       const year = date.getFullYear()
@@ -90,6 +116,57 @@ export default {
       const day = date.getDate().toString().padStart(2, '0')
 
       return `${year}-${month}-${day}`
+    },
+    //찜 기능
+    changeIsFavorite() {
+      this.isFavorite = !this.isFavorite
+      console.log(this.userId, this.postId)
+      if (this.isFavorite) {
+        axios
+          .post('/favorites/post', {
+            userID: this.userId,
+            postID: this.postId
+          })
+          .then((res) => {
+            console.log(res.data)
+            console.log('찜 추가')
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      } else {
+        axios
+          .delete('/favorites/delete', {
+            userID: this.userId,
+            postID: this.postId
+          })
+          .then((res) => {
+            console.log(res.data)
+            console.log('찜 삭제')
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+    },
+    navigateToPage(value) {
+      if (value === '수정하기') {
+        this.$router.push({ path: `/bookedit/${this.postId}` })
+      } else if (value === '삭제하기') {
+        const isConfirmed = confirm('게시글을 삭제하시겠습니까?')
+        if (isConfirmed) {
+          axios
+            .delete(`v1/post/${this.postId}`)
+            .then((res) => {
+              console.log(res.data)
+              alert('게시글이 삭제되었습니다.')
+              this.$router.go(-1)
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }
+      }
     }
   },
   data() {
@@ -98,7 +175,8 @@ export default {
       postData: null,
       isDropdownOpen: false,
       item1: ['수정하기', '삭제하기'],
-      item2: ['신고하기']
+      item2: ['신고하기'],
+      isFavorite: null
     }
   }
 }
@@ -200,5 +278,35 @@ export default {
   width: 90%;
   font-weight: bold;
   font-size: large;
+}
+
+.star {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: auto;
+}
+
+.nostar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: auto;
+  opacity: 0.3;
+}
+
+.tradeBtn {
+  background-color: #2e6464;
+  border: none;
+  color: #fff;
+  width: 30%;
+  height: 5%;
+  border-radius: 20px;
+  font-weight: bolder;
+  font-size: 15px;
+  position: absolute;
+  right: 5%;
 }
 </style>

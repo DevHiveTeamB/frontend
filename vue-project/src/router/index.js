@@ -36,6 +36,10 @@ const routes = [
   {
     path: '/bookdetail/:post_id',
     component: () => import('../views/BookDeatilPage.vue')
+  },
+  {
+    path: '/bookedit/:post_id',
+    component: () => import('../views/BookEditPage.vue')
   }
 ]
 
