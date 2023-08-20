@@ -1,22 +1,312 @@
 <template>
-  <UpperBar title="DevHive" rightSource="hamburgerBtn" />
-  <div class="profileContainer"></div>
-  <div class="photoContainer"></div>
-  <div class="contentContainer"></div>
-  <button>거래하기</button>
+  <UpperBar title="DevHive" rightSource="hamburgerBtn" :clickFunction="toggleDropdown" />
+  <div v-if="postData">
+    <div class="profileContainer">
+      <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" />
+      <div class="profileInfo">
+        <div class="leftItem name">
+          {{ postData.writer.username }}
+        </div>
+        <div class="rating leftItem" style="display: flex">
+          <div
+            :key="index"
+            v-for="(value, index) in [1, 2, 3, 4, 5]"
+            :class="(`${postData.writer.ratingState >= value ? 'star' : 'nostar'}`, leftItem)"
+          >
+            <img src="../assets/mypage/icon_mypage_star.svg" />
+          </div>
+          ({{ postData.writer.ratingState }})
+        </div>
+        <div class="rightItem date">
+          {{ getFormattedDate(postData.postDate) }}
+        </div>
+        <div class="rightItem hitAndLike">
+          <img src="../assets/bookdetail/icon_bookdetail_hits.svg" style="width: 10px" />
+          {{ postData.hits }}
+          <img src="../assets/bookdetail/icon_bookdetail_likes.svg" style="width: 10px" />
+          좋아요
+        </div>
+      </div>
+    </div>
+    <div class="photoContainer">
+      <div class="photoSlider">
+        <div v-for="(value, index) in postData.postPictures" :key="index" class="photoSlide">
+          <img :src="value.picture" alt="PostImage" />
+        </div>
+      </div>
+    </div>
+    <div class="contentContainer">
+      <div class="titleContainer">
+        <div id="title">{{ postData.postTitle }}</div>
+        <img
+          @click="changeIsFavorite"
+          style="width: 7%"
+          v-bind:src="
+            isFavorite
+              ? require('../assets/bookdetail/icon_bookdetail_isLike.svg')
+              : require('../assets/bookdetail/icon_bookdetail_likes.svg')
+          "
+          alt="LikeImage"
+        />
+      </div>
+      <div id="content">{{ postData.postContent }}</div>
+      <div id="price">{{ postData.price }}원</div>
+    </div>
+    <button class="tradeBtn">거래하기</button>
+  </div>
+
+  <!-- 토글창 -->
+  <!-- 글 소유자이면 수정/삭제 아니라면 신고하기 -->
+  <div v-if="isDropdownOpen" class="dropdown-menu">
+    <div
+      v-for="(value, index) in userId === postData.writer.userId ? item1 : item2"
+      :key="index"
+      class="dropdown-item"
+      @click="navigateToPage(value)"
+    >
+      {{ value }}
+    </div>
+  </div>
 </template>
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
+import axios from '../main.js'
+import { mapState } from 'vuex'
 export default {
+  computed: {
+    ...mapState(['userInfo']),
+    userId() {
+      return this.userInfo.userId
+    }
+  },
+  created() {
+    this.sendGetRequest()
+  },
   components: {
     UpperBar
   },
-  methods: {},
+  methods: {
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen
+    },
+    sendGetRequest() {
+      const url = `/v1/post/${this.postId}`
+      axios
+        .get(url, {
+          params: {
+            userId: this.userId
+          }
+        })
+        .then((res) => {
+          console.log(url, this.userId)
+          console.log(res.data)
+          this.postData = res.data
+        })
+        .catch((err) => {
+          console.log(url, this.userId)
+          console.log(err)
+        })
+    },
+    //날짜를 년,월,일만 가져오도록 변환
+    getFormattedDate(dateString) {
+      const date = new Date(dateString)
+      const year = date.getFullYear()
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const day = date.getDate().toString().padStart(2, '0')
+
+      return `${year}-${month}-${day}`
+    },
+    //찜 기능
+    changeIsFavorite() {
+      this.isFavorite = !this.isFavorite
+      console.log(this.userId, this.postId)
+      if (this.isFavorite) {
+        axios
+          .post('/favorites/post', {
+            userID: this.userId,
+            postID: this.postId
+          })
+          .then((res) => {
+            console.log(res.data)
+            console.log('찜 추가')
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      } else {
+        axios
+          .delete('/favorites/delete', {
+            userID: this.userId,
+            postID: this.postId
+          })
+          .then((res) => {
+            console.log(res.data)
+            console.log('찜 삭제')
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+    },
+    navigateToPage(value) {
+      if (value === '수정하기') {
+        this.$router.push({ path: `/bookedit/${this.postId}` })
+      } else if (value === '삭제하기') {
+        const isConfirmed = confirm('게시글을 삭제하시겠습니까?')
+        if (isConfirmed) {
+          axios
+            .delete(`v1/post/${this.postId}`)
+            .then((res) => {
+              console.log(res.data)
+              alert('게시글이 삭제되었습니다.')
+              this.$router.go(-1)
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }
+      }
+    }
+  },
   data() {
-    return {}
+    return {
+      postId: this.$route.params.post_id,
+      postData: null,
+      isDropdownOpen: false,
+      item1: ['수정하기', '삭제하기'],
+      item2: ['신고하기'],
+      isFavorite: null
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.dropdown-menu {
+  width: 30%;
+  position: absolute;
+  top: 10%;
+  right: 0px;
+  background-color: #d9d9d9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.dropdown-item {
+  padding: 10%;
+  cursor: pointer;
+  border: 1px solid #fff;
+}
+
+.profileContainer {
+  margin: 5%;
+  width: 90%;
+  position: relative;
+  font-size: small;
+  font-weight: bold;
+}
+
+.leftItem {
+  position: absolute;
+  left: 15%;
+  top: 0;
+}
+
+.rating {
+  top: 45%;
+}
+
+.rightItem {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.hitAndLike {
+  top: 45%;
+}
+
+.photoContainer {
+  margin: 5%;
+}
+
+.photoSlider {
+  display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+}
+
+.photoSlide {
+  height: 270px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  margin-right: 10px;
+}
+
+.photoSlide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contentContainer {
+  width: 100%;
+  position: relative;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+  font-size: large;
+  font-weight: bolder;
+  margin: 5%;
+}
+
+#content {
+  margin: 5%;
+  width: 90%;
+  font-size: small;
+  color: #727272;
+}
+
+#price {
+  margin: 5%;
+  width: 90%;
+  font-weight: bold;
+  font-size: large;
+}
+
+.star {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: auto;
+}
+
+.nostar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: auto;
+  opacity: 0.3;
+}
+
+.tradeBtn {
+  background-color: #2e6464;
+  border: none;
+  color: #fff;
+  width: 30%;
+  height: 5%;
+  border-radius: 20px;
+  font-weight: bolder;
+  font-size: 15px;
+  position: absolute;
+  right: 5%;
+}
+</style>
