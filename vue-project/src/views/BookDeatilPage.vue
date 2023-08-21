@@ -151,7 +151,7 @@ export default {
     },
     navigateToPage(value) {
       if (value === '수정하기') {
-        this.$router.push({ path: `/bookedit/${this.postId}` })
+        this.$router.push(`/bookedit/${this.postId}`)
       } else if (value === '삭제하기') {
         const isConfirmed = confirm('게시글을 삭제하시겠습니까?')
         if (isConfirmed) {

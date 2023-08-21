@@ -2,21 +2,40 @@
   <!-- 글 작성 페이지의 카테고리 선택 모달창 -->
   <div class="modal">
     <div class="modal-content">
-      <div class="category">
-        <div v-for="option in categoryOptions" :key="option.value">
-          <input
-            type="radio"
-            :id="option.value"
-            name="category"
-            :value="option.value"
-            v-model="categorySelected"
-          />
-          <label :for="option.value">{{ option.label }}</label>
-        </div>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 5%">
+        <img
+          src="../assets/categoryModal/icon_categoryModal_close.svg"
+          style="width: 8%"
+          @click="closeModal"
+        />
       </div>
-      <div class="search">
-        <input v-model="searchText" type="text" />
-        <button @click="searchBook">검색</button>
+      <div class="categoryContainer">
+        <button
+          :style="
+            this.selectedCategory == value.value
+              ? ' background-color: #316464; color=#000000; color: white;'
+              : ''
+          "
+          class="categoryItem"
+          :key="index"
+          v-for="(value, index) in categoryOptions"
+          @click="this.selectedCategory = value.value"
+        >
+          {{ value.label }}
+        </button>
+      </div>
+      <div style="display: flex; border: 2px solid #316464; justify-content: flex-end">
+        <input
+          class="searchInput"
+          v-model="searchText"
+          type="text"
+          placeholder="검색어를 입력해주세요."
+        />
+        <img
+          src="../assets/main/icon_main_search.svg"
+          style="width: 10%; padding: 1%"
+          @click="searchBook"
+        />
       </div>
       <div class="searchResult">
         <div
@@ -26,29 +45,29 @@
           class="result-item"
         >
           <!-- 일단은 제목만  -->
-          {{ result.postTitle }}
+          {{ result.post.postTitle }}
         </div>
       </div>
-      <button @click="closeModal">완료</button>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from '../main.js'
+const newLocal = 'title'
 export default {
   data() {
     return {
       searchText: '', //검색창 입력 내용
-      categorySelected: '', //카테고리 선택
       searchResults: [], //결과 데이터 저장 용도,
       selectedResult: null, //결과 중 하나 선택
       categoryOptions: [
-        { value: '1', label: '강의명' },
-        { value: '2', label: '전공' },
-        { value: '3', label: '교수' },
-        { value: '4', label: '과목코드' }
-      ]
+        { value: newLocal, label: '제목', group: 'category' },
+        { value: 'course', label: '강의', group: 'category' },
+        { value: 'professor', label: '교수이름', group: 'category' },
+        { value: 'major', label: '전공', group: 'category' }
+      ],
+      selectedCategory: 'title'
     }
   },
 
@@ -69,14 +88,6 @@ export default {
 
     //검색 버튼 눌렀을때
     searchBook() {
-      let apiUrl = '/lectures/'
-
-      //카테고리가 선택되지 않았을 때
-      if (this.categorySelected == '') {
-        alert('카테고리를 선택해주세요')
-        return
-      }
-
       //검색어를 입력하지 않았을 때
       if (this.searchText == '') {
         alert('검색어를 입력해주세요')
@@ -84,15 +95,24 @@ export default {
       }
 
       // 카테고리 선택에 따라 API 요청
-      if (this.searchText) apiUrl = apiUrl + `${this.categorySelected}/get/${this.bookInfo}`
+      const apiUrl = `/lectures/${this.selectedCategory}/get/${this.searchText}`
+      let data = {}
 
-      const data = { [this.categorySelected]: this.searchText }
+      if (this.selectedCategory == 'title') {
+        data = { postTitle: this.searchText }
+      } else if (this.selectedCategory == 'professor') {
+        data = { professorName: this.searchText }
+      } else if (this.selectedCategory == 'lectureName') {
+        data = { lectureName: this.searchText }
+      } else {
+        data = { major: this.searchText }
+      }
 
       console.log(apiUrl, data)
 
       //get 요청으로 보냄
       axios
-        .get(apiUrl, data)
+        .get(apiUrl, { parmas: data })
         .then((response) => {
           console.log(response.data)
           //searchResults 배열에 response 받은 값들 저장
@@ -125,13 +145,40 @@ export default {
 }
 
 .modal-content {
+  width: 360px;
   background-color: white;
   padding: 20px;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-button {
-  margin-top: 10px;
+.categoryContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-top: solid 2px #316464;
+  /* // margin: 4% 0; */
+}
+
+.categoryItem {
+  flex-grow: 1;
+  font-style: bold;
+  border: none;
+  border-right: 2px solid #316464;
+  background-color: white;
+  padding: 2%;
+  font-weight: bold;
+}
+
+.categoryItem:nth-child(1) {
+  border-left: 2px solid #316464;
+}
+
+.searchInput {
+  outline: none;
+  border: none;
+  width: 100%;
+  font-weight: bold;
+  font-size: medium;
 }
 </style>
