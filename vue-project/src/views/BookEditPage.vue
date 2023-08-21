@@ -22,7 +22,7 @@
         style="display: none"
       />
       <div :key="index" v-for="(image, index) in selectedImages" style="position: relative">
-        <img :src="image" alt="선택된 사진" class="thumbnail" />
+        <img :src="image.picture" alt="선택된 사진" class="thumbnail" />
         <button
           class="imageDeleteButton"
           @click="selectedImages = selectedImages.filter((item) => item !== image)"
@@ -109,6 +109,7 @@ export default {
         .then((res) => {
           this.postData = res.data
           this.selectedImages = this.postData.postPictures
+          console.log(this.selectedImages)
           this.title = this.postData.postTitle
           this.content = this.postData.postContent
           //   카테고리도 추가해야댐
