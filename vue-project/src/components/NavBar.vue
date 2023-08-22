@@ -8,7 +8,7 @@
       <div id="community" class="item">
         <img src="../assets/community/icon_commu_disable.svg" />
       </div>
-      <div id="chat" class="item">
+      <div id="chat" class="item" @click="goChat">
         <img src="../assets/chat/icon_chat_disable.svg" />
       </div>
       <div id="mypage" class="item" @click="navigateToMypageOrLogin">
@@ -36,6 +36,9 @@ export default {
       } else {
         this.$router.push('/login')
       }
+    },
+    goChat() {
+      this.$router.push('/chat')
     }
   },
   created() {

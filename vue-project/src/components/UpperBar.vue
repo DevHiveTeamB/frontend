@@ -23,7 +23,7 @@
       </div>
       <div>
         <img
-          src="../assets/UpperBar/icon_chat_refresh.svg"
+          src="../assets/UpperBar/icon_refresh.svg"
           @click="clickFunction"
           class="complete refreshBtn"
           :style="`${rightSource === 'refreshBtn' ? '' : 'display:none'}`"

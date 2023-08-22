@@ -44,6 +44,11 @@ const routes = [
   {
     path: '/chatdetail',
     component: () => import('../views/ChatDetailPage.vue')
+  },
+  //쪽지함 페이지
+  {
+    path: '/chat',
+    component: () => import('../views/ChatPage.vue')
   }
 ]
 
