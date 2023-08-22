@@ -29,6 +29,14 @@
           :style="`${rightSource === 'refreshBtn' ? '' : 'display:none'}`"
         />
       </div>
+      <div>
+        <img
+          src="../assets/UpperBar/icon_refresh.svg"
+          @click="clickFunction"
+          class="complete reFresh"
+          :style="`${rightSource === 'reFresh' ? '' : 'display:none'}`"
+        />
+      </div>
     </div>
   </div>
 </template>

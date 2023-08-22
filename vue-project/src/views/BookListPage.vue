@@ -84,13 +84,13 @@
         <div class="postContent">
           <h2
             class="contentItem"
-            style="font-size: 18px; white-space: nowrap; /* 2. 줄바꿈 방지 */"
+            style="font-size: 18px;"
           >
             {{ value.postTitle }}
           </h2>
           <div
             class="contentItem"
-            style="height: 30%; margin: 2% 0; font-size: 14px; color: #c9caca"
+            style="height: 35%; margin: 2% 0; font-size: 14px; color: #c9caca"
           >
             {{ value.postContent }}
           </div>
@@ -219,7 +219,7 @@ export default {
   align-items: center;
   height: 120px;
   width: 100%;
-  margin: 10px 0;
+  padding: 10px  0;
   border-bottom: solid 2px #316464;
 }
 
@@ -245,6 +245,9 @@ export default {
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .contentPrice {
