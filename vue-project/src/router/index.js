@@ -40,6 +40,10 @@ const routes = [
   {
     path: '/bookedit/:post_id',
     component: () => import('../views/BookEditPage.vue')
+  },
+  {
+    path: '/chatdetail',
+    component: () => import('../views/ChatDetailPage.vue')
   }
 ]
 
