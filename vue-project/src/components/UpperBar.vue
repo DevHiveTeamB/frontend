@@ -21,6 +21,14 @@
           :style="`${rightSource === 'hamburgerBtn' ? '' : 'display:none'}`"
         />
       </div>
+      <div>
+        <img
+          src="../assets/UpperBar/icon_chat_refresh.svg"
+          @click="clickFunction"
+          class="complete refreshBtn"
+          :style="`${rightSource === 'refreshBtn' ? '' : 'display:none'}`"
+        />
+      </div>
     </div>
   </div>
 </template>

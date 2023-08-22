@@ -20,12 +20,6 @@
         <div class="rightItem date">
           {{ getFormattedDate(postData.postDate) }}
         </div>
-        <div class="rightItem hitAndLike">
-          <img src="../assets/bookdetail/icon_bookdetail_hits.svg" style="width: 10px" />
-          {{ postData.hits }}
-          <img src="../assets/bookdetail/icon_bookdetail_likes.svg" style="width: 10px" />
-          좋아요
-        </div>
       </div>
     </div>
     <div class="photoContainer">
