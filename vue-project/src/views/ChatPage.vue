@@ -1,5 +1,5 @@
 <template>
-  <UpperBar title="쪽지함" rightSource="reFresh" :clickFunction="refresh" />
+  <UpperBar title="쪽지함" rightSource="refreshBtn" :clickFunction="refresh" />
   <div style="overflow-y: auto; height: 80%; width: 100%; display: inline-block;">
       <div
         class="chatRoom"
@@ -46,7 +46,7 @@ export default {
 },
   methods: {
     refresh(){
-      console.log('refresh')
+      this.$router.go(0)
     }
   },
   data() {
