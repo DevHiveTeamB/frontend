@@ -49,6 +49,11 @@ const routes = [
   {
     path: '/chat',
     component: () => import('../views/ChatPage.vue')
+  },
+  //community 페이지
+  {
+    path: '/community',
+    component: () => import('../views/CommunityPage.vue')
   }
 ]
 

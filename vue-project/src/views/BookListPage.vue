@@ -21,7 +21,6 @@
     <div style="display: flex; border-bottom: #316464 solid 2px; height: 10%">
       <input
         v-model="searchText"
-        ref="searchInput"
         placeholder="검색어를 입력하세요"
         style="
           padding-left: 5%;
@@ -33,7 +32,7 @@
         "
       />
       <div style="display: flex; justify-content: center; align-content: center; padding: 5%">
-        <img class="imageItem" src="../assets/main/icon_main_search.svg" @click="searchTest" />
+        <img src="../assets/main/icon_main_search.svg" @click="searchTest" />
       </div>
     </div>
     <div
@@ -84,7 +83,7 @@
         <div class="postContent">
           <h2
             class="contentItem"
-            style="font-size: 18px;"
+            style="font-size: 18px; white-space:nowrap;"
           >
             {{ value.postTitle }}
           </h2>
@@ -245,7 +244,6 @@ export default {
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }

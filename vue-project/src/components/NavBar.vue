@@ -5,7 +5,7 @@
       <div id="home" class="item" @click="goHome">
         <img src="../assets/home/icon_home_disable.svg" />
       </div>
-      <div id="community" class="item">
+      <div id="community" class="item" @click="goComunity">
         <img src="../assets/community/icon_commu_disable.svg" />
       </div>
       <div id="chat" class="item" @click="goChat">
@@ -29,6 +29,9 @@ export default {
     goHome() {
       this.$router.push('/')
       this.setIsPopup(true)
+    },
+    goComunity() {
+      this.$router.push('/community')
     },
     navigateToMypageOrLogin() {
       if (this.isLoggedIn) {
