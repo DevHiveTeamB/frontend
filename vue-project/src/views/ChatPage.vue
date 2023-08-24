@@ -18,7 +18,7 @@
           </h2>
           <h3
             class="content"
-            style="height: 35%;font-size: 15px; margin-top: 6%;"
+            style="font-size: 15px; margin-top: 6%;"
           >
             어제는 잘 들어갔어요? ~어제는 잘 들어갔어요? ~어제는 잘 들어갔어요? ~어제는 잘 들어갔어요? ~어제는 잘 들어갔어요? ~어제는 잘 들어갔어요? ~
           </h3>
