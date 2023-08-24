@@ -28,7 +28,7 @@
         <img
           class="subButtonItem"
           src="../assets/main/icon_main_posting.svg"
-          @click="this.$router.push('/write')"
+          @click="navigateToWriteOrLogin()"
         />
         <img
           class="subButtonItem"
@@ -97,6 +97,13 @@ export default {
     },
     selectSearchList(value) {
       this.searchData = value
+    },
+    navigateToWriteOrLogin() {
+      if (this.isLoggedIn) {
+        this.$router.push('/write')
+      } else {
+        this.$router.push('/login')
+      }
     }
   },
   components: {},

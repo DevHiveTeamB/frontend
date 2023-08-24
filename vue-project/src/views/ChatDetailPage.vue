@@ -1,9 +1,9 @@
 <template>
   <!-- 쪽지함 상세페이지(쪽지 나누기) -->
   <UpperBar title="쪽지 나누기" rightSource="refreshBtn" :clickFunction="refreshPage" />
-  <div class="profileContainer">
-    <ProfileModal v-if="modalOpen" @close="modalOpen = false" />
-    <div class="profile" @click="modalOpen = true">
+  <ProfileModal v-if="modalOpen" @close="modalOpen = false" style="z-index: 1" />
+  <div class="profile" @click="modalOpen = true">
+    <div class="profileContainer">
       <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 100%" />
       <div class="leftItem" style="top: 5%">이름</div>
       <div class="leftItem rating" style="bottom: 5%">평점</div>
@@ -15,9 +15,15 @@
     <div class="date">날짜</div>
     <div class="bookInfoContainer">
       <div class="photo">사진</div>
-      <div class="title">제목</div>
-      <div class="price">가격</div>
-      <div class="content">내용</div>
+      <div class="info">
+        <div class="title">제목</div>
+        <div class="price">가격</div>
+      </div>
+    </div>
+
+    <div class="chatContainer">
+      <div class="myBubble">책 거래 할게요</div>
+      <div class="yourBubble">어떤 책이요?</div>
     </div>
   </div>
   <div class="inputContainer">
@@ -65,8 +71,8 @@ export default {
 .report {
   position: absolute;
   width: 10%;
-  right: -15%;
-  top: 15%;
+  right: 6%;
+  top: 11.5%;
 }
 
 .contentContainer {
@@ -105,47 +111,56 @@ export default {
 }
 
 .bookInfoContainer {
-  height: 30%;
   border: 1.5px solid #316464;
   margin: 0% 5%;
   border-radius: 10px;
   padding: 3%;
-  position: relative;
-}
-
-.photo,
-.title,
-.price,
-.content {
-  position: absolute;
+  display: flex;
+  align-items: center;
 }
 
 .photo {
   border: solid 1px #316464;
   width: 60px;
   height: 60px;
+  margin-right: 10px;
 }
 
-.title {
-  left: 26%;
-  top: 10%;
-  font-weight: bolder;
-  font-size: large;
-  margin-top: 1%;
+.info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.price {
-  left: 26%;
-  font-weight: bolder;
-  font-size: small;
-  margin-top: 11%;
+.chatContainer {
+  margin: 0% 5%;
+  padding: 3% 0%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
-.content {
-  width: 94%;
-  top: 50%;
+.myBubble {
+  background-color: #58888e;
+  width: fit-content;
+  height: auto;
+  color: #fff;
+  padding: 3%;
+  border-radius: 10px;
   font-weight: bold;
-  font-size: small;
-  border-top: 1.5px solid #316464;
+  align-self: flex-end; /* 오른쪽에 배치 */
+  margin-bottom: 10px; /* 말풍선 사이의 간격 설정 */
+}
+
+.yourBubble {
+  background-color: #74b495;
+  width: fit-content;
+  height: auto;
+  color: #fff;
+  padding: 3%;
+  border-radius: 10px;
+  font-weight: bold;
+  align-self: flex-start; /* 왼쪽에 배치 */
+  margin-bottom: 10px; /* 말풍선 사이의 간격 설정 */
 }
 </style>
