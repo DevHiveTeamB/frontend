@@ -54,6 +54,10 @@ const routes = [
   {
     path: '/community',
     component: () => import('../views/CommunityPage.vue')
+  },
+  {
+    path: '/community/detail',
+    component: () => import('../views/CommunityDetailPage.vue')
   }
 ]
 
