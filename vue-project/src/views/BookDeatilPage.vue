@@ -52,10 +52,12 @@
       <div id="content">{{ postData.postContent }}</div>
       <div id="price">{{ postData.price }}원</div>
     </div>
-    <!-- 거래하기 버튼 -->
-    <div class="BookTradeBtn">
-      <div style="display: flex; justify-content: center; align-items: center; margin: 0 auto">
-        <img src="../assets/bookdetail/icon_bookdetail_tradeBtn.svg" />
+    <!-- 거래하기 버튼. 내 글이면 안보임-->
+    <div v-if="userId != postData.writer.userId">
+      <div class="BookTradeBtn" @click="goMessageroom">
+        <div style="display: flex; justify-content: center; align-items: center; margin: 0 auto">
+          <img src="../assets/bookdetail/icon_bookdetail_tradeBtn.svg" />
+        </div>
       </div>
     </div>
   </div>
@@ -154,6 +156,7 @@ export default {
           })
       }
     },
+    //게시글 수정,삭제하기 기능
     navigateToPage(value) {
       if (value === '수정하기') {
         this.$router.push(`/bookedit/${this.postId}`)
@@ -172,6 +175,25 @@ export default {
             })
         }
       }
+    },
+    //거래하기 버튼 눌렀을 때
+    goMessageroom() {
+      const url = '/message-rooms/messagerooms/post'
+      axios
+        .post(url, null, {
+          params: {
+            postId: this.postId,
+            buyerId: this.userId
+          }
+        })
+        .then((res) => {
+          //response로 messageroomId가 넘어옴
+          console.log(res.data)
+          this.messageroomId = res.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   },
   data() {
@@ -181,7 +203,8 @@ export default {
       isDropdownOpen: false,
       item1: ['수정하기', '삭제하기'],
       item2: ['신고하기'],
-      isFavorite: null
+      isFavorite: null,
+      messageroomId: null //거래하기 버튼 눌렀을때 반환되는 메시지룸 ID
     }
   }
 }
@@ -305,10 +328,10 @@ export default {
 .BookTradeBtn {
   display: flex;
   align-items: center;
-  bottom: 3%;
+  bottom: 15%;
   right: 5%;
   position: absolute;
-  height: 6.5%;
+  height: 5.5%;
   width: 30%;
   z-index: 1;
   border-radius: 100px;
