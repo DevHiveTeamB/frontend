@@ -81,10 +81,7 @@
       >
         <img class="thumbnail" :src="value.picture" />
         <div class="postContent">
-          <h2
-            class="contentItem"
-            style="font-size: 18px; white-space:nowrap;"
-          >
+          <h2 class="contentItem" style="font-size: 18px; white-space: nowrap">
             {{ value.postTitle }}
           </h2>
           <div
@@ -93,8 +90,6 @@
           >
             {{ value.postContent }}
           </div>
-          <!-- <div class="contentItem contentPrice">20000원</div> -->
-          <!-- 이거되는데? -->
           <div class="contentItem">{{ value.price }}원</div>
         </div>
       </div>
@@ -218,7 +213,7 @@ export default {
   align-items: center;
   height: 120px;
   width: 100%;
-  padding: 10px  0;
+  padding: 10px 0;
   border-bottom: solid 2px #316464;
 }
 
