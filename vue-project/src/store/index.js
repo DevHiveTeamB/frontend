@@ -24,7 +24,8 @@ const store = createStore({
         introduction: 'string',
         membership: 0,
         certification: 0,
-        ratingState: 0
+        ratingState: 0,
+        activeNavItem: 'home' //Navbar 초기값
       }
     }
   },
@@ -38,6 +39,9 @@ const store = createStore({
     },
     isPopup(state) {
       return state.isPopup
+    },
+    activeNavItem(state) {
+      return state.activeNavItem
     }
   },
   mutations: {
@@ -54,6 +58,9 @@ const store = createStore({
     setIsPopup(state, isPopup) {
       state.isPopup = isPopup
       console.log('setIsPopup', isPopup)
+    },
+    setActiveNavItem(state, item) {
+      state.activeNavItem = item
     }
   },
   plugins: [vuexPersist.plugin]

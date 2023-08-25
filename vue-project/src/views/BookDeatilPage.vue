@@ -52,7 +52,12 @@
       <div id="content">{{ postData.postContent }}</div>
       <div id="price">{{ postData.price }}원</div>
     </div>
-    <button class="tradeBtn">거래하기</button>
+    <!-- 거래하기 버튼 -->
+    <div class="BookTradeBtn">
+      <div style="display: flex; justify-content: center; align-items: center; margin: 0 auto">
+        <img src="../assets/bookdetail/icon_bookdetail_tradeBtn.svg" />
+      </div>
+    </div>
   </div>
 
   <!-- 토글창 -->
@@ -297,16 +302,16 @@ export default {
   opacity: 0.3;
 }
 
-.tradeBtn {
-  background-color: #2e6464;
-  border: none;
-  color: #fff;
-  width: 30%;
-  height: 5%;
-  border-radius: 20px;
-  font-weight: bolder;
-  font-size: 15px;
-  position: absolute;
+.BookTradeBtn {
+  display: flex;
+  align-items: center;
+  bottom: 3%;
   right: 5%;
+  position: absolute;
+  height: 6.5%;
+  width: 30%;
+  z-index: 1;
+  border-radius: 100px;
+  background-color: #316464;
 }
 </style>

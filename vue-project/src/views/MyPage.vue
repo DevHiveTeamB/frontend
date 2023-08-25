@@ -44,10 +44,24 @@
             border: none;
             border-radius: 5px;
             font-weight: bold;
+            margin: 5% 0%;
           "
           @click="this.$router.push('/profile')"
         >
           프로필보기
+        </button>
+        <button
+          class="grow"
+          style="
+            width: 50%;
+            background-color: #d9d9d9;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+          "
+          @click="handleLogout()"
+        >
+          로그아웃
         </button>
       </div>
     </div>
@@ -79,13 +93,20 @@
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   components: { UpperBar },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo', 'isLoggedIn'])
   },
-  methods: {},
+  methods: {
+    ...mapMutations(['logout']),
+    handleLogout() {
+      this.logout() // 뮤테이션을 호출하여 로그아웃 상태 변경
+      alert('로그아웃 되었습니다.')
+      this.$router.push('/')
+    }
+  },
   created() {
     console.log(this.userInfo)
   },

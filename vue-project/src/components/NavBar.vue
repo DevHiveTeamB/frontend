@@ -2,17 +2,51 @@
   <!-- NAVBAR -->
   <div id="navbar">
     <div class="container">
-      <div id="home" class="item" @click="goHome">
-        <img src="../assets/home/icon_home_disable.svg" />
+      <div id="home" class="item" :class="{ active: isActive('home') }" @click="goHome">
+        <img
+          :src="
+            isActive('home')
+              ? require('../assets/home/icon_home_enable.svg')
+              : require('../assets/home/icon_home_disable.svg')
+          "
+        />
       </div>
-      <div id="community" class="item" @click="goComunity">
-        <img src="../assets/community/icon_commu_disable.svg" />
+      <div
+        id="community"
+        class="item"
+        :class="{ active: isActive('community') }"
+        @click="goComunity"
+      >
+        <img
+          :src="
+            isActive('community')
+              ? require('../assets/community/icon_commu_enable.svg')
+              : require('../assets/community/icon_commu_disable.svg')
+          "
+        />
       </div>
-      <div id="chat" class="item" @click="goChat">
-        <img src="../assets/chat/icon_chat_disable.svg" />
+      <div id="chat" class="item" :class="{ active: isActive('chat') }" @click="goChat">
+        <img
+          :src="
+            isActive('chat')
+              ? require('../assets/chat/icon_chat_enable.svg')
+              : require('../assets/chat/icon_chat_disable.svg')
+          "
+        />
       </div>
-      <div id="mypage" class="item" @click="navigateToMypageOrLogin">
-        <img src="../assets/mypage/icon_mypage_disable.svg" />
+      <div
+        id="mypage"
+        class="item"
+        :class="{ active: isActive('mypage') }"
+        @click="navigateToMypageOrLogin"
+      >
+        <img
+          :src="
+            isActive('mypage')
+              ? require('../assets/mypage/icon_mypage_enable.svg')
+              : require('../assets/mypage/icon_mypage_disable.svg')
+          "
+        />
       </div>
     </div>
   </div>
@@ -22,18 +56,24 @@
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   computed: {
-    ...mapGetters(['isLoggedIn', 'isPopup'])
+    ...mapGetters(['isLoggedIn', 'isPopup', 'activeNavItem'])
   },
   methods: {
-    ...mapMutations(['setIsPopup']),
+    ...mapMutations(['setIsPopup', 'setActiveNavItem']),
+    isActive(item) {
+      return this.activeNavItem === item
+    },
     goHome() {
+      this.setActiveNavItem('home')
       this.$router.push('/')
       this.setIsPopup(true)
     },
     goComunity() {
+      this.setActiveNavItem('community')
       this.$router.push('/community')
     },
     navigateToMypageOrLogin() {
+      this.setActiveNavItem('mypage')
       if (this.isLoggedIn) {
         this.$router.push('/mypage')
       } else {
@@ -41,6 +81,7 @@ export default {
       }
     },
     goChat() {
+      this.setActiveNavItem('chat')
       this.$router.push('/chat')
     }
   },
