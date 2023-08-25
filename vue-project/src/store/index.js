@@ -24,9 +24,9 @@ const store = createStore({
         introduction: 'string',
         membership: 0,
         certification: 0,
-        ratingState: 0,
-        activeNavItem: 'home' //Navbar 초기값
-      }
+        ratingState: 0
+      },
+      activeNavItem: 'home' //Navbar 초기값
     }
   },
   getters: {
