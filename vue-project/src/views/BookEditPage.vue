@@ -163,6 +163,13 @@ export default {
   components: {
     CategoryModal,
     UpperBar
+  },
+  watch: {
+    price(input) {
+      if (input < 0) {
+        alert('0원 이상 입력해주세해주세요')
+      }
+    }
   }
 }
 </script>
@@ -243,5 +250,12 @@ export default {
   align-items: center;
   border-radius: 10px;
   border: 2px solid #316464;
+}
+
+/* 가격 입력 옆에 화살표 없앰 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>

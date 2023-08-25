@@ -13,21 +13,15 @@ const routes = [
     path: '/write',
     component: () => import('../views/PostPage.vue')
   },
+  //책 게시글 관련 페이지
   {
     path: '/booklist',
     component: () => import('../views/BookListPage.vue')
   },
+  //마이페이지
   {
     path: '/mypage',
     component: () => import('../views/MyPage.vue')
-  },
-  {
-    path: '/profile',
-    component: () => import('../views/ProfilePage.vue')
-  },
-  {
-    path: '/announce',
-    component: () => import('../views/AnnouncePage.vue')
   },
   {
     path: '/mybooklist',
@@ -41,6 +35,16 @@ const routes = [
     path: '/bookedit/:post_id',
     component: () => import('../views/BookEditPage.vue')
   },
+  //마이페이지->프로필 보기
+  {
+    path: '/profile',
+    component: () => import('../views/ProfilePage.vue')
+  },
+  {
+    path: '/announce',
+    component: () => import('../views/AnnouncePage.vue')
+  },
+  //쪽지 관련 페이지
   {
     path: '/chatdetail',
     component: () => import('../views/ChatDetailPage.vue')
@@ -58,6 +62,10 @@ const routes = [
   {
     path: '/community/detail',
     component: () => import('../views/CommunityDetailPage.vue')
+  },
+  {
+    path: '/community/write',
+    component: () => import('../views/CommunityPostPage.vue')
   }
 ]
 
