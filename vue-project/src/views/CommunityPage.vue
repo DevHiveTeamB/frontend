@@ -112,9 +112,9 @@ export default {
             "username": "",
             "loginId": null
           },
-          "communityPostTitle": "string",
-          "communityPostContent": "string",
-          "communityPostDate": "2023-08-26T04:07:15.135+00:00",
+          "communityPostTitle": "",
+          "communityPostContent": "",
+          "communityPostDate": "",
           "communityPostLikesCount": null,
           "isCommunityPostLikes": null,
           "commentIDs": null

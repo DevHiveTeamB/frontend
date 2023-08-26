@@ -20,23 +20,30 @@
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
+import { mapGetters } from 'vuex'
 import axios from '../main.js'
 export default {
+  computed: {
+    ...mapGetters(['userInfo'])
+  },
   components: { UpperBar },
   methods: {
     checkForm() {
       if (this.title == '' || this.content == '') {
         alert('빈칸없이 작성해주세요')
       } else {
-        //모든 정보가 입력되었을때만 요청 보냄
-        axios.post('/community/post', {
-          "writerID": this.userId,
+        const data = {
+          "writerID": this.userInfo.userId,
           "communityPostTitle": this.title,
           "communityPostContent": this.content,
           "communityPostLikes": 0
-        })
+        }
+        console.log(data)
+        //모든 정보가 입력되었을때만 요청 보냄
+        axios.post('/communityposts/post', data)
         .then((res) => {
           console.log(res)
+          this.$router.push(`/community/detail/${res.data.communityPostID}`)
         })
       }
     }
