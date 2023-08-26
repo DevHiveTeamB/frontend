@@ -52,9 +52,9 @@
 
             <div
               style="display: flex; flex-grow: 1; justify-content: center; align-content: center"
-              @click="searchText = value.searchData"
+              @click="searchText = value"
             >
-              {{ value.searchData }}
+              {{ value }}
             </div>
           </div>
           <div @click="isPopup = false" class="closeSearchList">닫기</div>
@@ -167,7 +167,10 @@ export default {
         .get(url)
         .then((response) => {
           console.log(response.data)
+
           this.searchList = response.data.searchList
+          const parsedData = this.searchList.map((item) => JSON.parse(item.searchData))
+          this.searchList = parsedData.map((data) => data.message)
         })
         .catch((error) => {
           console.log(error)

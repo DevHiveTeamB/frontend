@@ -3,8 +3,12 @@
 
   <div class="profileContainer" style="margin: 5%; width: 90%">
     <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 100%" />
-    <div class="leftItem" style="top: 5%; color: #c9caca; font-size: medium">{{this.communityPostContent.writer.username}}</div>
-    <div class="leftItem" style="bottom: 5%; color: #c9caca; font-size: smaller">{{ getFormattedDate(this.communityPostContent.communityPostDate) }}</div>
+    <div class="leftItem" style="top: 5%; color: #c9caca; font-size: medium">
+      {{ this.communityPostContent.writer.username }}
+    </div>
+    <div class="leftItem" style="bottom: 5%; color: #c9caca; font-size: smaller">
+      {{ getFormattedDate(this.communityPostContent.communityPostDate) }}
+    </div>
   </div>
 
   <div class="contentContainer" style="margin: 0% 5%; margin-bottom: 5%">
@@ -24,7 +28,7 @@
   </div>
 
   <div class="commentContainer" style="border: 1px solid #2e6464; height: 100%">
-    <div style="border: 1px solid #c9caca" :key="index" v-for="(value,index) in comments">
+    <div style="border: 1px solid #c9caca" :key="index" v-for="(value, index) in comments">
       <div class="profileContainer" style="padding: 3%; padding-bottom: 0">
         <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 30px" />
         <div class="leftItem comment" style="top: 18%; color: #c9caca; font-size: small">
@@ -72,7 +76,7 @@ export default {
     }
   },
   created() {
-    this.comments = null;
+    this.comments = null
     axios.get(`/communityposts/get/${this.$route.params.post_id}`).then((res) => {
       this.communityPostContent = res.data
       this.comments = res.data.comments
@@ -90,7 +94,7 @@ export default {
       const day = date.getDate().toString().padStart(2, '0')
 
       return `${year}-${month}-${day}`
-    },
+    }
   },
   components: { UpperBar },
   data() {
@@ -98,30 +102,30 @@ export default {
       item1: ['수정하기', '삭제하기', '새로고침'],
       item2: ['신고하기', '새로고침'],
       isDropdownOpen: false,
-      communityPostContent : {
-        "communityPostID": 1,
-        "writer": {
-          "id": 1,
-          "username": "",
-          "loginId": null
+      communityPostContent: {
+        communityPostID: 1,
+        writer: {
+          id: 1,
+          username: '',
+          loginId: null
         },
-        "communityPostTitle": "",
-        "communityPostContent": "",
-        "communityPostDate": "",
-        "communityPostsPictures": null,
-        "communityPostLikesCount": null,
-        "isCommunityPostLikes": null,
+        communityPostTitle: '',
+        communityPostContent: '',
+        communityPostDate: '',
+        communityPostsPictures: null,
+        communityPostLikesCount: null,
+        isCommunityPostLikes: null
       },
-      comments : [
+      comments: [
         {
-          "commentsID": 0,
-          "user": {
-            "id": 0,
-            "username": "",
-            "loginId": ""
+          commentsID: 0,
+          user: {
+            id: 0,
+            username: '',
+            loginId: ''
           },
-          "commentContent": "",
-          "commentDate": ""
+          commentContent: '',
+          commentDate: ''
         }
       ]
     }
@@ -133,7 +137,7 @@ export default {
 .dropdown-menu {
   width: 30%;
   position: absolute;
-  top: 10%;
+  top: 60px;
   right: 0px;
   background-color: #d9d9d9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

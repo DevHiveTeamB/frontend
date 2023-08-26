@@ -8,7 +8,6 @@
       <div class="leftItem" style="top: 5%">이름</div>
       <div class="leftItem rating" style="bottom: 5%">평점</div>
     </div>
-    <img src="..\assets\chat\icon_chat_report.svg" class="report" />
   </div>
 
   <div class="contentContainer">
@@ -94,7 +93,7 @@ export default {
 
 .contentContainer {
   border: 1px solid #316464;
-  height: 66%;
+  height: 68.5%;
 }
 
 .inputContainer {

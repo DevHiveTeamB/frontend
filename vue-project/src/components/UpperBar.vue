@@ -62,7 +62,7 @@ export default {
 .imageContainer {
   height: 100%;
   width: 25%;
-  padding: 5%;
+  padding: 3%;
   //height 와 같은 값
   display: flex;
   justify-content: center;
@@ -74,7 +74,7 @@ export default {
 }
 .container {
   width: 100%;
-  height: 10%;
+  height: 60px;
   display: flex;
   align-items: center;
   background-color: #316464;

@@ -37,7 +37,7 @@
       </div>
       <div style="font-size: 12px; font-weight: bold; text-align: center; display: flex">
         <div style="flex-grow: 0.3">글 작성하기</div>
-        <div style="flex-grow: 1">내가 쓴 글</div>
+        <div style="flex-grow: 1">게시글 보기</div>
         <div style="flex-grow: 0.6">공지사항</div>
       </div>
     </div>
