@@ -56,7 +56,11 @@ const routes = [
     component: () => import('../views/CommunityPage.vue')
   },
   {
-    path: '/community/detail',
+    path: '/community/post',
+    component: () => import('../views/CommunityPostPage.vue')
+  },
+  {
+    path: '/community/detail/:post_id',
     component: () => import('../views/CommunityDetailPage.vue')
   }
 ]

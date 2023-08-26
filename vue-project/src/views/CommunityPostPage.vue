@@ -20,6 +20,7 @@
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
+import axios from '../main.js'
 export default {
   components: { UpperBar },
   methods: {
@@ -28,6 +29,15 @@ export default {
         alert('빈칸없이 작성해주세요')
       } else {
         //모든 정보가 입력되었을때만 요청 보냄
+        axios.post('/community/post', {
+          "writerID": this.userId,
+          "communityPostTitle": this.title,
+          "communityPostContent": this.content,
+          "communityPostLikes": 0
+        })
+        .then((res) => {
+          console.log(res)
+        })
       }
     }
   },

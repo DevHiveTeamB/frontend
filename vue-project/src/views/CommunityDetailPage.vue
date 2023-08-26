@@ -3,13 +3,13 @@
 
   <div class="profileContainer" style="margin: 5%; width: 90%">
     <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 100%" />
-    <div class="leftItem" style="top: 5%; color: #c9caca; font-size: medium">이희연</div>
-    <div class="leftItem" style="bottom: 5%; color: #c9caca; font-size: smaller">2023.08.24</div>
+    <div class="leftItem" style="top: 5%; color: #c9caca; font-size: medium">{{this.communityPostContent.writer.username}}</div>
+    <div class="leftItem" style="bottom: 5%; color: #c9caca; font-size: smaller">{{ getFormattedDate(this.communityPostContent.communityPostDate) }}</div>
   </div>
 
   <div class="contentContainer" style="margin: 0% 5%; margin-bottom: 5%">
-    <div class="title">GPT가 나보다 코딩 잘하는 것에 대하여..</div>
-    <div class="content">어쩌구저쩌구<br />어쩌구저쩌구</div>
+    <div class="title">{{ this.communityPostContent.communityPostTitle }}</div>
+    <div class="content">{{ this.communityPostContent.communityPostContent }}</div>
     <div style="font-size: smaller">
       <img
         src="../assets/community/icon_community_comment.svg"
@@ -24,7 +24,7 @@
   </div>
 
   <div class="commentContainer" style="border: 1px solid #2e6464; height: 100%">
-    <div style="border: 1px solid #c9caca">
+    <div style="border: 1px solid #c9caca" :key="index" v-for="(value,index) in comments">
       <div class="profileContainer" style="padding: 3%; padding-bottom: 0">
         <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 30px" />
         <div class="leftItem comment" style="top: 18%; color: #c9caca; font-size: small">
@@ -61,6 +61,7 @@
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
+import axios from '../main.js'
 import { mapState } from 'vuex'
 
 export default {
@@ -70,17 +71,59 @@ export default {
       return this.userInfo.userId
     }
   },
+  created() {
+    this.comments = null;
+    axios.get(`/communityposts/get/${this.$route.params.post_id}`).then((res) => {
+      this.communityPostContent = res.data
+      this.comments = res.data.comments
+      console.log(res.data)
+    })
+  },
   methods: {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
-    }
+    },
+    getFormattedDate(dateString) {
+      const date = new Date(dateString)
+      const year = date.getFullYear()
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const day = date.getDate().toString().padStart(2, '0')
+
+      return `${year}-${month}-${day}`
+    },
   },
   components: { UpperBar },
   data() {
     return {
       item1: ['수정하기', '삭제하기', '새로고침'],
       item2: ['신고하기', '새로고침'],
-      isDropdownOpen: false
+      isDropdownOpen: false,
+      communityPostContent : {
+        "communityPostID": 1,
+        "writer": {
+          "id": 1,
+          "username": "",
+          "loginId": null
+        },
+        "communityPostTitle": "",
+        "communityPostContent": "",
+        "communityPostDate": "",
+        "communityPostsPictures": null,
+        "communityPostLikesCount": null,
+        "isCommunityPostLikes": null,
+      },
+      comments : [
+        {
+          "commentsID": 0,
+          "user": {
+            "id": 0,
+            "username": "",
+            "loginId": ""
+          },
+          "commentContent": "",
+          "commentDate": ""
+        }
+      ]
     }
   }
 }
