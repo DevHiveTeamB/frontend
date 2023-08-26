@@ -190,6 +190,7 @@ export default {
           //response로 messageroomId가 넘어옴
           console.log(res.data)
           this.messageroomId = res.data
+          this.$router.push(`/chat`)
         })
         .catch((err) => {
           console.log(err)

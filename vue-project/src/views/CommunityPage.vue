@@ -14,7 +14,7 @@
       </div>
     </div>
     <!-- 글쓰기 버튼 -->
-    <div class="communityCreateBtn">
+    <div class="communityCreateBtn" @click="communityCreate">
       <div style="display: flex; justify-content:center; align-items: center; margin-left: 5%;">
         <img src="../assets/community/icon_add_community.svg" />
       </div>
@@ -24,9 +24,9 @@
     </div>
     <!-- 커뮤니티 리스트 -->
     <div style="overflow-y: auto; height: 92%; width: 100%">
-      <div class="community"  :key="index" v-for="(value,index) in communityList">
+      <div class="community"  :key="index" v-for="(value,index) in communityList" @click="clickCommunityPost(value.communityPostID)">
         <!-- 날짜 -->
-        <div style="position: absolute; right: 2%; top: 10%; font-size: 14px; color: #c9caca">2000.09.21</div>
+        <div style="position: absolute; right: 2%; top: 10%; font-size: 14px; color: #c9caca">{{ getFormattedDate(value.communityPostDate) }}</div>
         <!-- 댓글, 좋아요 -->
         <div style="height: 12%; display: flex; position: absolute; right: 5%; bottom: 10%; color: #c9caca;">
           <div style="display: flex; justify-content:center; align-items: center; margin-right: 5%;">
@@ -44,17 +44,15 @@
             class="contentItem"
             style="font-size: 18px;"
           >
-            파이썬으로 만드는 인공지능
+            {{ value.communityPostTitle }}
           </h2>
           <div
             class="contentItem"
             style="height: auto; margin-top: 2%; font-size: 12px; color: #c9caca"
           >
-            이것은 예시 글 내용입니다.
-            <br>
-            이것은 예시 글 내용입니다.
+            {{ value.communityPostContent }}
           </div>
-          <div style="font-size: 12px; color: #c9caca; margin-top: 4%;" class="contentItem">이원찬 #0001</div>
+          <div style="font-size: 12px; color: #c9caca; margin-top: 4%;" class="contentItem">{{ value.writer.username }} #{{ value.writer.id }}</div>
         </div>
       </div>
     </div>
@@ -63,7 +61,7 @@
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
-// import axios from '../main.js'
+import axios from '../main.js'
 import { mapState } from 'vuex'
 export default {
   computed: {
@@ -73,7 +71,10 @@ export default {
     }
   },
   created() {
-    
+    axios.get('/communityposts').then((res) => {
+      console.log(res.data)
+      this.communityList = res.data
+    })
   },
   components: {
     UpperBar,
@@ -81,12 +82,44 @@ export default {
   methods: {
     favorite(){
       this.isFavorite = !this.isFavorite
-    }
+    },
+    getFormattedDate(dateString) {
+      const date = new Date(dateString)
+      const year = date.getFullYear()
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const day = date.getDate().toString().padStart(2, '0')
+
+      return `${year}-${month}-${day}`
+    },
+    communityCreate(){
+      if(this.userId == null)
+        this.$router.push('/login')
+      else
+        this.$router.push('/community/post')
+    },
+    clickCommunityPost(postId){
+      this.$router.push(`/community/detail/${postId}`)
+    },
   },
   data() {
     return {
       searchText : "",
-      communityList: [1,2,3,4,5],
+      communityList: [
+        {
+          "communityPostID": 1,
+          "writer": {
+            "id": 0,
+            "username": "",
+            "loginId": null
+          },
+          "communityPostTitle": "string",
+          "communityPostContent": "string",
+          "communityPostDate": "2023-08-26T04:07:15.135+00:00",
+          "communityPostLikesCount": null,
+          "isCommunityPostLikes": null,
+          "commentIDs": null
+        }
+      ],
     }
   }
 }
