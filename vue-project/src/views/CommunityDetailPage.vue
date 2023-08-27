@@ -1,50 +1,66 @@
 <template>
   <UpperBar title="DevHive" rightSource="hamburgerBtn" :clickFunction="toggleDropdown" />
-
-  <div class="profileContainer" style="margin: 5%; width: 90%">
-    <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 100%" />
-    <div class="leftItem" style="top: 5%; color: #c9caca; font-size: medium">{{this.communityPostContent.writer.username}}</div>
-    <div class="leftItem" style="bottom: 5%; color: #c9caca; font-size: smaller">{{ getFormattedDate(this.communityPostContent.communityPostDate) }}</div>
-  </div>
-
-  <div class="contentContainer" style="margin: 0% 5%; margin-bottom: 5%">
-    <div class="title">{{ this.communityPostContent.communityPostTitle }}</div>
-    <div class="content">{{ this.communityPostContent.communityPostContent }}</div>
-    <div style="font-size: smaller">
-      <img
-        src="../assets/community/icon_community_comment.svg"
-        style="width: 10px; margin-right: 1%"
-      />
-      999+
-      <img
-        src="../assets/community/icon_community_like.svg"
-        style="width: 10px; margin-right: 1%"
-      />99+
+  <!-- 글 정보 -->
+  <div style="width: 100%; padding: 5%;border-bottom: 1px solid #316464;">
+  <!-- 글쓴이 프로필 -->
+    <div class="profileContainer" style="width: 100%; margin-bottom: 5%;">
+      <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 100%" />
+      <div class="leftItem" style="top: 5%; color: #c9caca; font-size: medium">{{this.communityPostContent.writer.username}}</div>
+      <div class="leftItem" style="bottom: 5%; color: #c9caca; font-size: smaller">{{ getFormattedDate(this.communityPostContent.communityPostDate) }}</div>
     </div>
-  </div>
 
-  <div class="commentContainer" style="border: 1px solid #2e6464; height: 100%">
+    <!-- 글 제목, 내용, 댓글, 좋아요 수 -->
+    <div class="contentContainer">
+      <div class="title">{{ this.communityPostContent.communityPostTitle }}</div>
+      <div class="content">{{ this.communityPostContent.communityPostContent }}</div>
+      <div style="font-size: smaller">
+        <img
+          src="../assets/community/icon_community_comment.svg"
+          style="width: 10px; margin-right: 1%"
+        />
+        999+
+        <img
+          src="../assets/community/icon_community_like.svg"
+          style="width: 10px; margin-right: 1%"
+        />99+
+      </div>
+    </div>
+</div>
+
+  <!-- 댓글 컨테이너 -->
+  <div ref="commentContainer" class="commentContainer" style="overflow-y: auto;flex-grow: 1;">
     <div style="border: 1px solid #c9caca" :key="index" v-for="(value,index) in comments">
+      <!-- 댓글쓴이 정보 -->
       <div class="profileContainer" style="padding: 3%; padding-bottom: 0">
         <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 30px" />
+        <!-- 유저 이름 -->
         <div class="leftItem comment" style="top: 18%; color: #c9caca; font-size: small">
-          이희연
+          {{ value.user.username  }}
         </div>
+        <!-- 날짜 -->
         <div class="leftItem comment" style="bottom: 10%; color: #c9caca; font-size: smaller">
-          2023.08.24
+          {{ getFormattedDate(value.commentDate)  }}
         </div>
+        <!-- 좋아요, 신고 -->
         <div class="rightItem">
           <img src="../assets/community/icon_community_notLike.svg" style="width: 10px" />
           99+
           <img src="../assets/chat/icon_chat_report.svg" style="width: 10px" />
         </div>
       </div>
+      <!-- 댓글 내용 -->
       <div style="margin-left: 15%; font-size: small; font-weight: bold; margin-bottom: 3%">
-        댓글입니다아ㅏ아ㅏ아
+        {{ value.commentContent }}
       </div>
     </div>
   </div>
-
+  <!-- 댓글 작성창 -->
+  <div class="inputContainer" @click="isLogin">
+    <input v-model="commentInput" type="text" class="inputbox" />
+    <img src="../assets/chat/icon_chat_disable.svg" class="inputImg" @click="createComment"/>
+  </div>
+  <!-- 밑 네브바를 채워줄 빈공간 -->
+  <div style="margin-top: auto; flex-basis: 10%; flex-shrink: 0;" />
   <!-- 토글창 -->
   <!-- 글 소유자이면 수정/삭제/새로고침 아니라면 신고/새로고침 -->
   <!-- <div v-if="isDropdownOpen" class="dropdown-menu">
@@ -66,22 +82,50 @@ import { mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo','isLoggedIn']),
     userId() {
       return this.userInfo.userId
-    }
+    },
   },
   created() {
-    this.comments = null;
-    axios.get(`/communityposts/get/${this.$route.params.post_id}`).then((res) => {
-      this.communityPostContent = res.data
-      this.comments = res.data.comments
-      console.log(res.data)
-    })
+    this.reload()
   },
   methods: {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
+    },
+    reload(callback){
+      this.comments = [];
+      axios.get(`/communityposts/get/${this.$route.params.post_id}`).then((res) => {
+        this.communityPostContent = res.data
+        this.comments = res.data.comments
+        //callback 이 함수라면 함수 실행
+        if(callback){
+          callback()
+        }
+      })
+    },
+    createComment(){
+      //빈칸이면 쓰라고 알려주기
+      if(this.commentInput == ""){
+        alert("빈칸으로 작성할수 없습니다.")
+        return
+      }
+      const text = this.commentInput
+      this.commentInput = ""
+      axios.post(`/comments/post/{CommentsID}`,{
+        "userID": this.userId,
+        "communityPostID": this.$route.params.post_id,
+        "commentContent": text
+    }).then((res) => {
+        console.log(res)
+        this.reload(()=>{
+          //댓글들 가져오면 맨 아래로 스크롤
+          this.$nextTick(() => {
+            this.$refs.commentContainer.scrollTop = this.$refs.commentContainer.scrollHeight
+          })
+        })
+      })
     },
     getFormattedDate(dateString) {
       const date = new Date(dateString)
@@ -91,12 +135,18 @@ export default {
 
       return `${year}-${month}-${day}`
     },
+    isLogin(){
+      //로그인 안되어있으면 로그인 페이지로
+      if(!this.isLoggedIn)
+        this.$router.push('/login')
+    }
   },
   components: { UpperBar },
   data() {
     return {
       item1: ['수정하기', '삭제하기', '새로고침'],
       item2: ['신고하기', '새로고침'],
+      commentInput : "",
       isDropdownOpen: false,
       communityPostContent : {
         "communityPostID": 1,
@@ -123,9 +173,9 @@ export default {
           "commentContent": "",
           "commentDate": ""
         }
-      ]
+      ],
     }
-  }
+  },
 }
 </script>
 
@@ -179,5 +229,25 @@ export default {
   top: 18%;
   font-size: smaller;
   color: #c9caca;
+}
+.inputContainer {
+  border-top: 1px solid #316464;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+.inputbox {
+  border: 1.5px solid #316464;
+  flex-grow: 1;
+  border-radius: 10px;
+  margin: 1% 0%;
+  margin-left: 1%;
+  padding: 0 5%;
+}
+
+.inputImg {
+  width: 10%;
+  padding: 1%;
+  margin: 1%;
 }
 </style>
