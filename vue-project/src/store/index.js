@@ -14,6 +14,7 @@ const store = createStore({
     return {
       isLoggedIn: false,
       isPopup: true,
+      isLoading: false,
       userInfo: {
         userId: 0,
         username: 'string',
@@ -40,6 +41,9 @@ const store = createStore({
     isPopup(state) {
       return state.isPopup
     },
+    isLoading(state) {
+      return state.isLoading
+    },
     activeNavItem(state) {
       return state.activeNavItem
     }
@@ -58,6 +62,9 @@ const store = createStore({
     setIsPopup(state, isPopup) {
       state.isPopup = isPopup
       console.log('setIsPopup', isPopup)
+    },
+    setIsLoading(state, isLoading) {
+      state.isLoading = isLoading
     },
     setActiveNavItem(state, item) {
       state.activeNavItem = item

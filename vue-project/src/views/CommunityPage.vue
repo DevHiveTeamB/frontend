@@ -23,7 +23,10 @@
       </div>
     </div>
     <!-- 커뮤니티 리스트 -->
-    <div style="overflow-y: auto; height: 92%; width: 100%">
+    <div v-if="this.communitylistLoading" style="height: 100%; width: 100%;">
+        <LoadingSpinner :setloading="true"/>
+    </div>
+    <div v-else style="overflow-y: auto; height: 92%; width: 100%">
       <div class="community"  :key="index" v-for="(value,index) in communityList" @click="clickCommunityPost(value.communityPostID)">
         <!-- 날짜 -->
         <div style="position: absolute; right: 2%; top: 10%; font-size: 14px; color: #c9caca">{{ getFormattedDate(value.communityPostDate) }}</div>
@@ -61,6 +64,7 @@
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
 import axios from '../main.js'
 import { mapState } from 'vuex'
 export default {
@@ -71,13 +75,18 @@ export default {
     }
   },
   created() {
+    this.communitylistLoading = true
     axios.get('/communityposts').then((res) => {
       console.log(res.data)
       this.communityList = res.data
+      this.$nextTick(() => {
+        this.communitylistLoading = false
+      })
     })
   },
   components: {
     UpperBar,
+    LoadingSpinner
   },
   methods: {
     favorite(){
@@ -92,7 +101,7 @@ export default {
       return `${year}-${month}-${day}`
     },
     communityCreate(){
-      if(this.userId == null)
+      if(this.userInfo == null)
         this.$router.push('/login')
       else
         this.$router.push('/community/post')
@@ -104,6 +113,7 @@ export default {
   data() {
     return {
       searchText : "",
+      communitylistLoading : true,
       communityList: [
         {
           "communityPostID": 1,

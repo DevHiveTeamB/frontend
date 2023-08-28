@@ -1,6 +1,9 @@
 <template>
   <UpperBar title="DevHive" rightSource="hamburgerBtn" :clickFunction="toggleDropdown" />
-  <div v-if="postData">
+  <div v-if="detailLoading" style="height: 83%;">
+    <LoadingSpinner :setloading="true"/>
+  </div>
+  <div v-else-if="postData">
     <div class="profileContainer">
       <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" />
       <div class="profileInfo">
@@ -11,7 +14,7 @@
           <div
             :key="index"
             v-for="(value, index) in [1, 2, 3, 4, 5]"
-            :class="`${this.userInfo.ratingState >= value ? 'star' : 'nostar'}`"
+            :class="`${postData.writer.ratingState >= value ? 'star' : 'nostar'}`"
           >
             <img style="width: 100%; height: 100%" src="../assets/mypage/icon_mypage_star.svg" />
           </div>
@@ -55,7 +58,10 @@
     <!-- 거래하기 버튼. 내 글이면 안보임-->
     <div v-if="userId != postData.writer.userId">
       <div class="BookTradeBtn" @click="goMessageroom">
-        <div style="display: flex; justify-content: center; align-items: center; margin: 0 auto">
+        <div v-if="this.tradeLoading" style="height: 100%; width: 100%;">
+          <LoadingSpinner :setloading="true" height="30px" width="30px" color="#ffffff" alpha="0.3"/>
+        </div>
+        <div v-else style="display: flex; justify-content: center; align-items: center; margin: 0 auto">
           <img src="../assets/bookdetail/icon_bookdetail_tradeBtn.svg" />
         </div>
       </div>
@@ -78,12 +84,15 @@
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
 import axios from '../main.js'
 import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState(['userInfo']),
     userId() {
+      if(this.userInfo === null)
+        return null
       return this.userInfo.userId
     }
   },
@@ -91,13 +100,15 @@ export default {
     this.sendGetRequest()
   },
   components: {
-    UpperBar
+    UpperBar,
+    LoadingSpinner
   },
   methods: {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
     },
     sendGetRequest() {
+      this.detailLoading = true
       const url = `/v1/post/${this.postId}`
       axios
         .get(url, {
@@ -109,6 +120,9 @@ export default {
           console.log(url, this.userId)
           console.log(res.data)
           this.postData = res.data
+          this.$nextTick(() => {
+            this.detailLoading = false
+          })
         })
         .catch((err) => {
           console.log(url, this.userId)
@@ -178,7 +192,10 @@ export default {
     },
     //거래하기 버튼 눌렀을 때
     goMessageroom() {
-      const url = '/message-rooms/messagerooms/post'
+      // 로딩중이 아닐때 && 로그인 중일때
+      if (!this.tradeLoading && this.userInfo !== null) {
+        this.tradeLoading = true
+        const url = '/message-rooms/messagerooms/post'
       axios
         .post(url, null, {
           params: {
@@ -191,15 +208,22 @@ export default {
           console.log(res.data)
           this.messageroomId = res.data
           this.$router.push(`/chat`)
+          this.tradeLoading = false
         })
         .catch((err) => {
           console.log(err)
         })
+      } 
+      else if(this.userInfo === null){
+        this.$router.push('/login')
+      }
     }
   },
   data() {
     return {
       postId: this.$route.params.post_id,
+      detailLoading: true,
+      tradeLoading: false,
       postData: null,
       isDropdownOpen: false,
       item1: ['수정하기', '삭제하기'],

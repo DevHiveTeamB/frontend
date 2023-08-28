@@ -71,7 +71,10 @@
 
     <div style="border: 1px solid #316464; width: 100%"></div>
     <!-- searchResult 만큼 출력 -->
-    <div style="overflow-y: auto; height: 83%; width: 100%">
+    <div v-if="this.listLoading" style="height: 83%; width: 100%;">
+      <LoadingSpinner :setloading="true"/>
+    </div>
+    <div v-else style="overflow-y: auto; height: 83%; width: 100%">
       <div
         class="postItem"
         :key="index"
@@ -104,23 +107,27 @@
 <script>
 import axios from '../main.js'
 import UpperBar from '../components/UpperBar.vue'
-import { mapState } from 'vuex'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
+import { mapState, mapGetters,mapMutations } from 'vuex'
 
 export default {
   computed: {
     ...mapState(['userInfo']),
+    ...mapGetters(['isLoading']),
     userId() {
       return this.userInfo.userId
     }
   },
   components: {
-    UpperBar
+    UpperBar,
+    LoadingSpinner,
   },
   created() {
     console.log('create')
     this.sendGetRequest()
   },
   methods: {
+    ...mapMutations(['setIsLoading']),
     //책 검색 했을때
     searchTest() {
       this.sendGetRequest()
@@ -132,12 +139,17 @@ export default {
       const data = { [this.selectedCategory]: this.searchText }
       console.log(url, data)
       this.searchResult = []
+      this.listLoading = true
       axios
         .get(url, { params: data })
         .then((response) => {
           console.log(response.data)
           //게시물 목록 검색결과로 바꿈
           this.searchResult = response.data
+          //모든 렌더링이 끝나면 화면에 띄어줌
+          this.$nextTick(() => {
+            this.listLoading = false
+          })
         })
         .catch((error) => {
           console.error(error)
@@ -180,6 +192,7 @@ export default {
   data() {
     return {
       isPopup: false,
+      listLoading: false,
       selectedFilter: null,
       selectedCategory: 'postTitle',
       searchText: '',

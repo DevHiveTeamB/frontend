@@ -1,6 +1,11 @@
 <template>
   <UpperBar title="쪽지함" rightSource="refreshBtn" :clickFunction="refresh" />
-  <div style="overflow-y: auto; height: 80%; width: 100%; display: inline-block">
+  <!-- 로딩창 -->
+  <div v-if="this.chatLoading" style="height: 80%; width: 100%;">
+    <LoadingSpinner :setloading="true" />
+  </div>
+  <!-- 쪽지함들 -->
+  <div v-else style="overflow-y: auto; height: 80%; width: 100%; display: inline-block">
     <div
       class="chatRoom"
       :key="index"
@@ -29,6 +34,7 @@
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import axios from '../main.js'
 import { mapState } from 'vuex'
 export default {
@@ -42,7 +48,8 @@ export default {
     this.getMessageRooms()
   },
   components: {
-    UpperBar
+    UpperBar,
+    LoadingSpinner
   },
   methods: {
     refresh() {
@@ -51,12 +58,16 @@ export default {
     //유저 메시지룸 조회 API
     // 오류 왜뜨지..?
     getMessageRooms() {
+      this.chatLoading = true
       const url = `/message-rooms/messagerooms/user/get/${this.userId}`
       axios
         .get(url)
         .then((res) => {
           console.log(res.data)
           this.getData = res.data
+          this.$nextTick(() => {
+            this.chatLoading = false
+          })
         })
         .catch((err) => {
           console.log(err)
@@ -78,6 +89,7 @@ export default {
   data() {
     return {
       searchResult: [1, 2, 3, 4],
+      chatLoading: true,
       getData: {
         messageRoom: []
       }

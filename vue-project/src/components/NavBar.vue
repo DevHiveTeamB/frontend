@@ -82,7 +82,12 @@ export default {
     },
     goChat() {
       this.setActiveNavItem('chat')
-      this.$router.push('/chat')
+      if(this.isLoggedIn){
+        this.$router.push('/chat')
+      }
+      else{
+        this.$router.push('/login')
+      }
     }
   },
   created() {
