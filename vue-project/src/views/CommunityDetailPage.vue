@@ -116,28 +116,32 @@ export default {
       })
     },
     createComment(){
-      //빈칸이면 쓰라고 알려주기
-      if(this.commentInput == ""){
-        alert("빈칸으로 작성할수 없습니다.")
-        return
-      }
-      this.commentLoading = true
-      const text = this.commentInput
-      this.commentInput = ""
-      axios.post(`/comments/post/{CommentsID}`,{
-        "userID": this.userId,
-        "communityPostID": this.$route.params.post_id,
-        "commentContent": text
-    }).then((res) => {
-        console.log(res)
-        this.reload(()=>{
-          //댓글들 가져오면 맨 아래로 스크롤
-          this.$nextTick(() => {
-            this.$refs.commentContainer.scrollTop = this.$refs.commentContainer.scrollHeight
-            this.commentLoading = false
+      if(!this.isLoggedIn)
+        this.$router.push('/login')
+      else{
+        //빈칸이면 쓰라고 알려주기
+        if(this.commentInput == ""){
+          alert("빈칸으로 작성할수 없습니다.")
+          return
+        }
+        this.commentLoading = true
+        const text = this.commentInput
+        this.commentInput = ""
+        axios.post(`/comments/post/{CommentsID}`,{
+          "userID": this.userId,
+          "communityPostID": this.$route.params.post_id,
+          "commentContent": text
+      }).then((res) => {
+          console.log(res)
+          this.reload(()=>{
+            //댓글들 가져오면 맨 아래로 스크롤
+            this.$nextTick(() => {
+              this.$refs.commentContainer.scrollTop = this.$refs.commentContainer.scrollHeight
+              this.commentLoading = false
+            })
           })
         })
-      })
+      }
     },
     getFormattedDate(dateString) {
       const date = new Date(dateString)
@@ -146,11 +150,6 @@ export default {
       const day = date.getDate().toString().padStart(2, '0')
 
       return `${year}-${month}-${day}`
-    },
-    isLogin(){
-      //로그인 안되어있으면 로그인 페이지로
-      if(!this.isLoggedIn)
-        this.$router.push('/login')
     }
   },
   components: { UpperBar,LoadingSpinner },
