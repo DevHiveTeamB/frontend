@@ -14,7 +14,7 @@
           <div
             :key="index"
             v-for="(value, index) in [1, 2, 3, 4, 5]"
-            :class="`${this.userInfo.ratingState >= value ? 'star' : 'nostar'}`"
+            :class="`${postData.writer.ratingState >= value ? 'star' : 'nostar'}`"
           >
             <img style="width: 100%; height: 100%" src="../assets/mypage/icon_mypage_star.svg" />
           </div>
@@ -91,6 +91,8 @@ export default {
   computed: {
     ...mapState(['userInfo']),
     userId() {
+      if(this.userInfo === null)
+        return null
       return this.userInfo.userId
     }
   },
@@ -190,8 +192,8 @@ export default {
     },
     //거래하기 버튼 눌렀을 때
     goMessageroom() {
-      // 로딩중이 아닐때
-      if (!this.tradeLoading) {
+      // 로딩중이 아닐때 && 로그인 중일때
+      if (!this.tradeLoading && this.userInfo !== null) {
         this.tradeLoading = true
         const url = '/message-rooms/messagerooms/post'
       axios
@@ -211,6 +213,9 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+      } 
+      else if(this.userInfo === null){
+        this.$router.push('/login')
       }
     }
   },

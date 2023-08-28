@@ -101,7 +101,7 @@ export default {
       return `${year}-${month}-${day}`
     },
     communityCreate(){
-      if(this.userId == null)
+      if(this.userInfo == null)
         this.$router.push('/login')
       else
         this.$router.push('/community/post')
