@@ -14,7 +14,7 @@ const store = createStore({
     return {
       isLoggedIn: false,
       isPopup: true,
-      isLoading: true,
+      isLoading: false,
       userInfo: {
         userId: 0,
         username: 'string',
