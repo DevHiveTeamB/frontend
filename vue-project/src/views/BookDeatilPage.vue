@@ -5,7 +5,7 @@
   </div>
   <div v-else-if="postData">
     <div class="profileContainer">
-      <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" />
+      <img style="height: 40px; width: 40px; border-radius: 15px;" :src="`${postData.writer.profilePhoto}`" />
       <div class="profileInfo">
         <div class="leftItem name">
           {{ postData.writer.username }}

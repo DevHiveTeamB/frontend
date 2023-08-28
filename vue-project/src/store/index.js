@@ -23,8 +23,6 @@ const store = createStore({
         phoneNumber: 'string',
         profilePhoto: 'string',
         introduction: 'string',
-        membership: 0,
-        certification: 0,
         ratingState: 0
       },
       activeNavItem: 'home' //Navbar 초기값
