@@ -1,6 +1,6 @@
 <template>
   <UpperBar title="마이페이지" />
-  <div style="width: 100%; height: 90%; padding: 0 10%">
+  <div v-if="this.userInfo" style="width: 100%; height: 90%; padding: 0 10%">
     <div class="profile" style="display: flex">
       <img class="profileImg" :src="this.userInfo.profilePhoto" />
       <div
@@ -94,9 +94,10 @@ export default {
     ...mapGetters(['userInfo', 'isLoggedIn'])
   },
   methods: {
-    ...mapMutations(['logout']),
+    ...mapMutations(['logout','setUserInfo']),
     handleLogout() {
       this.logout() // 뮤테이션을 호출하여 로그아웃 상태 변경
+      this.setUserInfo(null) // 로그아웃 상태로 변경
       alert('로그아웃 되었습니다.')
       this.$router.push('/')
     }
