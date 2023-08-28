@@ -2,6 +2,7 @@
   <!-- 책 검색 창 -->
   <UpperBar title="책 검색 창" />
   <div style="height: 80%">
+    <!-- 검색 카테고리 선택 -->
     <div class="categoryContainer">
       <button
         :style="
@@ -18,6 +19,7 @@
       </button>
     </div>
     <div style="border: 1px solid #316464; width: 100%"></div>
+    <!-- 검색어 입력 창 -->
     <div style="display: flex; border-bottom: #316464 solid 2px; height: 10%">
       <input
         v-model="searchText"
@@ -31,10 +33,12 @@
           flex-grow: 1;
         "
       />
+      <!-- 검색 버튼 -->
       <div style="display: flex; justify-content: center; align-content: center; padding: 5%">
         <img src="../assets/main/icon_main_search.svg" @click="searchTest" />
       </div>
     </div>
+    <!-- 최근 검색 목록 모달 -->
     <div
       style="width: 100%; height: 3%; display: flex; flex-direction: column; padding: 0 5%"
       :style="`${!isPopup ? 'display:none' : ''}`"
@@ -42,29 +46,34 @@
       <!-- 배열 갯수만큼 출력 -->
       <div class="modal">
         <div class="modal-content">
-          <div class="searchList" :key="index" v-for="(value, index) in searchList">
+          <!-- 로딩 프로그래스 -->
+          <div v-if="this.lastsearchLoading" style="margin: 10% 0;">
+            <LoadingSpinner :setloading="true"/>
+          </div>
+          <!-- 최근 검색기록 리스트 -->
+          <div v-else class="searchList" :key="index" v-for="(value, index) in searchList">
+            <!-- 지우기 x -->
             <div
               style="background-color: white; border: none; padding: 0 5px"
-              @click="searchList.splice(index, 1)"
-            >
-              x
-            </div>
-
+              @click="deleteSearchList(index)"
+            >x</div>
             <div
               style="display: flex; flex-grow: 1; justify-content: center; align-content: center"
-              @click="searchText = value"
-            >
-              {{ value }}
-            </div>
+              @click="searchText = value.searchData"
+            >{{ value.searchData }}</div>
           </div>
+          <!-- 최근 검색 기록 없음 알려주는 창 -->
+          <div v-if="searchList.length == 0" style="display: flex; justify-content: center; align-items: center; margin: 10%;">최근 검색 기록 없음</div>
+          <!-- 닫기 버튼 -->
           <div @click="isPopup = false" class="closeSearchList">닫기</div>
         </div>
       </div>
     </div>
+    <!-- 최근 검색 기록 보기 버튼 -->
     <div
       class="openSearchList"
       :style="`${isPopup ? 'display:none' : ''}`"
-      @click=";[(isPopup = true), getSearchList()]"
+      @click="getSearchList()"
     >
       최근 검색 기록 보기
     </div>
@@ -113,7 +122,7 @@ import { mapState, mapGetters,mapMutations } from 'vuex'
 export default {
   computed: {
     ...mapState(['userInfo']),
-    ...mapGetters(['isLoading']),
+    ...mapGetters(['isLoading','userInfo','isLoggedIn']),
     userId() {
       return this.userInfo.userId
     }
@@ -126,12 +135,36 @@ export default {
     console.log('create')
     this.sendGetRequest()
   },
+  watch: {
+    searchText() {
+      console.log(this.searchText)
+    }
+  },
   methods: {
     ...mapMutations(['setIsLoading']),
     //책 검색 했을때
     searchTest() {
-      this.sendGetRequest()
       this.sendPostRequest()
+      this.sendGetRequest()
+    },
+    // 최근 검색 기록 지우기
+    deleteSearchList(index){
+      const deleteMessage = this.searchList.splice(index, 1)[0].searchData
+      console.log(deleteMessage)
+      const url = '/searchlist/user/delete'
+      axios
+        .delete(`${url}?userID=${this.userId}`, {
+          data: deleteMessage,
+          headers: {
+            'Accept': '*/*',
+            'Content-Type': 'application/json'
+          }})
+        .then((response) => {
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     },
     //검색 기능
     sendGetRequest() {
@@ -156,15 +189,16 @@ export default {
         })
     },
     sendPostRequest() {
+      if(this.isLoggedIn == false || this.searchText == ''){
+        return
+      }
       const url = '/searchlist/post'
-      const params = {
-        userId: this.userId
-      }
-      const requestBody = {
-        message: this.searchText
-      }
       axios
-        .post(url, requestBody, { params })
+        .post(`${url}?userId=${this.userId}`, this.searchText , {
+          headers: {
+            'Accept': '*/*',
+            'Content-Type': 'application/json'
+          }})
         .then((response) => {
           console.log(response.data)
         })
@@ -174,15 +208,18 @@ export default {
     },
     //최근 검색어 가져오기
     getSearchList() {
+      if(this.isLoggedIn == false){
+        this.$router.push('/login')
+        return
+      }
+      this.isPopup = true
+      this.searchList = []
       const url = `/searchlist/user/get/${this.userId}`
       axios
         .get(url)
         .then((response) => {
           console.log(response.data)
-
           this.searchList = response.data.searchList
-          const parsedData = this.searchList.map((item) => JSON.parse(item.searchData))
-          this.searchList = parsedData.map((data) => data.message)
         })
         .catch((error) => {
           console.log(error)
@@ -193,10 +230,14 @@ export default {
     return {
       isPopup: false,
       listLoading: false,
+      lastsearchLoading : false,
       selectedFilter: null,
       selectedCategory: 'postTitle',
       searchText: '',
-      searchList: [], //최근 검색어
+      searchList: [{
+          "searchData": "",
+          "searchDate": ""
+      }], //최근 검색어
       searchResult: [], //검색 결과를 저장
       categoryOptions: [
         { value: 'postTitle', label: '제목', group: 'category' },
