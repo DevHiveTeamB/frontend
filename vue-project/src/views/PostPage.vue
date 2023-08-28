@@ -1,12 +1,14 @@
 <template>
   <!-- 글 작성페이지 -->
   <UpperBar title="게시글 작성" rightSource="완료" :clickFunction="checkForm" />
+  <div v-if="this.postCreateLoading" class="modal">
+    <LoadingSpinner :setloading="true"/>
+  </div>
+  <!-- 게시글 입력창 -->
   <div
     style="position: relative; height: 80%; padding: 0 10px; display: flex; flex-direction: column"
   >
-    <!-- 사진 선택하고 화면에 나옴
-      슬라이드로 넘기는거 구현해주세요
-      최대 5장 선택가능하도록 해뒀음 -->
+    <!-- 사진 입력, 보여주기 -->
     <div class="fileContainer marginTop_Bottom">
       <label for="file"
         ><div class="plusFile">
@@ -34,18 +36,21 @@
         </button>
       </div>
     </div>
+    <!-- 제목 입력창 -->
     <input
       class="textInput marginTop_Bottom"
       v-model="title"
       type="text"
       placeholder="제목을 입력해주세요"
     />
+    <!-- 책 소개 입력창 -->
     <textarea
       style="height: 30%; padding: 5%; resize: none"
       class="textInput marginTop_Bottom"
       v-model="content"
       placeholder="책 소개를 입력해주세요"
     />
+    <!-- 카테고리 선택창 -->
     <div class="category" @click="modalOpen = true">강의 선택하기</div>
     <CategoryModal
       v-if="modalOpen"
@@ -54,6 +59,7 @@
     />
     <!-- 선택된 카테고리 표시해줌 -->
     <div v-if="selectedResult">{{ selectedResult.postTitle }}</div>
+    <!-- 가격 입력창 -->
     <input
       class="textInput marginTop_Bottom"
       v-model="price"
@@ -69,6 +75,7 @@ import CategoryModal from '../components/CategoryModal.vue'
 import UpperBar from '@/components/UpperBar.vue'
 import { mapGetters } from 'vuex'
 import FormData from 'form-data'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 export default {
   computed: {
     ...mapGetters(['isLoggedIn', 'userInfo'])
@@ -98,8 +105,8 @@ export default {
     },
 
     sendPostRequest() {
+      this.postCreateLoading = true
       const formData = new FormData()
-      this.$router.push('/')
       // 이미지 파일들 추가
       Array.from(this.$refs.images.files).forEach((file) => {
         formData.append('pictures', file)
@@ -119,8 +126,8 @@ export default {
         .post('v1/post', formData)
         .then((response) => {
           console.log(response.data)
-          alert('게시글이 등록되었습니다')
-          //완료되면 내가 작성한 글 내용보는걸로 넘어갈까..?
+          this.postCreateLoading = false
+          this.$router.push(`/bookdetail/${response.data.postId}`)
         })
         .catch((error) => {
           console.error(error)
@@ -133,6 +140,7 @@ export default {
 
   data() {
     return {
+      postCreateLoading: false,
       selectedImage: null,
       selectedImages: [],
       title: '',
@@ -146,8 +154,9 @@ export default {
   },
   components: {
     CategoryModal,
-    UpperBar
-  },
+    UpperBar,
+    LoadingSpinner
+},
   watch: {
     price(input) {
       if (input < 0) {
@@ -159,6 +168,19 @@ export default {
 </script>
 
 <style scoped>
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
 .marginTop_Bottom {
   margin: 10px 0;
 }

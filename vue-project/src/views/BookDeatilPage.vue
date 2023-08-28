@@ -1,9 +1,15 @@
 <template>
   <UpperBar title="DevHive" rightSource="hamburgerBtn" :clickFunction="toggleDropdown" />
+  <div v-if="this.postDeleteLoading" class="modal">
+    <LoadingSpinner :setloading="true"/>
+  </div>
+  <!-- 로딩창 -->
   <div v-if="detailLoading" style="height: 83%;">
     <LoadingSpinner :setloading="true"/>
   </div>
+  <!-- 게시글 정보 -->
   <div v-else-if="postData">
+    <!-- 글쓴이 정보 -->
     <div class="profileContainer">
       <img style="height: 40px; width: 40px; border-radius: 15px;" :src="`${postData.writer.profilePhoto}`" />
       <div class="profileInfo">
@@ -31,6 +37,7 @@
         </div>
       </div>
     </div>
+    <!-- 게시글 사진 슬라이더 -->
     <div class="photoContainer">
       <div class="photoSlider">
         <div v-for="(value, index) in postData.postPictures" :key="index" class="photoSlide">
@@ -38,6 +45,7 @@
         </div>
       </div>
     </div>
+    <!-- 게시글 내용 -->
     <div class="contentContainer">
       <div class="titleContainer">
         <div id="title">{{ postData.postTitle }}</div>
@@ -176,18 +184,22 @@ export default {
         this.$router.push(`/bookedit/${this.postId}`)
       } else if (value === '삭제하기') {
         const isConfirmed = confirm('게시글을 삭제하시겠습니까?')
+        this.postDeleteLoading = true
         if (isConfirmed) {
           axios
             .delete(`v1/post/${this.postId}`)
             .then((res) => {
               console.log(res.data)
               alert('게시글이 삭제되었습니다.')
+              this.postDeleteLoading = false
               this.$router.go(-1)
             })
             .catch((err) => {
               console.log(err)
             })
         }
+      } else if (value === '신고하기') {
+        this.$router.push(`/report/${this.postId}`)
       }
     },
     //거래하기 버튼 눌렀을 때
@@ -224,6 +236,7 @@ export default {
       postId: this.$route.params.post_id,
       detailLoading: true,
       tradeLoading: false,
+      postDeleteLoading: false,
       postData: null,
       isDropdownOpen: false,
       item1: ['수정하기', '삭제하기'],
@@ -236,6 +249,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
 .dropdown-menu {
   width: 30%;
   position: absolute;
