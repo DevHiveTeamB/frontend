@@ -11,9 +11,9 @@
           <div
             :key="index"
             v-for="(value, index) in [1, 2, 3, 4, 5]"
-            :class="(`${postData.writer.ratingState >= value ? 'star' : 'nostar'}`, leftItem)"
+            :class="`${this.userInfo.ratingState >= value ? 'star' : 'nostar'}`"
           >
-            <img src="../assets/mypage/icon_mypage_star.svg" />
+            <img style="width: 100%; height: 100%" src="../assets/mypage/icon_mypage_star.svg" />
           </div>
           ({{ postData.writer.ratingState }})
         </div>
@@ -215,7 +215,7 @@ export default {
 .dropdown-menu {
   width: 30%;
   position: absolute;
-  top: 10%;
+  top: 60px;
   right: 0px;
   background-color: #d9d9d9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

@@ -2,13 +2,7 @@
   <UpperBar title="마이페이지" />
   <div style="width: 100%; height: 90%; padding: 0 10%">
     <div class="profile" style="display: flex">
-      <div style="width: 30%; display: flex; justify-content: center; align-items: center">
-        <!-- 사진 둥글게 -->
-        <img
-          style="width: 100%; border-radius: 50%; padding: 10%"
-          :src="this.userInfo.profilePhoto"
-        />
-      </div>
+      <img class="profileImg" :src="this.userInfo.profilePhoto" />
       <div
         style="
           display: flex;
@@ -68,7 +62,7 @@
     <div class="profile" style="display: flex; flex-direction: column">
       <div style="display: flex; margin-bottom: 2%">
         <div class="center" style="width: 10%; margin-right: 2%">
-          <img style="width: 100%" src="../assets/main/icon_main_postlist.svg" />
+          <img style="width: 80%" src="../assets/main/icon_main_postlist.svg" />
         </div>
         <h2 class="profileTitle center">게시글보기</h2>
       </div>
@@ -80,7 +74,7 @@
     <div class="profile" style="display: flex; flex-direction: column">
       <div style="display: flex; margin-bottom: 2%">
         <div class="center" style="width: 10%; margin-right: 2%">
-          <img style="width: 100%" src="../assets/main/icon_main_popup.svg" />
+          <img style="width: 80%" src="../assets/main/icon_main_popup.svg" />
         </div>
         <h2 class="profileTitle">기타</h2>
       </div>
@@ -123,6 +117,15 @@ export default {
   width: 100%;
   padding: 10% 0;
   border-bottom: solid 1px #316464;
+}
+
+.profileImg {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  /* 비율이 안깨지게 */
+  //object-fit: contain;
+  margin-top: 3%;
 }
 
 .profileItem {

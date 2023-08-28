@@ -148,30 +148,30 @@ export default {
       item2: ['신고하기', '새로고침'],
       commentInput : "",
       isDropdownOpen: false,
-      communityPostContent : {
-        "communityPostID": 1,
-        "writer": {
-          "id": 1,
-          "username": "",
-          "loginId": null
+      communityPostContent: {
+        communityPostID: 1,
+        writer: {
+          id: 1,
+          username: '',
+          loginId: null
         },
-        "communityPostTitle": "",
-        "communityPostContent": "",
-        "communityPostDate": "",
-        "communityPostsPictures": null,
-        "communityPostLikesCount": null,
-        "isCommunityPostLikes": null,
+        communityPostTitle: '',
+        communityPostContent: '',
+        communityPostDate: '',
+        communityPostsPictures: null,
+        communityPostLikesCount: null,
+        isCommunityPostLikes: null
       },
-      comments : [
+      comments: [
         {
-          "commentsID": 0,
-          "user": {
-            "id": 0,
-            "username": "",
-            "loginId": ""
+          commentsID: 0,
+          user: {
+            id: 0,
+            username: '',
+            loginId: ''
           },
-          "commentContent": "",
-          "commentDate": ""
+          commentContent: '',
+          commentDate: ''
         }
       ],
     }
@@ -183,7 +183,7 @@ export default {
 .dropdown-menu {
   width: 30%;
   position: absolute;
-  top: 10%;
+  top: 60px;
   right: 0px;
   background-color: #d9d9d9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

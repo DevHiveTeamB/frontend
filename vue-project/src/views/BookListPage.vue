@@ -61,7 +61,11 @@
         </div>
       </div>
     </div>
-    <div class="openSearchList" :style="`${isPopup ? 'display:none' : ''}`" @click="isPopup = true">
+    <div
+      class="openSearchList"
+      :style="`${isPopup ? 'display:none' : ''}`"
+      @click=";[(isPopup = true), getSearchList()]"
+    >
       최근 검색 기록 보기
     </div>
 
@@ -100,7 +104,15 @@
 <script>
 import axios from '../main.js'
 import UpperBar from '../components/UpperBar.vue'
+import { mapState } from 'vuex'
+
 export default {
+  computed: {
+    ...mapState(['userInfo']),
+    userId() {
+      return this.userInfo.userId
+    }
+  },
   components: {
     UpperBar
   },
@@ -112,8 +124,9 @@ export default {
     //책 검색 했을때
     searchTest() {
       this.sendGetRequest()
-      this.addSearchList()
+      this.sendPostRequest()
     },
+    //검색 기능
     sendGetRequest() {
       const url = '/v1/post'
       const data = { [this.selectedCategory]: this.searchText }
@@ -130,16 +143,38 @@ export default {
           console.error(error)
         })
     },
-    addSearchList() {
-      //최근검색어는 5개까지만 유지
-      if (this.searchList.length >= 5) {
-        this.searchList.shift()
+    sendPostRequest() {
+      const url = '/searchlist/post'
+      const params = {
+        userId: this.userId
       }
-      //같은 값이면 삭제 후 갱신
-      if (this.searchList.includes(this.searchText)) {
-        this.searchList.splice(this.searchList.indexOf(this.searchText), 1)
+      const requestBody = {
+        message: this.searchText
       }
-      this.searchList.push(this.searchText)
+      axios
+        .post(url, requestBody, { params })
+        .then((response) => {
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    },
+    //최근 검색어 가져오기
+    getSearchList() {
+      const url = `/searchlist/user/get/${this.userId}`
+      axios
+        .get(url)
+        .then((response) => {
+          console.log(response.data)
+
+          this.searchList = response.data.searchList
+          const parsedData = this.searchList.map((item) => JSON.parse(item.searchData))
+          this.searchList = parsedData.map((data) => data.message)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   },
   data() {
@@ -161,21 +196,21 @@ export default {
         { value: 'views', label: '조회수', group: 'filter' }
       ]
     }
-  },
-  computed: {
-    sortedPosts() {
-      //찜 순서대로 정렬
-      if (this.selectedFilter === 'like') {
-        return this.searchResult.slice().sort((a, b) => b.isFavorite - a.isFavorite)
-        //조회수 순서대로 정렬
-      } else if (this.selectedFilter === 'views') {
-        // hits 기준으로 정렬
-        return this.searchResult.slice().sort((a, b) => b.hits - a.hits)
-      } else {
-        return this.searchResult
-      }
-    }
   }
+  // computed: {
+  //   sortedPosts() {
+  //     //찜 순서대로 정렬
+  //     if (this.selectedFilter === 'like') {
+  //       return this.searchResult.slice().sort((a, b) => b.isFavorite - a.isFavorite)
+  //       //조회수 순서대로 정렬
+  //     } else if (this.selectedFilter === 'views') {
+  //       // hits 기준으로 정렬
+  //       return this.searchResult.slice().sort((a, b) => b.hits - a.hits)
+  //     } else {
+  //       return this.searchResult
+  //     }
+  //   }
+  // }
 }
 </script>
 

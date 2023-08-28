@@ -42,7 +42,7 @@ const routes = [
     component: () => import('../views/BookEditPage.vue')
   },
   {
-    path: '/chatdetail',
+    path: '/chat/:room_id',
     component: () => import('../views/ChatDetailPage.vue')
   },
   //쪽지함 페이지

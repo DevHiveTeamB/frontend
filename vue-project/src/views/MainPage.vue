@@ -15,31 +15,30 @@
         <img style="width: 100%; height: 100%" src="../assets/main/DevHive_logo.svg" />
       </div>
       <div id="searchBar" @click="this.$router.push('/booklist')">
-        <!-- 줄바꿈 -->
-        <div class="tItem" style="width: 20%; flex-direction: column">
-          <div class="tItem">Dev</div>
-          <div class="tItem">Hive</div>
-        </div>
-        <div class="tItem" style="font-size: large; width: 80%">
-          <div class="tItem">검색어를 입력하세요</div>
-        </div>
+        <img class="tItem" src="../assets/main/icon_main_searchbarLogo.svg" />
+        <img class="tItem" src="../assets/main/icon_main_searchBtn.svg" />
       </div>
-      <div id="subbutton">
+      <div class="subbutton">
         <img
           class="subButtonItem"
-          src="../assets/main/icon_main_posting.svg"
+          src="../assets/main/New_subbutton1.svg"
           @click="navigateToWriteOrLogin()"
         />
         <img
           class="subButtonItem"
-          src="../assets/main/icon_main_postlist.svg"
+          src="../assets/main/New_subbutton2.svg"
           @click="this.$router.push('/booklist')"
         />
         <img
           class="subButtonItem"
-          src="../assets/main/icon_main_anounce.svg"
+          src="../assets/main/New_subbutton3.svg"
           @click="this.$router.push('/announce')"
         />
+      </div>
+      <div style="font-size: 12px; font-weight: bold; text-align: center; display: flex">
+        <div style="flex-grow: 0.3">글 작성하기</div>
+        <div style="flex-grow: 1">게시글 보기</div>
+        <div style="flex-grow: 0.6">공지사항</div>
       </div>
     </div>
   </div>
@@ -154,20 +153,13 @@ export default {
   margin-bottom: auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-content: center;
 }
 
 .tItem {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  //font color
-  color: #316464;
+  height: 80%;
 }
-
-#subbutton {
+.subbutton {
   padding: 0 5%;
   display: flex;
   justify-content: space-between;
@@ -178,9 +170,11 @@ export default {
   border-radius: 30px;
   padding: 0 5%;
   display: flex;
-  align-content: center;
   height: 12%;
-  border: 5px solid #316464;
+  border: 2px solid #316464;
+  margin: 20% 0%;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .imageContainer {

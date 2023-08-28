@@ -8,17 +8,15 @@
       <div class="leftItem" style="top: 5%">이름</div>
       <div class="leftItem rating" style="bottom: 5%">평점</div>
     </div>
-    <img src="..\assets\chat\icon_chat_report.svg" class="report" />
   </div>
 
   <div class="contentContainer">
     <div class="date">날짜</div>
     <div class="bookInfoContainer">
-      <div class="photo">사진</div>
-      <div class="info">
-        <div class="title">제목</div>
-        <div class="price">가격</div>
+      <div style="font-weight: bolder; font-size: larger; margin-left: 5%; margin-bottom: 2%">
+        제목
       </div>
+      <div style="font-weight: bold; font-size: small; margin-left: 5%">가격</div>
     </div>
 
     <div class="chatContainer">
@@ -36,20 +34,38 @@
 <script>
 import UpperBar from '../components/UpperBar.vue'
 import ProfileModal from '../components/ProfileModal.vue'
+import axios from '../main.js'
 export default {
   components: {
     UpperBar,
     ProfileModal
   },
+  created() {
+    this.getMessageRoomInfo()
+  },
   methods: {
     //페이지 새로고침
     refreshPage() {
       this.$router.go(0)
+    },
+    //대화 내용 가져오기
+    getMessageRoomInfo() {
+      console.log(this.roomId)
+      const url = `/message-rooms/messages/${this.roomId}`
+      axios
+        .get(url)
+        .then((res) => {
+          console.log(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   },
   data() {
     return {
-      modalOpen: false
+      modalOpen: false,
+      roomId: this.$route.params.room_id
     }
   }
 }
@@ -77,7 +93,7 @@ export default {
 
 .contentContainer {
   border: 1px solid #316464;
-  height: 66%;
+  height: 68.5%;
 }
 
 .inputContainer {
@@ -115,21 +131,7 @@ export default {
   margin: 0% 5%;
   border-radius: 10px;
   padding: 3%;
-  display: flex;
-  align-items: center;
-}
-
-.photo {
-  border: solid 1px #316464;
-  width: 60px;
-  height: 60px;
-  margin-right: 10px;
-}
-
-.info {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+  line-height: 25px;
 }
 
 .chatContainer {

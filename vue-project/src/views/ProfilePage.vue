@@ -1,10 +1,10 @@
 <template>
   <UpperBar title="나의 프로필" />
   <div style="display: flex">
-    <div style="width: 40%; display: flex; justify-content: center; align-items: center">
+    <div style="width: 60%; display: flex; justify-content: center; align-items: center">
       <!-- 사진 둥글게 -->
       <img
-        style="width: 100%; border-radius: 50%; padding: 10%"
+        style="width: 150px; height: 150px; border-radius: 50%; padding: 10%"
         :src="this.userInfo.profilePhoto"
       />
     </div>
