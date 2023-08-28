@@ -52,6 +52,7 @@
           :key="index"
           @click="selectResult(result)"
           class="result-item"
+          :style="`background-color: ${this.selectedResult == result ? '#316464' : 'white'}; color: ${selectedResult == result ? 'white' : 'black'};`"
         >
           <!-- 강의이름  -->
           <h3 style="margin: 0; margin-bottom: 1%;">{{ result.lectureName }}</h3>
@@ -101,11 +102,11 @@ export default {
     closeModal() {
       //백엔드 연결 후 넣을것
 
-      // //검색결과 중 하나를 선택하지 않았을때
-      // if (this.selectedResult == null) {
-      //   alert('검색결과 중 하나를 선택해주세요')
-      //   return
-      // }
+      //검색결과 중 하나를 선택하지 않았을때
+      if (this.selectedResult == null) {
+        alert('검색결과 중 하나를 선택해주세요')
+        return
+      }
 
       this.$emit('close')
       //PostPage에 표시해야 되므로 값을 부모로 전달해줌

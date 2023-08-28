@@ -58,7 +58,15 @@
       @result-selected="handleResultSelected"
     />
     <!-- 선택된 카테고리 표시해줌 -->
-    <div v-if="selectedResult">{{ selectedResult.postTitle }}</div>
+    <div
+        v-if="this.selectedResult"
+        class="result-item"
+      >
+      <!-- 강의이름  -->
+      <h3 style="margin: 0; margin-bottom: 1%;">{{ this.selectedResult.lectureName }}</h3>
+      <!-- 전공 : 교수이름 -->
+      <div>{{ this.selectedResult.major }} : {{ this.selectedResult.professorName }}</div>
+    </div>
     <!-- 가격 입력창 -->
     <input
       class="textInput marginTop_Bottom"
@@ -94,7 +102,7 @@ export default {
         this.selectedImages.length == 0 ||
         this.selectedImages.length > 5 ||
         this.content == '' ||
-        // this.category == '' ||
+        this.selectedResult == null ||
         this.price == ''
       ) {
         alert('빈칸없이 작성해주세요')
@@ -115,7 +123,7 @@ export default {
       //'data' 객체 추가
       const data = {
         userId: this.userInfo.userId,
-        lectureId: '1',
+        lectureId: this.selectedResult.lectureId,
         postTitle: this.title,
         postContent: this.content,
         price: this.price
@@ -145,7 +153,7 @@ export default {
       selectedImages: [],
       title: '',
       content: '',
-      category: '',
+      lectureId: '',
       price: '',
       modalOpen: false,
       userId: null,
@@ -262,5 +270,12 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.result-item{
+  display: flex;
+  flex-direction: column;
+  border : 1px solid #316464;
+  margin: 10px 0;
 }
 </style>
