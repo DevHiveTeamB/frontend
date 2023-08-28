@@ -2,6 +2,7 @@
   <!-- 글 작성 페이지의 카테고리 선택 모달창 -->
   <div class="modal">
     <div class="modal-content">
+      <!-- x 버튼 -->
       <div style="display: flex; justify-content: flex-end; margin-bottom: 5%">
         <img
           src="../assets/categoryModal/icon_categoryModal_close.svg"
@@ -9,6 +10,7 @@
           @click="closeModal"
         />
       </div>
+      <!-- 카테고리 선택리스트 -->
       <div class="categoryContainer">
         <button
           :style="
@@ -19,11 +21,14 @@
           class="categoryItem"
           :key="index"
           v-for="(value, index) in categoryOptions"
-          @click="this.selectedCategory = value.value"
+          @click="()=>{this.selectedCategory = value.value
+          selectIndex = index
+          }"
         >
           {{ value.label }}
         </button>
       </div>
+      <!-- 검색어 입력창 -->
       <div style="display: flex; border: 2px solid #316464; justify-content: flex-end">
         <input
           class="searchInput"
@@ -37,35 +42,56 @@
           @click="searchBook"
         />
       </div>
-      <div class="searchResult">
+      <!-- 검색 결과 -->
+      <div v-if="this.searchLoading" style="margin: 10% 0;">
+        <LoadingSpinner :setloading="true"/>
+      </div>
+      <div v-if="searchResults.length > 0" class="result-container">
         <div
-          v-for="result in searchResults"
-          :key="result.postID"
+          v-for="(result,index)  in searchResults"
+          :key="index"
           @click="selectResult(result)"
           class="result-item"
         >
-          <!-- 일단은 제목만  -->
-          {{ result.post.postTitle }}
+          <!-- 강의이름  -->
+          <h3 style="margin: 0; margin-bottom: 1%;">{{ result.lectureName }}</h3>
+          <!-- 전공 : 교수이름 -->
+          <div>{{ result.major }} : {{ result.professorName }}</div>
         </div>
       </div>
+      <!-- 아무 것도 없다는 창 -->
+      <div v-else style="display: flex; justify-content: center; margin: 10%;">검색결과가 없습니다.</div>
     </div>
   </div>
 </template>
 
 <script>
+import LoadingSpinner from './LoadingSpinner.vue'
 import axios from '../main.js'
-const newLocal = 'title'
 export default {
+  components: {
+    LoadingSpinner
+  },
+  created() {
+    this.searchResults = []
+    this.selectedCategory = 'lectureName'
+  },
   data() {
     return {
+      searchLoading: false,
       searchText: '', //검색창 입력 내용
-      searchResults: [], //결과 데이터 저장 용도,
+      searchResults: [{
+        "lectureName": "객체지향프로그래밍",
+        "professorName": "김태형",
+        "major": "컴퓨터공학과",
+        "lectureId": 1
+      }], //결과 데이터 저장 용도,
       selectedResult: null, //결과 중 하나 선택
+      selectIndex : 0,
       categoryOptions: [
-        { value: newLocal, label: '제목', group: 'category' },
-        { value: 'course', label: '강의', group: 'category' },
-        { value: 'professor', label: '교수이름', group: 'category' },
-        { value: 'major', label: '전공', group: 'category' }
+        { value: 'lectureName', label: '강의', group: 'category', apiUrl:'/lectures/searchByLectureName' },
+        { value: 'major', label: '전공', group: 'category', apiUrl:'/lectures/searchByMajor' },
+        { value: 'professor', label: '교수이름', group: 'category' ,apiUrl:'lectures/searchByProfessor'},
       ],
       selectedCategory: 'title'
     }
@@ -94,29 +120,25 @@ export default {
         return
       }
 
+      this.searchLoading = true
+
+      const obj = this.categoryOptions[this.selectIndex]
       // 카테고리 선택에 따라 API 요청
-      const apiUrl = `/lectures/${this.selectedCategory}/get/${this.searchText}`
-      let data = {}
+      const apiUrl = 
+        `${obj.apiUrl}?${obj.value}=${this.searchText}`
 
-      if (this.selectedCategory == 'title') {
-        data = { postTitle: this.searchText }
-      } else if (this.selectedCategory == 'professor') {
-        data = { professorName: this.searchText }
-      } else if (this.selectedCategory == 'lectureName') {
-        data = { lectureName: this.searchText }
-      } else {
-        data = { major: this.searchText }
-      }
-
-      console.log(apiUrl, data)
+      console.log(apiUrl)
 
       //get 요청으로 보냄
       axios
-        .get(apiUrl, { parmas: data })
+        .get(apiUrl)
         .then((response) => {
           console.log(response.data)
-          //searchResults 배열에 response 받은 값들 저장
+          // searchResults 배열에 response 받은 값들 저장
           this.searchResults = response.data
+          this.$nextTick(() => {
+            this.searchLoading = false
+          })
         })
         .catch((error) => {
           console.log(error)
@@ -150,6 +172,7 @@ export default {
   padding: 20px;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20%;
 }
 
 .categoryContainer {
@@ -168,6 +191,7 @@ export default {
   background-color: white;
   padding: 2%;
   font-weight: bold;
+  width: 0px;
 }
 
 .categoryItem:nth-child(1) {
@@ -180,5 +204,17 @@ export default {
   width: 100%;
   font-weight: bold;
   font-size: medium;
+}
+
+.result-container{
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.result-item{
+  display: flex;
+  flex-direction: column;
+  border : 1px solid #316464;
+  margin: 10px 0;
 }
 </style>

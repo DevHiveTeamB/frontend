@@ -46,7 +46,7 @@
       v-model="content"
       placeholder="책 소개를 입력해주세요"
     />
-    <div class="category" @click="modalOpen = true">카테고리</div>
+    <div class="category" @click="modalOpen = true">강의 선택하기</div>
     <CategoryModal
       v-if="modalOpen"
       @close="modalOpen = false"
