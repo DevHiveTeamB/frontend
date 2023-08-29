@@ -278,6 +278,7 @@ export default {
 }
 
 .categoryItem {
+  width: 0px;
   flex-grow: 1;
   font-style: bold;
   border: none;
