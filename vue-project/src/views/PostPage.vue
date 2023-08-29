@@ -58,14 +58,14 @@
       @result-selected="handleResultSelected"
     />
     <!-- 선택된 카테고리 표시해줌 -->
-    <div
-        v-if="this.selectedResult"
-        class="result-item"
-      >
+    <div v-if="this.selectedResult" class="result-item">
       <!-- 강의이름  -->
       <h3 style="margin: 0; margin-bottom: 1%;">{{ this.selectedResult.lectureName }}</h3>
       <!-- 전공 : 교수이름 -->
       <div>{{ this.selectedResult.major }} : {{ this.selectedResult.professorName }}</div>
+    </div>
+    <div v-else class="result-item" style="border: none; ">
+      <div style="display: flex; justify-content: center; align-items: center; color: #686969;">선택된 강의가 없습니다.</div>
     </div>
     <!-- 가격 입력창 -->
     <input

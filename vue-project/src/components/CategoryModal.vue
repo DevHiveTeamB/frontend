@@ -102,12 +102,6 @@ export default {
     closeModal() {
       //백엔드 연결 후 넣을것
 
-      //검색결과 중 하나를 선택하지 않았을때
-      if (this.selectedResult == null) {
-        alert('검색결과 중 하나를 선택해주세요')
-        return
-      }
-
       this.$emit('close')
       //PostPage에 표시해야 되므로 값을 부모로 전달해줌
       this.$emit('result-selected', this.selectedResult)
@@ -122,6 +116,7 @@ export default {
       }
 
       this.searchLoading = true
+      this.searchResults = []
 
       const obj = this.categoryOptions[this.selectIndex]
       // 카테고리 선택에 따라 API 요청
