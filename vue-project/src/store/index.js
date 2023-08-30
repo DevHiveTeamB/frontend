@@ -25,6 +25,7 @@ const store = createStore({
         introduction: 'string',
         ratingState: 0
       },
+      selectCommnunity: null,
       activeNavItem: 'home' //Navbar 초기값
     }
   },
@@ -44,6 +45,9 @@ const store = createStore({
     },
     activeNavItem(state) {
       return state.activeNavItem
+    },
+    selectCommnunity(state) {
+      return state.selectCommnunity
     }
   },
   mutations: {
@@ -66,6 +70,9 @@ const store = createStore({
     },
     setActiveNavItem(state, item) {
       state.activeNavItem = item
+    },
+    setSelectCommnunity(state, community) {
+      state.selectCommnunity = community
     }
   },
   plugins: [vuexPersist.plugin]

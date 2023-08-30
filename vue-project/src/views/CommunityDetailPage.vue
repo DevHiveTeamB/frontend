@@ -7,26 +7,32 @@
   <!-- 글 정보 -->
   <div v-else style="width: 100%; padding: 5%;border-bottom: 1px solid #316464;">
   <!-- 글쓴이 프로필 -->
-    <div class="profileContainer" style="width: 100%; margin-bottom: 5%;">
-      <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 100%" />
-      <div class="leftItem" style="top: 5%; color: #c9caca; font-size: medium">{{this.communityPostContent.writer.username}}</div>
-      <div class="leftItem" style="bottom: 5%; color: #c9caca; font-size: smaller">{{ getFormattedDate(this.communityPostContent.communityPostDate) }}</div>
+    <div class="" style="display: flex; width: 100%; margin-bottom: 5%;">
+      <div style="display: flex; justify-content: center; height: 50px; width: 50px; border-radius: 50%; overflow: hidden; margin-right: 5%;">
+        <img :src="this.communityPostContent.writer.profilePhoto" style="height: 100%; width: 100%;" />
+      </div>
+      <div style="display: flex; flex-direction: column;">
+        <div class="" style="top: 5%; color: #c9caca; font-size: medium">{{this.communityPostContent.writer.username}} #{{ this.communityPostContent.writer.id }}</div>
+        <div class="" style="margin-top: auto; bottom: 5%; color: #c9caca; font-size: smaller">{{ getFormattedDate(this.communityPostContent.communityPostDate) }}</div>
+      </div>
     </div>
 
     <!-- 글 제목, 내용, 댓글, 좋아요 수 -->
     <div class="contentContainer">
       <div class="title">{{ this.communityPostContent.communityPostTitle }}</div>
       <div class="content">{{ this.communityPostContent.communityPostContent }}</div>
-      <div style="font-size: smaller">
+      <div style="font-size: 16px; display: flex; align-items: center;">
         <img
           src="../assets/community/icon_community_comment.svg"
-          style="width: 10px; margin-right: 1%"
+          style="width: 16px; margin-right: 1%"
         />
-        999+
+        {{ this.comments.length>=1000? '999+':this.comments.length }}
         <img
-          src="../assets/community/icon_community_like.svg"
-          style="width: 10px; margin-right: 1%"
-        />99+
+          :src="this.communityPostContent.isCommunityPostLikes? 
+            require('../assets/community/icon_community_like.svg') :
+            require('../assets/community/icon_community_notLike.svg')"
+          style="width: 16px; margin-right: 1%; margin-left: 3%;"
+        />{{ this.communityPostContent.communityPostLikesCount>=1000? '999+':this.communityPostContent.communityPostLikesCount }}
       </div>
     </div>
   </div>
@@ -36,10 +42,10 @@
     <div style="border: 1px solid #c9caca" :key="index" v-for="(value,index) in comments">
       <!-- 댓글쓴이 정보 -->
       <div class="profileContainer" style="padding: 3%; padding-bottom: 0">
-        <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 30px" />
+        <img :src="value.user.profilePhoto" style="height: 30px; width: 30px; border-radius: 50%;" />
         <!-- 유저 이름 -->
         <div class="leftItem comment" style="top: 18%; color: #c9caca; font-size: small">
-          {{ value.user.username  }}
+          {{ value.user.username  }} #{{ value.user.id }}
         </div>
         <!-- 날짜 -->
         <div class="leftItem comment" style="bottom: 10%; color: #c9caca; font-size: smaller">
@@ -47,9 +53,9 @@
         </div>
         <!-- 좋아요, 신고 -->
         <div class="rightItem">
-          <img src="../assets/community/icon_community_notLike.svg" style="width: 10px" />
-          99+
-          <img src="../assets/chat/icon_chat_report.svg" style="width: 10px" />
+          <img src="../assets/community/icon_community_notLike.svg" style="width: 12px" />
+          {{ value.likes>=100? '99+':value.likes }}
+          <img src="../assets/chat/icon_chat_report.svg" style="width: 12px" />
         </div>
       </div>
       <!-- 댓글 내용 -->
@@ -70,28 +76,29 @@
   <div style="margin-top: auto; flex-basis: 10%; flex-shrink: 0;" />
   <!-- 토글창 -->
   <!-- 글 소유자이면 수정/삭제/새로고침 아니라면 신고/새로고침 -->
-  <!-- <div v-if="isDropdownOpen" class="dropdown-menu">
+  <div v-if="isDropdownOpen" class="dropdown-menu">
     <div
-      v-for="(value, index) in userId === postData.writer.userId ? item1 : item2"
+      v-for="(value, index) in userId === this.communityPostContent.writer.id ? this.myItem : this.otherItem"
       :key="index"
       class="dropdown-item"
-      @click="navigateToPage(value)"
+      @click="value.function()"
     >
-      {{ value }}
+      {{ value.value }}
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import axios from '../main.js'
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapState(['userInfo','isLoggedIn']),
+    ...mapState(['userInfo','isLoggedIn','selectCommnunity']),
     userId() {
+      if(!this.isLoggedIn) return null
       return this.userInfo.userId
     },
   },
@@ -99,14 +106,24 @@ export default {
     this.reload()
   },
   methods: {
+    ...mapMutations(['setSelectCommnunity']),
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
+    },
+    navigateToPage(value){
+      console.log(value)
     },
     reload(callback){
       this.comments = [];
       this.communitylistLoading = true
-      axios.get(`/communityposts/get/${this.$route.params.post_id}/${this.userId}`).then((res) => {
+      const url = this.isLoggedIn ? 
+        `/communityposts/get/${this.$route.params.post_id}?userId=${this.userId}` : 
+        `/communityposts/get/${this.$route.params.post_id}`
+      axios.get(url).then((res) => {
+        console.log(url)
+        console.log(res.data)
         this.communityPostContent = res.data
+        this.setSelectCommnunity(res.data)
         this.comments = res.data.comments
         this.communitylistLoading = false
         //callback 이 함수라면 함수 실행
@@ -154,26 +171,85 @@ export default {
   },
   components: { UpperBar,LoadingSpinner },
   data() {
+    const item = {
+      'modifie':{
+        'value' : '수정하기',
+        'function' : ()=>{
+          this.$router.push(`/community/edit/${this.$route.params.post_id}`)
+          console.log('수정하기')
+        },
+      },
+      'delete':{
+        'value' : '삭제하기',
+        'function' : ()=>{
+          console.log('삭제하기')
+        },
+      },
+      'report':{
+        'value' : '신고하기',
+        'function' : ()=>{
+          if(!this.isLoggedIn){
+            this.$router.push('/login')
+            return
+          }
+          console.log('신고하기')
+        },
+      },
+      'refresh':{
+        'value' : '새로고침',
+        'function' : ()=>{
+          console.log('새로고침')
+          this.reload()
+        },
+      },
+      'like':{
+        'value' : '좋아요',
+        'function' : ()=>{
+          if(this.communitylistLoading) return
+          if(!this.isLoggedIn){
+            this.$router.push('/login')
+            return
+          }
+          this.communitylistLoading = true
+          if(this.communityPostContent.isCommunityPostLikes){
+            axios.delete(`/CommunityPostLikesList/delete?userID=${this.userId}&&postID=${this.communityPostContent.communityPostID}`).then((res) => {
+              console.log(res.data)
+              this.communityPostContent.isCommunityPostLikes = false
+              this.communityPostContent.communityPostLikesCount -= 1
+              this.communitylistLoading = false
+            })
+          }
+          else{
+            axios.post(`/CommunityPostLikesList/post?userID=${this.userId}&&postID=${this.communityPostContent.communityPostID}`).then((res) => {
+              console.log(res.data)
+              this.communityPostContent.isCommunityPostLikes = true
+              this.communityPostContent.communityPostLikesCount += 1
+              this.communitylistLoading = false
+            })
+          }
+        },
+      },
+    }
     return {
-      item1: ['수정하기', '삭제하기', '새로고침'],
-      item2: ['신고하기', '새로고침'],
+      myItem :[item.modifie,item.delete,item.refresh],
+      otherItem : [item.report,item.like,item.refresh],
       communitylistLoading : true,
       commentLoading : false,
       commentInput : "",
       isDropdownOpen: false,
       communityPostContent: {
-        communityPostID: 1,
-        writer: {
-          id: 1,
-          username: '',
-          loginId: null
+        "communityPostID": 0,
+        "writer": {
+          "id": 0,
+          "username": "",
+          "profilePhoto":"",
+          "loginId": null
         },
-        communityPostTitle: '',
-        communityPostContent: '',
-        communityPostDate: '',
-        communityPostsPictures: null,
-        communityPostLikesCount: null,
-        isCommunityPostLikes: null
+        "communityPostTitle": "",
+        "communityPostContent": "",
+        "communityPostDate": "",
+        "communityPostLikesCount": 0,
+        "isCommunityPostLikes": false,
       },
       comments: [
         {
@@ -193,6 +269,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .dropdown-menu {
   width: 30%;
   position: absolute;
@@ -230,17 +311,24 @@ export default {
   font-weight: bolder;
   margin-bottom: 5%;
 }
+.contentContainer{
+  width: 100%;
+}
+
 .content {
   color: #c9caca;
   font-size: small;
   margin-bottom: 5%;
+  //줄바꿈 가능
+  width: 100%;
+  word-wrap: break-word;
 }
 
 .rightItem {
   position: absolute;
   right: 5%;
   top: 18%;
-  font-size: smaller;
+  font-size: 12px;
   color: #c9caca;
 }
 .inputContainer {
