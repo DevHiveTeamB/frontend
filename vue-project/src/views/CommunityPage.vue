@@ -35,11 +35,11 @@
           <div style="display: flex; justify-content:center; align-items: center; margin-right: 5%;">
             <img style="height: 100%;"  src="../assets/community/icon_community_comment.svg"/>
           </div>
-          <div style="font-size: 10px; margin-right: 10%;  display: flex; justify-content: center; align-items: center;" >99+</div>
+          <div style="font-size: 10px; margin-right: 10%;  display: flex; justify-content: center; align-items: center;" >{{ value.commentcount>=100? '99+':value.commentcount }}</div>
           <div style="display: flex; justify-content:center; align-items: center; margin-right: 5%;">
             <img style="height: 100%;" src="../assets/bookdetail/icon_bookdetail_likes.svg"/>
           </div>
-          <div style="font-size: 10px; display: flex; justify-content: center; align-items: center;" >{{ value.communityPostLikesCount }}</div>
+          <div style="font-size: 10px; display: flex; justify-content: center; align-items: center;" >{{ value.communityPostLikesCount>=100? '99+':value.communityPostLikesCount }}</div>
         </div>
         <!-- 내용 -->
         <div class="postContent">
