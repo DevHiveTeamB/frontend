@@ -1,17 +1,20 @@
 <template>
   <UpperBar title="DevHive" rightSource="hamburgerBtn" :clickFunction="toggleDropdown" />
   <div v-if="this.postDeleteLoading" class="modal">
-    <LoadingSpinner :setloading="true"/>
+    <LoadingSpinner :setloading="true" />
   </div>
   <!-- 로딩창 -->
-  <div v-if="detailLoading" style="height: 83%;">
-    <LoadingSpinner :setloading="true"/>
+  <div v-if="detailLoading" style="height: 83%">
+    <LoadingSpinner :setloading="true" />
   </div>
   <!-- 게시글 정보 -->
   <div v-else-if="postData">
     <!-- 글쓴이 정보 -->
     <div class="profileContainer">
-      <img style="height: 40px; width: 40px; border-radius: 15px;" :src="`${postData.writer.profilePhoto}`" />
+      <img
+        style="height: 40px; width: 40px; border-radius: 15px"
+        :src="`${postData.writer.profilePhoto}`"
+      />
       <div class="profileInfo">
         <div class="leftItem name">
           {{ postData.writer.username }}
@@ -60,16 +63,32 @@
           alt="LikeImage"
         />
       </div>
+      <div id="category" style="margin: 5%; display: flex">
+        <div class="categoryItem">
+          {{ postData.lecture.lectureName }}
+        </div>
+        <div class="categoryItem">{{ postData.lecture.professorName }}</div>
+        <div class="categoryItem">{{ postData.lecture.major }}</div>
+      </div>
       <div id="content">{{ postData.postContent }}</div>
       <div id="price">{{ postData.price }}원</div>
     </div>
     <!-- 거래하기 버튼. 내 글이면 안보임-->
     <div v-if="userId != postData.writer.userId">
       <div class="BookTradeBtn" @click="goMessageroom">
-        <div v-if="this.tradeLoading" style="height: 100%; width: 100%;">
-          <LoadingSpinner :setloading="true" height="30px" width="30px" color="#ffffff" alpha="0.3"/>
+        <div v-if="this.tradeLoading" style="height: 100%; width: 100%">
+          <LoadingSpinner
+            :setloading="true"
+            height="30px"
+            width="30px"
+            color="#ffffff"
+            alpha="0.3"
+          />
         </div>
-        <div v-else style="display: flex; justify-content: center; align-items: center; margin: 0 auto">
+        <div
+          v-else
+          style="display: flex; justify-content: center; align-items: center; margin: 0 auto"
+        >
           <img src="../assets/bookdetail/icon_bookdetail_tradeBtn.svg" />
         </div>
       </div>
@@ -99,8 +118,7 @@ export default {
   computed: {
     ...mapState(['userInfo']),
     userId() {
-      if(this.userInfo === null)
-        return null
+      if (this.userInfo === null) return null
       return this.userInfo.userId
     }
   },
@@ -208,25 +226,24 @@ export default {
       if (!this.tradeLoading && this.userInfo !== null) {
         this.tradeLoading = true
         const url = '/message-rooms/messagerooms/post'
-      axios
-        .post(url, null, {
-          params: {
-            postId: this.postId,
-            buyerId: this.userId
-          }
-        })
-        .then((res) => {
-          //response로 messageroomId가 넘어옴
-          console.log(res.data)
-          this.messageroomId = res.data
-          this.$router.push(`/chat`)
-          this.tradeLoading = false
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-      } 
-      else if(this.userInfo === null){
+        axios
+          .post(url, null, {
+            params: {
+              postId: this.postId,
+              buyerId: this.userId
+            }
+          })
+          .then((res) => {
+            //response로 messageroomId가 넘어옴
+            console.log(res.data)
+            this.messageroomId = res.data
+            this.$router.push(`/chat`)
+            this.tradeLoading = false
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      } else if (this.userInfo === null) {
         this.$router.push('/login')
       }
     }
@@ -342,6 +359,16 @@ export default {
   font-size: large;
   font-weight: bolder;
   margin: 5%;
+}
+
+.categoryItem {
+  border: 2px solid #316464;
+  border-radius: 20px;
+  padding: 1% 3%;
+  margin-right: 3%;
+  font-weight: bold;
+  font-size: small;
+  color: #316464;
 }
 
 #content {

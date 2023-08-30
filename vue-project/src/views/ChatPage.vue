@@ -1,7 +1,7 @@
 <template>
   <UpperBar title="쪽지함" rightSource="refreshBtn" :clickFunction="refresh" />
   <!-- 로딩창 -->
-  <div v-if="this.chatLoading" style="height: 80%; width: 100%;">
+  <div v-if="this.chatLoading" style="height: 80%; width: 100%">
     <LoadingSpinner :setloading="true" />
   </div>
   <!-- 쪽지함들 -->
@@ -24,8 +24,15 @@
             {{ formatLastMessageDate(value.lastMessageDate) }}
           </div>
         </h2>
-        <h3 class="content" :style="{fontSize : 15+'px', marginTop: 1+'%', color: value.lastMessageData==='' ? '#c9caca':''}">
-          {{ value.lastMessageData==="" ? '대화를 시작하세요!' : value.lastMessageData }}
+        <h3
+          class="content"
+          :style="{
+            fontSize: 15 + 'px',
+            marginTop: 1 + '%',
+            color: value.lastMessageData === '' ? '#c9caca' : ''
+          }"
+        >
+          {{ value.lastMessageData === '' ? '대화를 시작하세요!' : value.lastMessageData }}
         </h3>
       </div>
     </div>
@@ -55,8 +62,6 @@ export default {
     refresh() {
       this.$router.go(0)
     },
-    //유저 메시지룸 조회 API
-    // 오류 왜뜨지..?
     getMessageRooms() {
       this.chatLoading = true
       const url = `/message-rooms/messagerooms/user/get/${this.userId}`
@@ -92,16 +97,16 @@ export default {
       chatLoading: true,
       messageRooms: [
         {
-          "opponent": {
-            "id": 0,
-            "username": "",
-            "profilePhoto": "",
-            "rating": 0
+          opponent: {
+            id: 0,
+            username: '',
+            profilePhoto: '',
+            rating: 0
           },
-          "roomID": 0,
-          "lastMessageData": "",
-          "lastMessageDate": "",
-          "postid": 0
+          roomID: 0,
+          lastMessageData: '',
+          lastMessageDate: '',
+          postid: 0
         }
       ]
     }

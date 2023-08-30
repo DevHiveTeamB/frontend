@@ -12,13 +12,49 @@
         />
       </div>
       <div class="profileContainer">
-        <img src="../assets/bookdetail/icon_bookdetail_basic_profile.svg" style="height: 100%" />
+        <img
+          :src="this.opponentData.profilePhoto"
+          style="width: 40%; height: 40%; border-radius: 50%"
+        />
         <div class="profileInfo">
-          <div style="font-size: large">이름</div>
-          <div style="font-size: medium; border-bottom: 1px solid #2e6464">평점</div>
-          <div style="font-size: medium; border-bottom: 1px solid #2e6464">자기소개</div>
+          <div style="font-size: large; font-weight: bolder">
+            {{ this.opponentData.username }}
+          </div>
+          <div style="display: flex; border-bottom: 2px solid #c9caca">
+            <div
+              :key="index"
+              v-for="(value, index) in [1, 2, 3, 4, 5]"
+              :class="`${this.opponentData.rating >= value ? 'star' : 'nostar'}`"
+            >
+              <img style="width: 100%; height: 100%" src="../assets/mypage/icon_mypage_star.svg" />
+            </div>
+            ({{ this.opponentData.rating }})
+          </div>
+          <div style="font-size: small; line-height: 130%; border-bottom: 2px solid #c9caca">
+            자기소개 응애야니아럼;냐ㅓㅇ럄너;ㅇ랴ㅓㅁ;냐ㅓㅇㄹ;ㅁ냐ㅓㅇ;랴ㅐ머ㅣㄴ뢰ㅏ어;랴ㅐㅓㅐ
+          </div>
           <div style="font-size: small">가입날짜</div>
         </div>
+        <!-- <img :src="this.opponentData.profilePhoto" style="width: 140px; border-radius: 50%" />
+        <div class="profileInfo">
+          <div style="font-size: large; font-weight: bolder">
+            {{ this.opponentData.username }}
+          </div>
+          <div style="display: flex; border-bottom: 2px solid #c9caca">
+            <div
+              :key="index"
+              v-for="(value, index) in [1, 2, 3, 4, 5]"
+              :class="`${this.opponentData.rating >= value ? 'star' : 'nostar'}`"
+            >
+              <img style="width: 100%; height: 100%" src="../assets/mypage/icon_mypage_star.svg" />
+            </div>
+            ({{ this.opponentData.rating }})
+          </div>
+          <div style="font-size: medium; border-bottom: 2px solid #c9caca">
+            이거30글자로 제한줘야되나?개길어서 튀어나오는데 어떡하죵 살려주세요
+          </div>
+          <div style="font-size: small">가입날짜</div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -26,6 +62,9 @@
 
 <script>
 export default {
+  props: {
+    opponentData: Object
+  },
   methods: {}
 }
 </script>
@@ -45,7 +84,7 @@ export default {
 
 .modal-content {
   width: 350px;
-  height: 200px;
+  height: auto;
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -62,16 +101,32 @@ export default {
 }
 
 .profileContainer {
-  position: relative;
-  margin: 5%;
-  height: 70%;
+  display: flex;
+  margin: 0% 5%;
+  height: auto;
+  align-items: center;
+}
+
+.star {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: auto;
+}
+
+.nostar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: auto;
+  opacity: 0.3;
 }
 
 .profileInfo {
-  position: absolute;
-  top: 5%;
-  left: 50%;
-  width: 50%;
+  width: 100%;
+  margin: 3%;
   line-height: 180%;
 }
 </style>
