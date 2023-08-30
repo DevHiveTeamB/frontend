@@ -105,7 +105,7 @@ export default {
     reload(callback){
       this.comments = [];
       this.communitylistLoading = true
-      axios.get(`/communityposts/get/${this.$route.params.post_id}`).then((res) => {
+      axios.get(`/communityposts/get/${this.$route.params.post_id}/${this.userId}`).then((res) => {
         this.communityPostContent = res.data
         this.comments = res.data.comments
         this.communitylistLoading = false
