@@ -39,7 +39,7 @@
           <div style="display: flex; justify-content:center; align-items: center; margin-right: 5%;">
             <img style="height: 100%;" src="../assets/bookdetail/icon_bookdetail_likes.svg"/>
           </div>
-          <div style="font-size: 10px; display: flex; justify-content: center; align-items: center;" >99+</div>
+          <div style="font-size: 10px; display: flex; justify-content: center; align-items: center;" >{{ value.communityPostLikesCount }}</div>
         </div>
         <!-- 내용 -->
         <div class="postContent">
@@ -126,7 +126,6 @@ export default {
           "communityPostContent": "",
           "communityPostDate": "",
           "communityPostLikesCount": null,
-          "isCommunityPostLikes": null,
           "commentIDs": null
         }
       ],
