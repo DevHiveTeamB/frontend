@@ -66,7 +66,16 @@ const routes = [
   {
     path: '/community/detail/:post_id',
     component: () => import('../views/CommunityDetailPage.vue')
-  }
+  },
+  {
+    path: '/community/edit/:post_id',
+    component: () => import('../views/CommunityEditPage.vue')
+  },
+  // test
+  {
+    path: '/test',
+    component: () => import('../views/TestPage.vue')
+  },
 ]
 
 const router = createRouter({

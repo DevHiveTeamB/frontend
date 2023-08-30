@@ -70,27 +70,27 @@
   <div style="margin-top: auto; flex-basis: 10%; flex-shrink: 0;" />
   <!-- 토글창 -->
   <!-- 글 소유자이면 수정/삭제/새로고침 아니라면 신고/새로고침 -->
-  <!-- <div v-if="isDropdownOpen" class="dropdown-menu">
+  <div v-if="isDropdownOpen" class="dropdown-menu">
     <div
-      v-for="(value, index) in userId === postData.writer.userId ? item1 : item2"
+      v-for="(value, index) in userId === this.communityPostContent.writer.id ? this.myItem : this.otherItem"
       :key="index"
       class="dropdown-item"
-      @click="navigateToPage(value)"
+      @click="myItem[index].function()"
     >
-      {{ value }}
+      {{ value.value }}
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import axios from '../main.js'
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapState(['userInfo','isLoggedIn']),
+    ...mapState(['userInfo','isLoggedIn','selectCommnunity']),
     userId() {
       return this.userInfo.userId
     },
@@ -99,14 +99,20 @@ export default {
     this.reload()
   },
   methods: {
+    ...mapMutations(['setSelectCommnunity']),
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
+    },
+    navigateToPage(value){
+      console.log(value)
     },
     reload(callback){
       this.comments = [];
       this.communitylistLoading = true
       axios.get(`/communityposts/get/${this.$route.params.post_id}/${this.userId}`).then((res) => {
+        console.log(res.data)
         this.communityPostContent = res.data
+        this.setSelectCommnunity(res.data)
         this.comments = res.data.comments
         this.communitylistLoading = false
         //callback 이 함수라면 함수 실행
@@ -154,26 +160,53 @@ export default {
   },
   components: { UpperBar,LoadingSpinner },
   data() {
+    const item = {
+      'modifie':{
+        'value' : '수정하기',
+        'function' : ()=>{
+          this.$router.push(`/community/edit/${this.$route.params.post_id}`)
+          console.log('수정하기')
+        },
+      },
+      'delete':{
+        'value' : '삭제하기',
+        'function' : ()=>{
+          console.log('삭제하기')
+        },
+      },
+      'report':{
+        'value' : '신고하기',
+        'function' : ()=>{
+          console.log('신고하기')
+        },
+      },
+      'refresh':{
+        'value' : '새로고침',
+        'function' : ()=>{
+          console.log('새로고침')
+          this.reload()
+        },
+      }
+    }
     return {
-      item1: ['수정하기', '삭제하기', '새로고침'],
-      item2: ['신고하기', '새로고침'],
+      myItem :[item.modifie,item.delete,item.refresh],
+      otherItem : [item.report,item.refresh],
       communitylistLoading : true,
       commentLoading : false,
       commentInput : "",
       isDropdownOpen: false,
       communityPostContent: {
-        communityPostID: 1,
-        writer: {
-          id: 1,
-          username: '',
-          loginId: null
+        "communityPostID": 0,
+        "writer": {
+          "id": 0,
+          "username": "",
+          "loginId": null
         },
-        communityPostTitle: '',
-        communityPostContent: '',
-        communityPostDate: '',
-        communityPostsPictures: null,
-        communityPostLikesCount: null,
-        isCommunityPostLikes: null
+        "communityPostTitle": "",
+        "communityPostContent": "",
+        "communityPostDate": "",
+        "communityPostLikesCount": 0,
+        "isCommunityPostLikes": false,
       },
       comments: [
         {

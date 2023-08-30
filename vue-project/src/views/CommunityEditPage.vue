@@ -20,14 +20,19 @@
 
 <script>
 import UpperBar from '../components/UpperBar.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import axios from '../main.js'
 export default {
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo', 'selectCommnunity'])
+  },
+  created(){
+    this.title = this.selectCommnunity.communityPostTitle
+    this.content = this.selectCommnunity.communityPostContent
   },
   components: { UpperBar },
   methods: {
+    ...mapMutations(['setSelectCommnunity']),
     checkForm() {
       if (this.title == '' || this.content == '') {
         alert('빈칸없이 작성해주세요')
@@ -36,22 +41,23 @@ export default {
           "writerID": this.userInfo.userId,
           "communityPostTitle": this.title,
           "communityPostContent": this.content,
-          "communityPostLikes": 0
         }
         console.log(data)
         //모든 정보가 입력되었을때만 요청 보냄
-        axios.post('/communityposts/post', data)
+        axios.put('/communityposts/put', data)
         .then((res) => {
           console.log(res.data)
-          this.$router.push(`/community/detail/${res.data.communityPostID}`)
+          this.$router.push(`/community/detail/${this.selectCommnunity.communityPostID}`)
         })
       }
     }
   },
   data() {
     return {
-      title: '',
-      content: ''
+      title : '',
+      content : ''
+      // title: this.selectCommnunity.communityPostTitle,
+      // content: this.selectCommnunity.communityPostContent
     }
   }
 }
