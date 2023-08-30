@@ -41,14 +41,18 @@ const routes = [
     path: '/bookedit/:post_id',
     component: () => import('../views/BookEditPage.vue')
   },
+  //쪽지함 페이지
   {
-    path: '/chat/:room_id',
+    path: '/chat/:room_id/:opponent_id',
     component: () => import('../views/ChatDetailPage.vue')
   },
-  //쪽지함 페이지
   {
     path: '/chat',
     component: () => import('../views/ChatPage.vue')
+  },
+  {
+    path: '/chat/:room_id',
+    component: () => import('../views/ChatRoomPage.vue')
   },
   //community 페이지
   {
