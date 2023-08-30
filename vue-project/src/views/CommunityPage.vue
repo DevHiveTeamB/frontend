@@ -1,6 +1,6 @@
 <template>
   <UpperBar title="커뮤니티" rightSource="No" />
-  <div style="width: 100%; height: 80%; position: relative;">
+  <div style="width: 100%; display: flex; flex-direction: column; flex-grow: 1; position: relative;">
     <!-- 검색창 -->
     <div style="height: 8%; width: 100%; border: 1px solid #316464; display: flex; padding: 2%;">
       <input
@@ -26,7 +26,7 @@
     <div v-if="this.communitylistLoading" style="height: 100%; width: 100%;">
         <LoadingSpinner :setloading="true"/>
     </div>
-    <div v-else style="overflow-y: auto; height: 92%; width: 100%">
+    <div v-else class="communityList">
       <div class="community"  :key="index" v-for="(value,index) in communityList" @click="clickCommunityPost(value.communityPostID)">
         <!-- 날짜 -->
         <div style="position: absolute; right: 2%; top: 10%; font-size: 14px; color: #c9caca">{{ getFormattedDate(value.communityPostDate) }}</div>
@@ -60,6 +60,7 @@
       </div>
     </div>
   </div>
+  <div style="height: 10%; width: 100%;"></div>
 </template>
 
 <script>
@@ -153,6 +154,13 @@ export default {
   z-index: 1;
   border-radius: 100px;
   background-color: #316464;
+}
+
+.communityList{
+  overflow-y: auto;
+  flex-grow: 1;
+  width: 100%;
+  height: 1px;
 }
 .community{
   display: flex;
