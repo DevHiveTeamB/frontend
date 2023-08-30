@@ -9,23 +9,23 @@
     <div
       class="chatRoom"
       :key="index"
-      v-for="(value, index) in getData.messageRoom"
-      @click="moveToChatRoom(value.roomID)"
+      v-for="(value, index) in messageRooms"
+      @click="moveToChatRoom(value.roomID, value.opponent.id)"
     >
-      <img class="profile" :src="this.userInfo.profilePhoto" />
+      <img class="profile" :src="value.opponent.profilePhoto" />
       <div class="chatRoominfo">
         <h2
           class="name"
           style="margin: 0; font-size: 15px; white-space: nowrap; color: #c9caca; margin-bottom: 2%"
         >
-          <!-- API 수정되면 수정할 부분(상대방 정보가져오기) -->
-          <div>이원찬</div>
+          <!-- 상대방 정보 -->
+          <div>{{ value.opponent.username }}</div>
           <div style="margin-left: auto; margin-right: 3%;-">
             {{ formatLastMessageDate(value.lastMessageDate) }}
           </div>
         </h2>
-        <h3 class="content" style="font-size: 15px; margin-top: 1%">
-          {{ value.lastMessageData }}
+        <h3 class="content" :style="{fontSize : 15+'px', marginTop: 1+'%', color: value.lastMessageData==='' ? '#c9caca':''}">
+          {{ value.lastMessageData==="" ? '대화를 시작하세요!' : value.lastMessageData }}
         </h3>
       </div>
     </div>
@@ -64,7 +64,7 @@ export default {
         .get(url)
         .then((res) => {
           console.log(res.data)
-          this.getData = res.data
+          this.messageRooms = res.data
           this.$nextTick(() => {
             this.chatLoading = false
           })
@@ -74,7 +74,7 @@ export default {
         })
     },
     formatLastMessageDate(date) {
-      if (!date) return 'null'
+      if (!date) return '...'
       const formattedDate = new Date(date).toLocaleDateString('en-US', {
         year: 'numeric',
         month: '2-digit',
@@ -82,17 +82,28 @@ export default {
       })
       return formattedDate
     },
-    moveToChatRoom(roomID) {
-      this.$router.push(`/chat/${roomID}`)
+    moveToChatRoom(roomID, opponentId) {
+      this.$router.push(`/chat/${roomID}/${opponentId}`)
     }
   },
   data() {
     return {
       searchResult: [1, 2, 3, 4],
       chatLoading: true,
-      getData: {
-        messageRoom: []
-      }
+      messageRooms: [
+        {
+          "opponent": {
+            "id": 0,
+            "username": "",
+            "profilePhoto": "",
+            "rating": 0
+          },
+          "roomID": 0,
+          "lastMessageData": "",
+          "lastMessageDate": "",
+          "postid": 0
+        }
+      ]
     }
   }
 }
