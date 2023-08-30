@@ -70,7 +70,7 @@ import axios from '../main.js'
 import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo','isLoggedIn']),
     userId() {
       return this.userInfo.userId
     }
@@ -102,7 +102,7 @@ export default {
       return `${year}-${month}-${day}`
     },
     communityCreate(){
-      if(this.userInfo == null)
+      if(this.isLoggedIn == false||this.userInfo == null)
         this.$router.push('/login')
       else
         this.$router.push('/community/post')
