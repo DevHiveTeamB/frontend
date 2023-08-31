@@ -53,9 +53,15 @@
         </div>
         <!-- 좋아요, 신고 -->
         <div class="rightItem">
-          <img src="../assets/community/icon_community_notLike.svg" style="width: 12px" />
-          {{ value.likes>=100? '99+':value.likes }}
-          <img src="../assets/chat/icon_chat_report.svg" style="width: 12px" />
+          <img :src="value.isLikes?
+            require('../assets/community/icon_community_like.svg') :
+            require('../assets/community/icon_community_notLike.svg')" 
+            @click="commentLike(index)"
+            style="width: 12px" />
+          <div style="width: 10%;">
+            {{ value.likes>=100? '99+':value.likes }}
+          </div>
+          <img src="../assets/chat/icon_chat_report.svg" style="width: 12px;margin-left: auto;" />
         </div>
       </div>
       <!-- 댓글 내용 -->
@@ -144,7 +150,7 @@ export default {
         this.commentLoading = true
         const text = this.commentInput
         this.commentInput = ""
-        axios.post(`/comments/post/{CommentsID}`,{
+        axios.post(`/comments/post`,{
           "userID": this.userId,
           "communityPostID": this.$route.params.post_id,
           "commentContent": text
@@ -159,6 +165,30 @@ export default {
           })
         })
       }
+    },
+    commentLike(index){
+      if(this.isWaiting) return
+      if(!this.isLoggedIn){
+        this.$router.push('/login')
+        return
+      }
+      this.isWaiting = true
+      const comment = this.comments[index]
+      if(comment.isLikes){
+        axios.delete(`/CommentsLikesList/delete?userID=${this.userId}&&commentId=${comment.commentsID}`).then((res) => {
+          console.log(res.data)
+          this.isWaiting = false
+        })
+      }
+      else{
+        axios.post(`/CommentsLikesList/post?userID=${this.userId}&&commentId=${comment.commentsID}`).then((res) => {
+          console.log(res.data)
+          this.isWaiting = false
+        })
+      }
+      comment.isLikes = !comment.isLikes
+      comment.likes += comment.isLikes? 1:-1
+      this.isWaiting = false
     },
     getFormattedDate(dateString) {
       const date = new Date(dateString)
@@ -205,26 +235,26 @@ export default {
       'like':{
         'value' : '좋아요',
         'function' : ()=>{
-          if(this.communitylistLoading) return
+          if(this.isWaiting) return
           if(!this.isLoggedIn){
             this.$router.push('/login')
             return
           }
-          this.communitylistLoading = true
+          this.isWaiting = true
           if(this.communityPostContent.isCommunityPostLikes){
+            this.communityPostContent.isCommunityPostLikes = false
+            this.communityPostContent.communityPostLikesCount -= 1
             axios.delete(`/CommunityPostLikesList/delete?userID=${this.userId}&&postID=${this.communityPostContent.communityPostID}`).then((res) => {
               console.log(res.data)
-              this.communityPostContent.isCommunityPostLikes = false
-              this.communityPostContent.communityPostLikesCount -= 1
-              this.communitylistLoading = false
+              this.isWaiting = false
             })
           }
           else{
+            this.communityPostContent.isCommunityPostLikes = true
+            this.communityPostContent.communityPostLikesCount += 1
             axios.post(`/CommunityPostLikesList/post?userID=${this.userId}&&postID=${this.communityPostContent.communityPostID}`).then((res) => {
               console.log(res.data)
-              this.communityPostContent.isCommunityPostLikes = true
-              this.communityPostContent.communityPostLikesCount += 1
-              this.communitylistLoading = false
+              this.isWaiting = false
             })
           }
         },
@@ -235,6 +265,7 @@ export default {
       otherItem : [item.report,item.like,item.refresh],
       communitylistLoading : true,
       commentLoading : false,
+      isWaiting : false,
       commentInput : "",
       isDropdownOpen: false,
       communityPostContent: {
@@ -253,14 +284,17 @@ export default {
       },
       comments: [
         {
+          commentContent: '',
+          commentDate: '',
           commentsID: 0,
+          isLike: false,
+          likes:0,
           user: {
             id: 0,
             username: '',
+            profilePhoto: '',
             loginId: ''
           },
-          commentContent: '',
-          commentDate: ''
         }
       ],
     }
@@ -330,6 +364,8 @@ export default {
   top: 18%;
   font-size: 12px;
   color: #c9caca;
+  display: flex;
+  width: 12%;
 }
 .inputContainer {
   border-top: 1px solid #316464;
