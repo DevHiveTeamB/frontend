@@ -1,22 +1,16 @@
 <template>
-  <UpperBar title="글 수정하기" rightSource="완료" :clickFunction="checkForm" />
+  <UpperBar title="댓글 신고하기" rightSource="완료" :clickFunction="checkForm" />
   <div v-if="this.Loading" class="modal">
     <LoadingSpinner :setloading="true"/>
   </div>
   <div
     style="position: relative; height: 80%; padding: 0 10px; display: flex; flex-direction: column"
   >
-    <input
-      class="textInput marginTop_Bottom"
-      v-model="title"
-      type="text"
-      placeholder="제목을 입력해주세요"
-    />
     <textarea
       style="height: 30%; padding: 5%; resize: none"
       class="textInput marginTop_Bottom"
       v-model="content"
-      placeholder="글 내용을 입력해주세요"
+      placeholder="신고 내용을 입력해주세요"
     />
   </div>
 </template>
@@ -31,8 +25,8 @@ export default {
     ...mapGetters(['userInfo', 'selectCommnunity'])
   },
   created(){
-    this.title = this.selectCommnunity.communityPostTitle
-    this.content = this.selectCommnunity.communityPostContent
+    // this.title = this.selectCommnunity.communityPostTitle
+    // this.content = this.selectCommnunity.communityPostContent
   },
   components: { UpperBar, LoadingSpinner },
   methods: {
@@ -41,18 +35,18 @@ export default {
       if (this.Loading) {
         return
       }
-      if (this.title == '' || this.content == '') {
+      if (this.content == '') {
         alert('빈칸없이 작성해주세요')
       } else {
         const data = {
-          "writerID": this.userInfo.userId,
-          "communityPostTitle": this.title,
-          "communityPostContent": this.content,
+          "userId": this.userInfo.userId,
+          "commentId": this.$route.params.comment_id,
+          "reportContent": this.content,
         }
         this.Loading = true
         console.log(data)
         //모든 정보가 입력되었을때만 요청 보냄
-        axios.put(`/communityposts/put/${this.selectCommnunity.communityPostID}`, data)
+        axios.post(`/commentsreports/post`, data)
         .then((res) => {
           console.log(res.data)
           this.$router.push(`/community/detail/${this.selectCommnunity.communityPostID}`)
@@ -64,10 +58,7 @@ export default {
   data() {
     return {
       Loading: false,
-      title : '',
       content : ''
-      // title: this.selectCommnunity.communityPostTitle,
-      // content: this.selectCommnunity.communityPostContent
     }
   }
 }
