@@ -61,7 +61,9 @@
           <div style="width: 10%;">
             {{ value.likes>=100? '99+':value.likes }}
           </div>
-          <img src="../assets/chat/icon_chat_report.svg" style="width: 12px;margin-left: auto;" />
+          <img v-if="value.user.id != this.userInfo.userId" src="../assets/chat/icon_chat_report.svg" style="width: 12px;margin-left: auto;"
+          @click="commentReport(value.commentsID)"
+           />
         </div>
       </div>
       <!-- 댓글 내용 -->
@@ -115,9 +117,6 @@ export default {
     ...mapMutations(['setSelectCommnunity']),
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
-    },
-    navigateToPage(value){
-      console.log(value)
     },
     reload(callback){
       this.comments = [];
@@ -190,6 +189,13 @@ export default {
       comment.likes += comment.isLikes? 1:-1
       this.isWaiting = false
     },
+    commentReport(id){
+      if(!this.isLoggedIn){
+        this.$router.push('/login')
+        return
+      }
+      this.$router.push(`/comment/report/${id}`)
+    },
     getFormattedDate(dateString) {
       const date = new Date(dateString)
       const year = date.getFullYear()
@@ -222,7 +228,7 @@ export default {
             this.$router.push('/login')
             return
           }
-          console.log('신고하기')
+          this.$router.push(`/community/report/${this.$route.params.post_id}`)
         },
       },
       'refresh':{

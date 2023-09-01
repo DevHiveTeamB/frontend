@@ -71,6 +71,14 @@ const routes = [
     path: '/community/edit/:post_id',
     component: () => import('../views/CommunityEditPage.vue')
   },
+  {
+    path: '/community/report/:post_id',
+    component: () => import('../views/CommunityReportPage.vue')
+  },
+  {
+    path: '/comment/report/:comment_id',
+    component: () => import('../views/CommentReportPage.vue')
+  },
   // test
   {
     path: '/test',
