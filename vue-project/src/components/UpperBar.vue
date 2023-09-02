@@ -60,7 +60,7 @@ export default {
 
 <style lang="scss" scoped>
 .imageContainer {
-  height: 100%;
+  height: 60px;
   width: 25%;
   padding: 3%;
   //height 와 같은 값
@@ -78,14 +78,6 @@ export default {
   display: flex;
   align-items: center;
   background-color: #316464;
-}
-
-.completeContainer {
-  color: white;
-  width: 25%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .title {
