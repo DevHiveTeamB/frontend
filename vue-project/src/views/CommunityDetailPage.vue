@@ -1,19 +1,45 @@
 <template>
   <UpperBar title="DevHive" rightSource="hamburgerBtn" :clickFunction="toggleDropdown" />
   <!-- 로딩창 -->
-  <div v-if="this.communitylistLoading" style="height: 100%; width: 100%;">
+  <div v-if="this.communitylistLoading" style="height: 100%; width: 100%">
     <LoadingSpinner :setloading="true" />
   </div>
   <!-- 글 정보 -->
-  <div v-else style="width: 100%; padding: 5%;border-bottom: 1px solid #316464;">
-  <!-- 글쓴이 프로필 -->
-    <div class="" style="display: flex; width: 100%; margin-bottom: 5%;">
-      <div style="display: flex; justify-content: center; height: 50px; width: 50px; border-radius: 50%; overflow: hidden; margin-right: 5%;">
-        <img :src="this.communityPostContent.writer.profilePhoto" style="height: 100%; width: 100%;" />
+  <div v-else style="width: 100%; padding: 5%; border-bottom: 1px solid #316464">
+    <!-- 글쓴이 프로필 -->
+    <div class="" style="display: flex; width: 100%; margin-bottom: 5%">
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          height: 50px;
+          width: 50px;
+          border-radius: 50%;
+          overflow: hidden;
+          margin-right: 5%;
+        "
+      >
+        <img
+          :src="this.communityPostContent.writer.profilePhoto"
+          style="height: 100%; width: 100%"
+        />
       </div>
-      <div style="display: flex; flex-direction: column;">
-        <div class="" style="top: 5%; color: #c9caca; font-size: medium">{{this.communityPostContent.writer.username}} #{{ this.communityPostContent.writer.id }}</div>
-        <div class="" style="margin-top: auto; bottom: 5%; color: #c9caca; font-size: smaller">{{ getFormattedDate(this.communityPostContent.communityPostDate) }}</div>
+      <div style="display: flex; flex-direction: column">
+        <div class="" style="top: 5%; color: #c9caca; font-size: medium; font-weight: bolder">
+          {{ this.communityPostContent.writer.username }} #{{ this.communityPostContent.writer.id }}
+        </div>
+        <div
+          class=""
+          style="
+            margin-top: auto;
+            bottom: 5%;
+            color: #c9caca;
+            font-size: smaller;
+            font-weight: bolder;
+          "
+        >
+          {{ getFormattedDate(this.communityPostContent.communityPostDate) }}
+        </div>
       </div>
     </div>
 
@@ -21,49 +47,67 @@
     <div class="contentContainer">
       <div class="title">{{ this.communityPostContent.communityPostTitle }}</div>
       <div class="content">{{ this.communityPostContent.communityPostContent }}</div>
-      <div style="font-size: 16px; display: flex; align-items: center;">
+      <div style="font-size: 16px; display: flex; align-items: center">
         <img
           src="../assets/community/icon_community_comment.svg"
           style="width: 16px; margin-right: 1%"
         />
-        {{ this.comments.length>=1000? '999+':this.comments.length }}
+        {{ this.comments.length >= 1000 ? '999+' : this.comments.length }}
         <img
-          :src="this.communityPostContent.isCommunityPostLikes? 
-            require('../assets/community/icon_community_like.svg') :
-            require('../assets/community/icon_community_notLike.svg')"
-          style="width: 16px; margin-right: 1%; margin-left: 3%;"
-        />{{ this.communityPostContent.communityPostLikesCount>=1000? '999+':this.communityPostContent.communityPostLikesCount }}
+          :src="
+            this.communityPostContent.isCommunityPostLikes
+              ? require('../assets/community/icon_community_like.svg')
+              : require('../assets/community/icon_community_notLike.svg')
+          "
+          style="width: 16px; margin-right: 1%; margin-left: 3%"
+        />{{
+          this.communityPostContent.communityPostLikesCount >= 1000
+            ? '999+'
+            : this.communityPostContent.communityPostLikesCount
+        }}
       </div>
     </div>
   </div>
 
   <!-- 댓글 컨테이너 -->
-  <div v-if="!this.communitylistLoading" ref="commentContainer" class="commentContainer" style="overflow-y: auto;flex-grow: 1;">
-    <div style="border: 1px solid #c9caca" :key="index" v-for="(value,index) in comments">
+  <div
+    v-if="!this.communitylistLoading"
+    ref="commentContainer"
+    class="commentContainer"
+    style="overflow-y: auto; flex-grow: 1"
+  >
+    <div style="border: 1px solid #c9caca" :key="index" v-for="(value, index) in comments">
       <!-- 댓글쓴이 정보 -->
       <div class="profileContainer" style="padding: 3%; padding-bottom: 0">
-        <img :src="value.user.profilePhoto" style="height: 30px; width: 30px; border-radius: 50%;" />
+        <img :src="value.user.profilePhoto" style="height: 30px; width: 30px; border-radius: 50%" />
         <!-- 유저 이름 -->
         <div class="leftItem comment" style="top: 18%; color: #c9caca; font-size: small">
-          {{ value.user.username  }} #{{ value.user.id }}
+          {{ value.user.username }} #{{ value.user.id }}
         </div>
         <!-- 날짜 -->
         <div class="leftItem comment" style="bottom: 10%; color: #c9caca; font-size: smaller">
-          {{ getFormattedDate(value.commentDate)  }}
+          {{ getFormattedDate(value.commentDate) }}
         </div>
         <!-- 좋아요, 신고 -->
         <div class="rightItem">
-          <img :src="value.isLikes?
-            require('../assets/community/icon_community_like.svg') :
-            require('../assets/community/icon_community_notLike.svg')" 
+          <img
+            :src="
+              value.isLikes
+                ? require('../assets/community/icon_community_like.svg')
+                : require('../assets/community/icon_community_notLike.svg')
+            "
             @click="commentLike(index)"
-            style="width: 12px" />
-          <div style="width: 10%;">
-            {{ value.likes>=100? '99+':value.likes }}
+            style="width: 13px; margin-right: 5%"
+          />
+          <div style="width: 10%; font-size: small">
+            {{ value.likes >= 100 ? '99+' : value.likes }}
           </div>
-          <img v-if="value.user.id != this.userInfo.userId" src="../assets/chat/icon_chat_report.svg" style="width: 12px;margin-left: auto;"
-          @click="commentReport(value.commentsID)"
-           />
+          <img
+            v-if="value.user.id != this.userInfo.userId"
+            src="../assets/chat/icon_chat_report.svg"
+            style="width: 12px; margin-left: auto"
+            @click="commentReport(value.commentsID)"
+          />
         </div>
       </div>
       <!-- 댓글 내용 -->
@@ -75,18 +119,25 @@
   <!-- 댓글 작성창 -->
   <div class="inputContainer" @click="isLogin">
     <input v-model="commentInput" type="text" class="inputbox" />
-    <div v-if="this.commentLoading" style="width: 10%; margin: 1%;">
-      <LoadingSpinner :setloading="true" height="30px" width="30px"/>
+    <div v-if="this.commentLoading" style="width: 10%; margin: 1%">
+      <LoadingSpinner :setloading="true" height="30px" width="30px" />
     </div>
-    <img v-else src="../assets/chat/icon_chat_disable.svg" class="inputImg" @click="createComment"/>
+    <img
+      v-else
+      src="../assets/chat/icon_chat_disable.svg"
+      class="inputImg"
+      @click="createComment"
+    />
   </div>
   <!-- 밑 네브바를 채워줄 빈공간 -->
-  <div style="margin-top: auto; flex-basis: 10%; flex-shrink: 0;" />
+  <div style="margin-top: auto; flex-basis: 10%; flex-shrink: 0" />
   <!-- 토글창 -->
   <!-- 글 소유자이면 수정/삭제/새로고침 아니라면 신고/새로고침 -->
   <div v-if="isDropdownOpen" class="dropdown-menu">
     <div
-      v-for="(value, index) in userId === this.communityPostContent.writer.id ? this.myItem : this.otherItem"
+      v-for="(value, index) in userId === this.communityPostContent.writer.id
+        ? this.myItem
+        : this.otherItem"
       :key="index"
       class="dropdown-item"
       @click="value.function()"
@@ -104,11 +155,11 @@ import { mapMutations, mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapState(['userInfo','isLoggedIn','selectCommnunity']),
+    ...mapState(['userInfo', 'isLoggedIn', 'selectCommnunity']),
     userId() {
-      if(!this.isLoggedIn) return null
+      if (!this.isLoggedIn) return null
       return this.userInfo.userId
-    },
+    }
   },
   created() {
     this.reload()
@@ -118,12 +169,12 @@ export default {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
     },
-    reload(callback){
-      this.comments = [];
+    reload(callback) {
+      this.comments = []
       this.communitylistLoading = true
-      const url = this.isLoggedIn ? 
-        `/communityposts/get/${this.$route.params.post_id}?userId=${this.userId}` : 
-        `/communityposts/get/${this.$route.params.post_id}`
+      const url = this.isLoggedIn
+        ? `/communityposts/get/${this.$route.params.post_id}?userId=${this.userId}`
+        : `/communityposts/get/${this.$route.params.post_id}`
       axios.get(url).then((res) => {
         console.log(url)
         console.log(res.data)
@@ -132,65 +183,71 @@ export default {
         this.comments = res.data.comments
         this.communitylistLoading = false
         //callback 이 함수라면 함수 실행
-        if(callback){
+        if (callback) {
           callback()
         }
       })
     },
-    createComment(){
-      if(!this.isLoggedIn)
-        this.$router.push('/login')
-      else{
+    createComment() {
+      if (!this.isLoggedIn) this.$router.push('/login')
+      else {
         //빈칸이면 쓰라고 알려주기
-        if(this.commentInput == ""){
-          alert("빈칸으로 작성할수 없습니다.")
+        if (this.commentInput == '') {
+          alert('빈칸으로 작성할수 없습니다.')
           return
         }
         this.commentLoading = true
         const text = this.commentInput
-        this.commentInput = ""
-        axios.post(`/comments/post`,{
-          "userID": this.userId,
-          "communityPostID": this.$route.params.post_id,
-          "commentContent": text
-      }).then((res) => {
-          console.log(res)
-          this.reload(()=>{
-            //댓글들 가져오면 맨 아래로 스크롤
-            this.$nextTick(() => {
-              this.$refs.commentContainer.scrollTop = this.$refs.commentContainer.scrollHeight
-              this.commentLoading = false
+        this.commentInput = ''
+        axios
+          .post(`/comments/post`, {
+            userID: this.userId,
+            communityPostID: this.$route.params.post_id,
+            commentContent: text
+          })
+          .then((res) => {
+            console.log(res)
+            this.reload(() => {
+              //댓글들 가져오면 맨 아래로 스크롤
+              this.$nextTick(() => {
+                this.$refs.commentContainer.scrollTop = this.$refs.commentContainer.scrollHeight
+                this.commentLoading = false
+              })
             })
           })
-        })
       }
     },
-    commentLike(index){
-      if(this.isWaiting) return
-      if(!this.isLoggedIn){
+    commentLike(index) {
+      if (this.isWaiting) return
+      if (!this.isLoggedIn) {
         this.$router.push('/login')
         return
       }
       this.isWaiting = true
       const comment = this.comments[index]
-      if(comment.isLikes){
-        axios.delete(`/CommentsLikesList/delete?userID=${this.userId}&&commentId=${comment.commentsID}`).then((res) => {
-          console.log(res.data)
-          this.isWaiting = false
-        })
-      }
-      else{
-        axios.post(`/CommentsLikesList/post?userID=${this.userId}&&commentId=${comment.commentsID}`).then((res) => {
-          console.log(res.data)
-          this.isWaiting = false
-        })
+      if (comment.isLikes) {
+        axios
+          .delete(
+            `/CommentsLikesList/delete?userID=${this.userId}&&commentId=${comment.commentsID}`
+          )
+          .then((res) => {
+            console.log(res.data)
+            this.isWaiting = false
+          })
+      } else {
+        axios
+          .post(`/CommentsLikesList/post?userID=${this.userId}&&commentId=${comment.commentsID}`)
+          .then((res) => {
+            console.log(res.data)
+            this.isWaiting = false
+          })
       }
       comment.isLikes = !comment.isLikes
-      comment.likes += comment.isLikes? 1:-1
+      comment.likes += comment.isLikes ? 1 : -1
       this.isWaiting = false
     },
-    commentReport(id){
-      if(!this.isLoggedIn){
+    commentReport(id) {
+      if (!this.isLoggedIn) {
         this.$router.push('/login')
         return
       }
@@ -201,92 +258,101 @@ export default {
       const year = date.getFullYear()
       const month = (date.getMonth() + 1).toString().padStart(2, '0')
       const day = date.getDate().toString().padStart(2, '0')
+      const hours = date.getHours().toString().padStart(2, '0')
+      const minutes = date.getMinutes().toString().padStart(2, '0')
 
-      return `${year}-${month}-${day}`
+      return `${year}-${month}-${day} ${hours}:${minutes}`
     }
   },
-  components: { UpperBar,LoadingSpinner },
+  components: { UpperBar, LoadingSpinner },
   data() {
     const item = {
-      'modifie':{
-        'value' : '수정하기',
-        'function' : ()=>{
+      modifie: {
+        value: '수정하기',
+        function: () => {
           this.$router.push(`/community/edit/${this.$route.params.post_id}`)
           console.log('수정하기')
-        },
+        }
       },
-      'delete':{
-        'value' : '삭제하기',
-        'function' : ()=>{
+      delete: {
+        value: '삭제하기',
+        function: () => {
           console.log('삭제하기')
-        },
+        }
       },
-      'report':{
-        'value' : '신고하기',
-        'function' : ()=>{
-          if(!this.isLoggedIn){
+      report: {
+        value: '신고하기',
+        function: () => {
+          if (!this.isLoggedIn) {
             this.$router.push('/login')
             return
           }
           this.$router.push(`/community/report/${this.$route.params.post_id}`)
-        },
+        }
       },
-      'refresh':{
-        'value' : '새로고침',
-        'function' : ()=>{
+      refresh: {
+        value: '새로고침',
+        function: () => {
           console.log('새로고침')
           this.reload()
-        },
+        }
       },
-      'like':{
-        'value' : '좋아요',
-        'function' : ()=>{
-          if(this.isWaiting) return
-          if(!this.isLoggedIn){
+      like: {
+        value: '좋아요',
+        function: () => {
+          if (this.isWaiting) return
+          if (!this.isLoggedIn) {
             this.$router.push('/login')
             return
           }
           this.isWaiting = true
-          if(this.communityPostContent.isCommunityPostLikes){
+          if (this.communityPostContent.isCommunityPostLikes) {
             this.communityPostContent.isCommunityPostLikes = false
             this.communityPostContent.communityPostLikesCount -= 1
-            axios.delete(`/CommunityPostLikesList/delete?userID=${this.userId}&&postID=${this.communityPostContent.communityPostID}`).then((res) => {
-              console.log(res.data)
-              this.isWaiting = false
-            })
-          }
-          else{
+            axios
+              .delete(
+                `/CommunityPostLikesList/delete?userID=${this.userId}&&postID=${this.communityPostContent.communityPostID}`
+              )
+              .then((res) => {
+                console.log(res.data)
+                this.isWaiting = false
+              })
+          } else {
             this.communityPostContent.isCommunityPostLikes = true
             this.communityPostContent.communityPostLikesCount += 1
-            axios.post(`/CommunityPostLikesList/post?userID=${this.userId}&&postID=${this.communityPostContent.communityPostID}`).then((res) => {
-              console.log(res.data)
-              this.isWaiting = false
-            })
+            axios
+              .post(
+                `/CommunityPostLikesList/post?userID=${this.userId}&&postID=${this.communityPostContent.communityPostID}`
+              )
+              .then((res) => {
+                console.log(res.data)
+                this.isWaiting = false
+              })
           }
-        },
-      },
+        }
+      }
     }
     return {
-      myItem :[item.modifie,item.delete,item.refresh],
-      otherItem : [item.report,item.like,item.refresh],
-      communitylistLoading : true,
-      commentLoading : false,
-      isWaiting : false,
-      commentInput : "",
+      myItem: [item.modifie, item.delete, item.refresh],
+      otherItem: [item.report, item.like, item.refresh],
+      communitylistLoading: true,
+      commentLoading: false,
+      isWaiting: false,
+      commentInput: '',
       isDropdownOpen: false,
       communityPostContent: {
-        "communityPostID": 0,
-        "writer": {
-          "id": 0,
-          "username": "",
-          "profilePhoto":"",
-          "loginId": null
+        communityPostID: 0,
+        writer: {
+          id: 0,
+          username: '',
+          profilePhoto: '',
+          loginId: null
         },
-        "communityPostTitle": "",
-        "communityPostContent": "",
-        "communityPostDate": "",
-        "communityPostLikesCount": 0,
-        "isCommunityPostLikes": false,
+        communityPostTitle: '',
+        communityPostContent: '',
+        communityPostDate: '',
+        communityPostLikesCount: 0,
+        isCommunityPostLikes: false
       },
       comments: [
         {
@@ -294,22 +360,22 @@ export default {
           commentDate: '',
           commentsID: 0,
           isLike: false,
-          likes:0,
+          likes: 0,
           user: {
             id: 0,
             username: '',
             profilePhoto: '',
             loginId: ''
-          },
+          }
         }
-      ],
+      ]
     }
-  },
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.center{
+.center {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -351,7 +417,7 @@ export default {
   font-weight: bolder;
   margin-bottom: 5%;
 }
-.contentContainer{
+.contentContainer {
   width: 100%;
 }
 
