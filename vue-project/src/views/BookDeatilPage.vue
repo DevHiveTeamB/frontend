@@ -36,7 +36,7 @@
           <img src="../assets/bookdetail/icon_bookdetail_hits.svg" style="width: 10px" />
           {{ postData.hits }}
           <img src="../assets/bookdetail/icon_bookdetail_likes.svg" style="width: 10px" />
-          좋아요
+          {{ postData.favorite }}
         </div>
       </div>
     </div>
@@ -52,11 +52,12 @@
     <div class="contentContainer">
       <div class="titleContainer">
         <div id="title">{{ postData.postTitle }}</div>
+        <!-- 찜 기능 -->
         <img
-          @click="changeIsFavorite"
+          @click="changeIsFavorite()"
           style="width: 7%"
-          v-bind:src="
-            isFavorite
+          :src="
+            this.postData.isFavorite
               ? require('../assets/bookdetail/icon_bookdetail_isLike.svg')
               : require('../assets/bookdetail/icon_bookdetail_likes.svg')
           "
@@ -166,34 +167,24 @@ export default {
     },
     //찜 기능
     changeIsFavorite() {
-      this.isFavorite = !this.isFavorite
+      this.postData.isFavorite = !this.postData.isFavorite
+      const params = {
+        userID: this.userId,
+        postID: this.postId
+      }
+
       console.log(this.userId, this.postId)
-      if (this.isFavorite) {
+      //찜을 눌렀을때
+      if (this.postData.isFavorite) {
         axios
-          .post('/favorites/post', {
-            userID: this.userId,
-            postID: this.postId
-          })
-          .then((res) => {
-            console.log(res.data)
-            console.log('찜 추가')
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+          .post('/favorites/post', null, { params: params })
+          .then((res) => console.log('찜 추가', res))
+          .catch((err) => console.log(err))
       } else {
         axios
-          .delete('/favorites/delete', {
-            userID: this.userId,
-            postID: this.postId
-          })
-          .then((res) => {
-            console.log(res.data)
-            console.log('찜 삭제')
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+          .delete('/favorites/delete', { params: params })
+          .then((res) => console.log('찜 삭제', res))
+          .catch((err) => console.log(err))
       }
     },
     //게시글 수정,삭제하기 기능
@@ -237,7 +228,7 @@ export default {
             //response로 messageroomId가 넘어옴
             console.log(res.data)
             this.messageroomId = res.data
-            this.$router.push(`/chat`)
+            this.$router.push(`/chat/${this.messageroomId.roomID}/${this.postData.writer.userId}`)
             this.tradeLoading = false
           })
           .catch((err) => {
@@ -254,12 +245,45 @@ export default {
       detailLoading: true,
       tradeLoading: false,
       postDeleteLoading: false,
-      postData: null,
       isDropdownOpen: false,
       item1: ['수정하기', '삭제하기'],
       item2: ['신고하기'],
-      isFavorite: null,
-      messageroomId: null //거래하기 버튼 눌렀을때 반환되는 메시지룸 ID
+      messageroomId: null, //거래하기 버튼 눌렀을때 반환되는 메시지룸 ID
+      postData: [
+        {
+          postId: '',
+          lecture: {
+            lectureId: 0,
+            lectureName: '',
+            professorName: '',
+            major: ''
+          },
+          writer: {
+            userId: 0,
+            username: '',
+            kakaoId: 0,
+            email: '',
+            phoneNumber: '',
+            profilePhoto: '',
+            introduction: '',
+            ratingState: 0,
+            joinDate: ''
+          },
+          postTitle: '',
+          postContent: '',
+          postDate: '',
+          price: 0,
+          hits: 0,
+          postPictures: [
+            {
+              picture: ''
+            }
+          ],
+          isSale: true,
+          favorite: 0,
+          isFavorite: true
+        }
+      ]
     }
   }
 }
