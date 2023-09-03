@@ -277,7 +277,16 @@ export default {
       delete: {
         value: '삭제하기',
         function: () => {
-          console.log('삭제하기')
+          axios
+            .delete(`/communityposts/delete/${this.communityPostContent.communityPostID}`)
+            .then((res) => {
+              alert('게시글이 삭제되었습니다.')
+              console.log(res.data)
+              this.$router.go(-1)
+            })
+            .catch((err) => {
+              console.log(err.data)
+            })
         }
       },
       report: {

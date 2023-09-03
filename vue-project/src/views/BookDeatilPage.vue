@@ -117,9 +117,10 @@ import axios from '../main.js'
 import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo', 'isLoggedIn']),
     userId() {
       if (this.userInfo === null) return null
+      if (!this.isLoggedIn) return null
       return this.userInfo.userId
     }
   },
@@ -167,6 +168,7 @@ export default {
     },
     //찜 기능
     changeIsFavorite() {
+      if (!this.isLoggedIn) this.$router.push('/login')
       this.postData.isFavorite = !this.postData.isFavorite
       const params = {
         userID: this.userId,
