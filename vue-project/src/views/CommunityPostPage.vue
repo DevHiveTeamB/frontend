@@ -33,17 +33,15 @@ export default {
         alert('빈칸없이 작성해주세요')
       } else {
         const data = {
-          "writerID": this.userInfo.userId,
-          "communityPostTitle": this.title,
-          "communityPostContent": this.content,
-          "communityPostLikes": 0
+          writerID: this.userInfo.userId,
+          communityPostTitle: this.title,
+          communityPostContent: this.content
         }
         console.log(data)
         //모든 정보가 입력되었을때만 요청 보냄
-        axios.post('/communityposts/post', data)
-        .then((res) => {
+        axios.post('/communityposts/post', data).then((res) => {
           console.log(res.data)
-          this.$router.push(`/community/detail/${res.data.communityPostID}`)
+          this.$router.push(`/community/detail/${res.data.CommunityPostID}`)
         })
       }
     }
