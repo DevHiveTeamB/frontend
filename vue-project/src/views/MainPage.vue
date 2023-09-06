@@ -1,7 +1,9 @@
 <template>
   <!-- view display none으로 조건부 렌더링 -->
   <div style="display: flex; flex-direction: column; width: 100%; height: 100%">
+    <!-- 위쪽 공간 -->
     <div id="TopBar">
+      <!-- 공지사항 버튼 -->
       <div style="margin-left: auto" class="imageContainer">
         <img
           class="imageItem"
@@ -11,24 +13,30 @@
       </div>
     </div>
     <div id="view">
+      <!-- 로고 사진 -->
       <div id="logo">
         <img style="width: 100%; height: 100%" src="../assets/main/DevHive_logo.svg" />
       </div>
+      <!-- 검색 창 -->
       <div id="searchBar" @click="this.$router.push('/booklist')">
         <img class="tItem" src="../assets/main/icon_main_searchbarLogo.svg" />
         <img class="tItem" src="../assets/main/icon_main_searchBtn.svg" />
       </div>
+      <!-- 세 버튼 -->
       <div class="subbutton">
+        <!-- 게시글 작성 버튼 -->
         <img
           class="subButtonItem"
           src="../assets/main/New_subbutton1.svg"
           @click="navigateToWriteOrLogin()"
         />
+        <!-- 게시글 목록 버튼 -->
         <img
           class="subButtonItem"
           src="../assets/main/New_subbutton2.svg"
           @click="this.$router.push('/booklist')"
         />
+        <!-- 공지사항 버튼 -->
         <img
           class="subButtonItem"
           src="../assets/main/New_subbutton3.svg"
